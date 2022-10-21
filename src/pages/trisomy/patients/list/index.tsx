@@ -1,6 +1,5 @@
 import useAsync from '@/hooks/useAsync';
 import PatientDetail from '@/pages/trisomy/patients/list/PatientDetail';
-import { getDefaultFilterTimestamp } from '@/utils/time';
 import { ExclamationCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
@@ -9,15 +8,10 @@ import moment from 'moment';
 import { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Link, useRequest, useSelector } from 'umi';
+import { Link } from 'umi';
 import { defaultDateRange, deletePatient, queryPatients } from './service';
-import styles from './style.less';
-
-const ActionLink = styled(Link)`
-  &:not(:first-child) {
-    margin-left: 8px;
-  }
-`;
+import styles from './style/index.less';
+import './style/index.css';
 
 const FilterWrapper = styled.div`
   margin-bottom: 24px;
@@ -113,26 +107,28 @@ const PatientList: FC = () => {
       render: (patient: any) => {
         return (
           <>
-            <span
-              style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-              onClick={() => {
-                setSelectedPatient(patient.id);
-              }}
-            >
-              Chi tiết
-            </span>
-            <Link
-              to={`/trisomy/patients/${patient.id}/edit`}
-              style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-            >
-              Sửa
-            </Link>
-            <span
-              onClick={() => handleShowConfirmDelete(patient)}
-              style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}
-            >
-              Xóa
-            </span>
+            <div className="action-cell">
+              <span
+                style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
+                onClick={() => {
+                  setSelectedPatient(patient.id);
+                }}
+              >
+                Chi tiết
+              </span>
+              <Link
+                to={`/trisomy/patients/${patient.id}/edit`}
+                style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
+              >
+                Sửa
+              </Link>
+              <span
+                onClick={() => handleShowConfirmDelete(patient)}
+                style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}
+              >
+                Xóa
+              </span>{' '}
+            </div>
           </>
         );
       },

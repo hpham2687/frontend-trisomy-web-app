@@ -1,0 +1,9 @@
+@media only screen and (max-width: 600px) {
+  #filter-form > div {
+    flex-direction: column;
+    gap: 0;
+  }
+  .action-cell {
+    display: flex;
+  }
+}

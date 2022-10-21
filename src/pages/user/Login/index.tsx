@@ -1,12 +1,5 @@
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  MobileOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
-} from '@ant-design/icons';
-import { Alert, Card, Col, message, Row, Tabs } from 'antd';
+import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
+import { Alert, Col, message, Row, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import {
@@ -23,7 +16,8 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 
-import styles from './index.less';
+import './style/index.css';
+import styles from './style/index.less';
 import token from '@/utils/token';
 import Introduction from './Introduction';
 
@@ -43,14 +37,13 @@ const LoginMessage: React.FC<{
 const Login: React.FC = ({ index }: any) => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const { setInitialState } = useModel('@@initialState');
   const { name } = index;
 
   const intl = useIntl();
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      // 登录
       const msg = await login({ ...values, type });
       if (msg?.user) {
         const defaultLoginSuccessMessage = intl.formatMessage({
@@ -75,10 +68,9 @@ const Login: React.FC = ({ index }: any) => {
       setUserLoginState(msg);
     } catch (error) {
       console.log('login error', error);
-
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+        defaultMessage: 'Dang nhap that bai',
       });
       message.error(defaultLoginFailureMessage);
     }
@@ -87,16 +79,16 @@ const Login: React.FC = ({ index }: any) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.lang} data-lang>
+      <div className={styles.lang} data-lang id="lang-select">
         {SelectLang && <SelectLang />}
       </div>
-      {name}
+      {/* {name} */}
       <div className={styles.content}>
         <Row>
-          <Col span={12}>
+          <Col md={12} xs={24}>
             <Introduction />
           </Col>
-          <Col span={12}>
+          <Col md={12} xs={24}>
             {' '}
             <LoginForm
               logo={<img alt="logo" src="/logo.svg" />}
@@ -106,35 +98,23 @@ const Login: React.FC = ({ index }: any) => {
               initialValues={{
                 autoLogin: true,
               }}
-              actions={[
-                <FormattedMessage
-                  key="loginWith"
-                  id="pages.login.loginWith"
-                  defaultMessage="其他登录方式"
-                />,
-                <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-                <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-                <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-              ]}
+              // actions={[
+              //   <FormattedMessage
+              //     key="loginWith"
+              //     id="pages.login.loginWith"
+              //     defaultMessage="其他登录方式"
+              //   />,
+              //   <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
+              //   <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
+              //   <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
+              // ]}
               onFinish={async (values) => {
                 await handleSubmit(values as API.LoginParams);
               }}
             >
               <Tabs activeKey={type} onChange={setType}>
-                <Tabs.TabPane
-                  key="account"
-                  tab={intl.formatMessage({
-                    id: 'pages.login.accountLogin.tab',
-                    defaultMessage: '账户密码登录',
-                  })}
-                />
-                <Tabs.TabPane
-                  key="mobile"
-                  tab={intl.formatMessage({
-                    id: 'pages.login.phoneLogin.tab',
-                    defaultMessage: '手机号登录',
-                  })}
-                />
+                <Tabs.TabPane key="account" tab={'Bác sĩ'} />
+                <Tabs.TabPane key="mobile" tab={'Quản trị viên'} />
               </Tabs>
 
               {status === 'error' && loginType === 'account' && (
@@ -154,8 +134,7 @@ const Login: React.FC = ({ index }: any) => {
                       prefix: <UserOutlined className={styles.prefixIcon} />,
                     }}
                     placeholder={intl.formatMessage({
-                      id: 'pages.login.username.placeholder',
-                      defaultMessage: '用户名: admin or user',
+                      id: 'Nhập email của bác sĩ',
                     })}
                     rules={[
                       {
@@ -163,7 +142,7 @@ const Login: React.FC = ({ index }: any) => {
                         message: (
                           <FormattedMessage
                             id="pages.login.username.required"
-                            defaultMessage="请输入用户名!"
+                            defaultMessage="Vui lòng nhập email của bác sĩ"
                           />
                         ),
                       },
@@ -177,7 +156,7 @@ const Login: React.FC = ({ index }: any) => {
                     }}
                     placeholder={intl.formatMessage({
                       id: 'pages.login.password.placeholder',
-                      defaultMessage: '密码: ant.design',
+                      defaultMessage: 'Nhập mật khẩu',
                     })}
                     rules={[
                       {
@@ -185,7 +164,7 @@ const Login: React.FC = ({ index }: any) => {
                         message: (
                           <FormattedMessage
                             id="pages.login.password.required"
-                            defaultMessage="请输入密码！"
+                            defaultMessage="Vui lòng nhận mật khẩu"
                           />
                         ),
                       },
@@ -291,7 +270,10 @@ const Login: React.FC = ({ index }: any) => {
                     float: 'right',
                   }}
                 >
-                  <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+                  <FormattedMessage
+                    id="pages.login.forgotPassword"
+                    defaultMessage="Quen mat khau"
+                  />
                 </a>
               </div>
             </LoginForm>

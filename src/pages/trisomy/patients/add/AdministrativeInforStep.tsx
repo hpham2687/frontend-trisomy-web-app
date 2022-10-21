@@ -12,7 +12,7 @@ function AdministrativeInforStep() {
     <>
       <h3 style={{ marginBottom: '24px' }}>Thông tin thai phụ</h3>
       <Row gutter={16}>
-        <Col lg={6} md={12} sm={24}>
+        <Col md={6} xs={24}>
           <ProFormText
             label={'Họ và tên'}
             name="fullName"
@@ -20,7 +20,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập họ và tên"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col md={6} xs={24}>
           <ProFormDatePicker
             label={'Ngày sinh'}
             name="dateOfBirth"
@@ -34,7 +34,7 @@ function AdministrativeInforStep() {
             }}
           />
         </Col>
-        <Col lg={{ span: 12 }} md={{ span: 24 }} sm={24}>
+        <Col lg={{ span: 12 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Địa chỉ"
             name="address"
@@ -64,7 +64,7 @@ function AdministrativeInforStep() {
               </Col> */}
       </Row>
       <Row gutter={16}>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Số điện thoại"
             name="phoneNumber"
@@ -75,7 +75,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập địa chỉ bệnh nhân"
           />
         </Col>
-        <Col lg={6} md={12} sm={24}>
+        <Col lg={6} md={12} xs={24}>
           <ProFormSelect
             label={'Nghề nghiệp'}
             name="job"
@@ -93,7 +93,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập nghề nghiệp"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 24 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 24 }} xs={24}>
           <ProFormSelect
             label={'Học vấn'}
             name="education"
@@ -120,7 +120,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập học vấn"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Dân tộc"
             name="folk"
@@ -133,7 +133,7 @@ function AdministrativeInforStep() {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Chiều cao"
             name="height"
@@ -144,7 +144,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập chiều cao"
           />
         </Col>
-        <Col lg={6} md={12} sm={24}>
+        <Col lg={6} md={12} xs={24}>
           <ProFormText
             label="Cân nặng (trước khi có thai)"
             name="weight_before"
@@ -155,7 +155,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập cân nặng"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 24 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 24 }} xs={24}>
           <ProFormText
             label="Cân nặng (hiện tại)"
             name="weight"
@@ -164,7 +164,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập cân nặng"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Tôn giáo"
             name="religion"
@@ -180,7 +180,7 @@ function AdministrativeInforStep() {
       <h3 style={{ marginBottom: '24px' }}>Thông tin chồng thai phụ</h3>
 
       <Row gutter={16}>
-        <Col lg={6} md={12} sm={24}>
+        <Col lg={6} md={12} xs={24}>
           <ProFormText
             label={'Họ và tên'}
             name="name2"
@@ -188,7 +188,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập họ và tên"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormDatePicker.Year
             label={'Năm sinh'}
             name="dateRange2"
@@ -201,7 +201,7 @@ function AdministrativeInforStep() {
             }}
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Số điện thoại"
             name="parentPhoneNumber"
@@ -212,7 +212,7 @@ function AdministrativeInforStep() {
             placeholder="Nhập số điện thoại bệnh nhân"
           />
         </Col>
-        <Col lg={{ span: 6 }} md={{ span: 6 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
           <ProFormSelect
             label={'Nghề nghiệp'}
             name="approver2"
@@ -232,7 +232,7 @@ function AdministrativeInforStep() {
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col lg={{ span: 6 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormCheckbox.Group name="checkbox-group" options={['Hút thuốc', 'Uống rượu']} />
         </Col>
       </Row>

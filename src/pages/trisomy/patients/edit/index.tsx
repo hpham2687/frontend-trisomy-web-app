@@ -4,48 +4,19 @@ import AdministrativeInforStep from '@/pages/trisomy/patients/add/Administrative
 import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
-import {
-  Button,
-  Card,
-  Descriptions,
-  Divider,
-  FormInstance,
-  message,
-  Result,
-  Statistic,
-} from 'antd';
+import { Button, Card, Descriptions, FormInstance, message, Result, Statistic } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import type { StepDataType } from './data';
-import { postAddPatient, postEditPatient, queryPatientDetail } from './service';
-import styles from './style.less';
+import { postEditPatient, queryPatientDetail } from './service';
+import './style/index.css';
+import styles from './style/index.less';
 
 const StepDescriptions: React.FC<{
   stepData: StepDataType;
   bordered?: boolean;
 }> = ({ stepData, bordered }) => {
-  return (
-    <Descriptions column={1} bordered={bordered}>
-      <Descriptions.Item label="付款账户"> dsf</Descriptions.Item>
-      <Descriptions.Item label="收款账户">e</Descriptions.Item>
-      <Descriptions.Item label="收款人姓名"> sdfsdf</Descriptions.Item>
-      <Descriptions.Item label="转账金额">
-        <Statistic
-          value={423}
-          suffix={
-            <span
-              style={{
-                fontSize: 14,
-              }}
-            >
-              元
-            </span>
-          }
-          precision={2}
-        />
-      </Descriptions.Item>
-    </Descriptions>
-  );
+  return <>null</>;
 };
 
 const StepResult: React.FC<{
@@ -61,7 +32,7 @@ const StepResult: React.FC<{
           <Button type="primary" onClick={props.onFinish}>
             Xem tất cả bệnh nhân
           </Button>
-          <Button>Xem tất cả bệnh nhân vừa thêm</Button>
+          {/* <Button>Xem tất cả bệnh nhân vừa thêm</Button> */}
         </>
       }
       className={styles.result}
@@ -71,21 +42,13 @@ const StepResult: React.FC<{
   );
 };
 
-const stepDataInitalState = {
-  payAccount: 'ant-design@alipay.com',
-  weight: '43',
-  address: 'Alex',
-  fullName: 'thai hung 4',
-  dateOfBirth: '2000-3-28',
-};
-
-const AddPatient: React.FC<Record<string, any>> = () => {
+const EditPatient: React.FC<Record<string, any>> = () => {
   const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType>(null);
   const [prehistoric, setPrehistoric] = useState<any>();
   const [current, setCurrent] = useState(0);
   const formRef = useRef<FormInstance>();
   const { run, isLoading } = useAsync();
-  const { patientId } = useParams();
+  const { patientId } = useParams<any>();
 
   useEffect(() => {
     run(queryPatientDetail(patientId))
@@ -93,7 +56,6 @@ const AddPatient: React.FC<Record<string, any>> = () => {
         setAdministrativeInforStep(response);
         console.log(response);
         console.log(formRef.current);
-
         formRef.current?.setFieldsValue({
           ...response,
         });
@@ -113,7 +75,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
     console.log(values);
     // setCurrent(1);
     setPrehistoric(values);
-    // SUbmit value here
+    // Submit value here
     const payload = {
       ...administrativeInforStep,
       ...prehistoric,
@@ -133,10 +95,10 @@ const AddPatient: React.FC<Record<string, any>> = () => {
   };
 
   if (isLoading || !administrativeInforStep) {
-    return 'loading';
+    return <> loading</>;
   }
   return (
-    <PageContainer content="Mô tả nhập thông tin bệnh nhân">
+    <PageContainer content="Trang sửa thông tin thai phụ">
       <Card bordered={false}>
         <StepsForm
           containerStyle={{ width: '100%' }}
@@ -187,4 +149,4 @@ const AddPatient: React.FC<Record<string, any>> = () => {
   );
 };
 
-export default AddPatient;
+export default EditPatient;

@@ -8,7 +8,9 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'umi';
 import type { StepDataType } from './data';
 import { postAddPatient } from './service';
-import styles from './style.less';
+
+import './style/index.css';
+import styles from './style/index.less';
 
 const StepDescriptions: React.FC<{
   stepData: StepDataType;
@@ -89,7 +91,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
   };
 
   return (
-    <PageContainer content="Mô tả nhập thông tin bệnh nhân">
+    <PageContainer content="Trang nhập thông tin thai phụ">
       <Card bordered={false}>
         <StepsForm
           containerStyle={{ width: '100%' }}

@@ -157,6 +157,7 @@ export default defineConfig({
       name: 'exception',
       icon: 'warning',
       path: '/exception',
+      hideInMenu: true,
       routes: [
         {
           path: '/exception',
