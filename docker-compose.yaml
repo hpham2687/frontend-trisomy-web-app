@@ -1,12 +1,12 @@
-version: '3'
+version: '3.8'
 services:
   frontend_reactjs_yt:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - '8989:80'
-      - '4012:9090'
-    networks:
-      - myytnetwork
-networks:
-  myytnetwork:
-    driver: bridge
+    volumes:
+      - .:/app
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
