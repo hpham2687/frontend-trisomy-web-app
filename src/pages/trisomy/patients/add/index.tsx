@@ -3,17 +3,17 @@ import AdministrativeInforStep from '@/pages/trisomy/patients/add/Administrative
 import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, Descriptions, Divider, FormInstance, Result, Statistic } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Button, Card, FormInstance, Result } from 'antd';
+import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'umi';
-import type { StepDataType } from './data';
+import type { AdministrativeStepDataType } from './data';
 import { postAddPatient } from './service';
 
 import './style/index.css';
 import styles from './style/index.less';
 
 const StepDescriptions: React.FC<{
-  stepData: StepDataType;
+  stepData: AdministrativeStepDataType;
   bordered?: boolean;
 }> = ({ stepData, bordered }) => {
   const { payAccount, receiverAccount, receiverName, amount } = stepData;
@@ -35,19 +35,15 @@ const StepResult: React.FC<{
               Xem tất cả bệnh nhân
             </Button>
           </Link>
-          {/* <Button>Xem tất cả bệnh nhân vừa thêm</Button> */}
         </>
       }
       className={styles.result}
-    >
-      {/* {props.children} */}
-    </Result>
+    ></Result>
   );
 };
 
 const stepDataInitalState = {
-  payAccount: 'ant-design@alipay.com',
-  weight: '43',
+  weight: 43,
   address: 'Alex',
   fullName: 'thai hung 4',
   dateOfBirth: '2000-3-28',
@@ -55,7 +51,7 @@ const stepDataInitalState = {
 
 const AddPatient: React.FC<Record<string, any>> = () => {
   const [administrativeInforStep, setAdministrativeInforStep] =
-    useState<StepDataType>(stepDataInitalState);
+    useState<AdministrativeStepDataType>(stepDataInitalState);
   const [prehistoric, setPrehistoric] = useState<any>(stepDataInitalState);
   const [current, setCurrent] = useState(0);
   const formRef = useRef<FormInstance>();
@@ -67,28 +63,29 @@ const AddPatient: React.FC<Record<string, any>> = () => {
     return true;
   };
 
-  const onSubmitPrehistoricStep = async (values: any) => {
-    console.log(values);
-    // setCurrent(1);
-    setPrehistoric(values);
-    // SUbmit value here
-    const payload = {
-      ...administrativeInforStep,
-      ...prehistoric,
-    };
-    try {
-      const addPatient = await postAddPatient(payload);
-      if (addPatient) {
-        return true;
-      } else {
+  const onSubmitPrehistoricStep = useCallback(
+    async (values: any) => {
+      setPrehistoric(values);
+      // Submit value here
+      const payload = {
+        ...administrativeInforStep,
+        ...values,
+      };
+      try {
+        const addPatient = await postAddPatient(payload);
+        if (addPatient) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+        message.error(error);
         return false;
       }
-    } catch (error) {
-      console.log(error);
-      message.error(error);
-      return false;
-    }
-  };
+    },
+    [administrativeInforStep, prehistoric],
+  );
 
   return (
     <PageContainer content="Trang nhập thông tin thai phụ">

@@ -1,9 +1,8 @@
-export interface StepDataType {
-  payAccount: string;
-  receiverAccount: string;
-  receiverName: string;
-  amount: string;
-  receiverMode: string;
+export interface AdministrativeStepDataType {
+  address: string;
+  weight: number;
+  fullName: string;
+  dateOfBirth: string;
 }
 
 export type CurrentTypes = 'base' | 'confirm' | 'result';
