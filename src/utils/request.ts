@@ -1,4 +1,4 @@
-import { BASE_URL_API } from '@/constants/api';
+import configs from '@/config';
 import token from '@/utils/token';
 /**
  * request 网络请求工具
@@ -27,9 +27,8 @@ const requestInterceptor: RequestInterceptor = (url, options) => {
   };
 };
 const refreshAccessToken = () => {
-  // console.log('get refesh', { refreshToken });
-  // return '33';
-  return fetch(BASE_URL_API + '/auth/refresh', {
+  //@ts-ignore
+  return fetch(configs.apiUrl + '/auth/refresh', {
     headers: {
       Authorization: `Bearer ${token.get().refreshToken}`,
     },
@@ -78,7 +77,8 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
  * 配置request请求时的默认参数
  */
 const request = extend({
-  prefix: BASE_URL_API,
+  //@ts-ignore
+  prefix: configs.apiUrl,
   // errorHandler, // 默认错误处理
   // credentials: 'include', // 默认请求是否带上cookie
 });
