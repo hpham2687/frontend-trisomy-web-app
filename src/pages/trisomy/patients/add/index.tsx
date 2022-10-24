@@ -43,9 +43,9 @@ const StepResult: React.FC<{
 };
 
 const stepDataInitalState = {
-  weight: 43,
-  address: 'Alex',
-  fullName: 'thai hung 4',
+  weight: '',
+  address: '',
+  fullName: '',
   dateOfBirth: '2000-3-28',
 };
 

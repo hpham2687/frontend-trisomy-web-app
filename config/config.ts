@@ -100,21 +100,21 @@ export default defineConfig({
     {
       path: '/trisomy',
       icon: 'form',
-      name: 'trisomy',
+      name: 'Bệnh Trisomy 21, 18, 13',
       routes: [
         {
           path: '/trisomy',
           redirect: '/trisomy/patients/add',
         },
         {
-          name: 'add-patient',
+          name: 'Thêm thai phụ',
           icon: 'smile',
           path: '/trisomy/patients/add',
           component: './trisomy/patients/add',
           exact: true,
         },
         {
-          name: 'edit-patient',
+          name: 'Sửa thông tin thai phụ',
           icon: 'smile',
           path: '/trisomy/patients/:patientId/edit',
           hideInMenu: true,
@@ -122,7 +122,7 @@ export default defineConfig({
           exact: true,
         },
         {
-          name: 'patient-list',
+          name: 'Danh sách thai phụ',
           icon: 'table',
           path: '/trisomy/patients/',
           component: './trisomy/patients/list',
@@ -133,7 +133,7 @@ export default defineConfig({
     {
       path: '/thalassemia',
       icon: 'form',
-      name: 'thalassemia',
+      name: 'Bệnh Thalassemia',
       // routes: [
       //   {
       //     path: '/trisomy',

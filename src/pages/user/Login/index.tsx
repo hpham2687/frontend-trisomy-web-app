@@ -82,32 +82,24 @@ const Login: React.FC = ({ index }: any) => {
       <div className={styles.lang} data-lang id="lang-select">
         {SelectLang && <SelectLang />}
       </div>
-      {/* {name} */}
       <div className={styles.content}>
         <Row>
           <Col md={12} xs={24}>
             <Introduction />
           </Col>
           <Col md={12} xs={24}>
-            {' '}
             <LoginForm
+              submitter={{
+                searchConfig: {
+                  submitText: 'Đăng nhập',
+                },
+              }}
               logo={<img alt="logo" src="/logo.svg" />}
               title="Đại học Bách Khoa HN"
               subTitle={'Tầm soát bệnh di truyền ở thai nhi'}
-              // subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
               initialValues={{
                 autoLogin: true,
               }}
-              // actions={[
-              //   <FormattedMessage
-              //     key="loginWith"
-              //     id="pages.login.loginWith"
-              //     defaultMessage="其他登录方式"
-              //   />,
-              //   <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-              //   <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-              //   <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-              // ]}
               onFinish={async (values) => {
                 await handleSubmit(values as API.LoginParams);
               }}
@@ -133,18 +125,11 @@ const Login: React.FC = ({ index }: any) => {
                       size: 'large',
                       prefix: <UserOutlined className={styles.prefixIcon} />,
                     }}
-                    placeholder={intl.formatMessage({
-                      id: 'Nhập email của bác sĩ',
-                    })}
+                    placeholder={'Nhập email của bác sĩ'}
                     rules={[
                       {
                         required: true,
-                        message: (
-                          <FormattedMessage
-                            id="pages.login.username.required"
-                            defaultMessage="Vui lòng nhập email của bác sĩ"
-                          />
-                        ),
+                        message: 'Vui lòng nhập email của bác sĩ',
                       },
                     ]}
                   />
@@ -154,19 +139,11 @@ const Login: React.FC = ({ index }: any) => {
                       size: 'large',
                       prefix: <LockOutlined className={styles.prefixIcon} />,
                     }}
-                    placeholder={intl.formatMessage({
-                      id: 'pages.login.password.placeholder',
-                      defaultMessage: 'Nhập mật khẩu',
-                    })}
+                    placeholder={'Nhập mật khẩu'}
                     rules={[
                       {
                         required: true,
-                        message: (
-                          <FormattedMessage
-                            id="pages.login.password.required"
-                            defaultMessage="Vui lòng nhận mật khẩu"
-                          />
-                        ),
+                        message: 'Vui lòng nhận mật khẩu',
                       },
                     ]}
                   />
@@ -263,17 +240,14 @@ const Login: React.FC = ({ index }: any) => {
                 }}
               >
                 <ProFormCheckbox noStyle name="autoLogin">
-                  <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+                  Nhớ mật khẩu
                 </ProFormCheckbox>
                 <a
                   style={{
                     float: 'right',
                   }}
                 >
-                  <FormattedMessage
-                    id="pages.login.forgotPassword"
-                    defaultMessage="Quen mat khau"
-                  />
+                  Quên mật khẩu
                 </a>
               </div>
             </LoginForm>
