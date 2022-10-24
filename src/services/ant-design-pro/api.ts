@@ -17,12 +17,14 @@ export async function currentUser(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/auth/login', {
+  const { type, ...rest } = body;
+  const endpoint = type === 'doctor' ? '/auth/login' : '/admin/auth/login';
+  return request<API.LoginResult>(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
+    data: rest,
     ...(options || {}),
   });
 }

@@ -36,7 +36,7 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC = ({ index }: any) => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
+  const [type, setType] = useState<'doctor' | 'admin'>('doctor');
   const { setInitialState } = useModel('@@initialState');
   const { name } = index;
 
@@ -46,14 +46,8 @@ const Login: React.FC = ({ index }: any) => {
     try {
       const msg = await login({ ...values, type });
       if (msg?.user) {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
-          defaultMessage: '登录成功！',
-        });
-        console.log('set initialstae to', msg.user);
-
         token.save(msg.accessToken, msg.refreshToken);
-        message.success(defaultLoginSuccessMessage);
+        message.success('Đăng nhập thành công!');
         await setInitialState((s) => ({
           ...s,
           currentUser: msg.user,
@@ -68,11 +62,8 @@ const Login: React.FC = ({ index }: any) => {
       setUserLoginState(msg);
     } catch (error) {
       console.log('login error', error);
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: 'Dang nhap that bai',
-      });
-      message.error(defaultLoginFailureMessage);
+
+      message.error('Đăng nhập thất bại!');
     }
   };
   const { status, type: loginType } = userLoginState;
@@ -104,9 +95,16 @@ const Login: React.FC = ({ index }: any) => {
                 await handleSubmit(values as API.LoginParams);
               }}
             >
-              <Tabs activeKey={type} onChange={setType}>
-                <Tabs.TabPane key="account" tab={'Bác sĩ'} />
-                <Tabs.TabPane key="mobile" tab={'Quản trị viên'} />
+              <Tabs
+                activeKey={type}
+                onChange={(e) => {
+                  console.log(e);
+
+                  setType(e);
+                }}
+              >
+                <Tabs.TabPane key="doctor" tab={'Bác sĩ'} />
+                <Tabs.TabPane key="admin" tab={'Quản trị viên'} />
               </Tabs>
 
               {status === 'error' && loginType === 'account' && (
@@ -117,7 +115,7 @@ const Login: React.FC = ({ index }: any) => {
                   })}
                 />
               )}
-              {type === 'account' && (
+              {type === 'doctor' && (
                 <>
                   <ProFormText
                     name="email"
@@ -153,84 +151,35 @@ const Login: React.FC = ({ index }: any) => {
               {status === 'error' && loginType === 'mobile' && (
                 <LoginMessage content="验证码错误" />
               )}
-              {type === 'mobile' && (
+              {type === 'admin' && (
                 <>
                   <ProFormText
+                    name="email"
                     fieldProps={{
                       size: 'large',
-                      prefix: <MobileOutlined className={styles.prefixIcon} />,
+                      prefix: <UserOutlined className={styles.prefixIcon} />,
                     }}
-                    name="mobile"
-                    placeholder={intl.formatMessage({
-                      id: 'pages.login.phoneNumber.placeholder',
-                      defaultMessage: '手机号',
-                    })}
+                    placeholder={'Nhập email của bác sĩ'}
                     rules={[
                       {
                         required: true,
-                        message: (
-                          <FormattedMessage
-                            id="pages.login.phoneNumber.required"
-                            defaultMessage="请输入手机号！"
-                          />
-                        ),
-                      },
-                      {
-                        pattern: /^1\d{10}$/,
-                        message: (
-                          <FormattedMessage
-                            id="pages.login.phoneNumber.invalid"
-                            defaultMessage="手机号格式错误！"
-                          />
-                        ),
+                        message: 'Vui lòng nhập email của bác sĩ',
                       },
                     ]}
                   />
-                  <ProFormCaptcha
+                  <ProFormText.Password
+                    name="password"
                     fieldProps={{
                       size: 'large',
                       prefix: <LockOutlined className={styles.prefixIcon} />,
                     }}
-                    captchaProps={{
-                      size: 'large',
-                    }}
-                    placeholder={intl.formatMessage({
-                      id: 'pages.login.captcha.placeholder',
-                      defaultMessage: '请输入验证码',
-                    })}
-                    captchaTextRender={(timing, count) => {
-                      if (timing) {
-                        return `${count} ${intl.formatMessage({
-                          id: 'pages.getCaptchaSecondText',
-                          defaultMessage: '获取验证码',
-                        })}`;
-                      }
-                      return intl.formatMessage({
-                        id: 'pages.login.phoneLogin.getVerificationCode',
-                        defaultMessage: '获取验证码',
-                      });
-                    }}
-                    name="captcha"
+                    placeholder={'Nhập mật khẩu'}
                     rules={[
                       {
                         required: true,
-                        message: (
-                          <FormattedMessage
-                            id="pages.login.captcha.required"
-                            defaultMessage="请输入验证码！"
-                          />
-                        ),
+                        message: 'Vui lòng nhận mật khẩu',
                       },
                     ]}
-                    onGetCaptcha={async (phone) => {
-                      const result = await getFakeCaptcha({
-                        phone,
-                      });
-                      if (result === false) {
-                        return;
-                      }
-                      message.success('获取验证码成功！验证码为：1234');
-                    }}
                   />
                 </>
               )}
