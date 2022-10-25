@@ -14,7 +14,7 @@ function Introduction(props) {
     <>
       <Tabs onChange={setType} activeKey={type} tabPosition={'top'} centered>
         <Tabs.TabPane key={View.TRISOMY} tab={<>Trisomy 21, 18, 13</>} />
-        <Tabs.TabPane key={View.THALASSEMIA} tab={<>Bệnh Thalassemia</>} />
+        <Tabs.TabPane key={View.THALASSEMIA} tab={<>Thalassemia</>} />
         <Tabs.TabPane key={View.DEVELOPERS} tab={<>Nhóm phát triển</>} />
       </Tabs>
 
