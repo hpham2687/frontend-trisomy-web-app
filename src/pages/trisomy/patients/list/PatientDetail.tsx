@@ -33,8 +33,8 @@ const convertResponseToTableData = (tests: any) => {
 
 const extra = (
   <div className={styles.moreInfo}>
-    <Statistic title="Lịch khám lại" value="NaN" />
-    <Statistic title="Ngày khám gần nhất" value="NaN" />
+    <Statistic title="Ngày đăng ký khám" value="NaN" />
+    <Statistic style={{ marginLeft: 8 }} title="Ngày khám gần nhất" value="NaN" />
   </div>
 );
 

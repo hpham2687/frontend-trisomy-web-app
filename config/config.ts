@@ -16,18 +16,12 @@ export default defineConfig({
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
-    locale: true,
+    locale: false,
     siderWidth: 250,
     ...defaultSettings,
   },
   // https://umijs.org/zh-CN/plugins/plugin-locale
-  locale: {
-    // default zh-CN
-    default: 'zh-CN',
-    antd: true,
-    // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
-  },
+  locale: {},
   dynamicImport: {
     loading: '@ant-design/pro-layout/es/PageLoading',
   },
@@ -67,36 +61,6 @@ export default defineConfig({
         },
       ],
     },
-    // {
-    //   path: '/dashboard',
-    //   name: 'dashboard',
-    //   icon: 'dashboard',
-    //   routes: [
-    //     {
-    //       path: '/dashboard',
-    //       redirect: '/dashboard/analysis',
-    //     },
-    //     {
-    //       name: 'analysis',
-    //       icon: 'smile',
-    //       path: '/dashboard/analysis',
-    //       component: './dashboard/analysis',
-    //     },
-    //     {
-    //       name: 'monitor',
-    //       icon: 'smile',
-    //       path: '/dashboard/monitor',
-    //       component: './dashboard/monitor',
-    //     },
-    //     {
-    //       name: 'workplace',
-    //       icon: 'smile',
-    //       path: '/dashboard/workplace',
-    //       component: './dashboard/workplace',
-    //     },
-    //   ],
-    // },
-
     {
       path: '/trisomy',
       icon: 'form',
@@ -134,26 +98,6 @@ export default defineConfig({
       path: '/thalassemia',
       icon: 'form',
       name: 'Bệnh Thalassemia',
-      // routes: [
-      //   {
-      //     path: '/trisomy',
-      //     redirect: '/trisomy/patients/add',
-      //   },
-      //   {
-      //     name: 'add-patient',
-      //     icon: 'smile',
-      //     path: '/trisomy/patients/add',
-      //     component: './trisomy/patients/add',
-      //     exact: true,
-      //   },
-      //   {
-      //     name: 'patient-list',
-      //     icon: 'table',
-      //     path: '/trisomy/patients',
-      //     component: './trisomy/patients/list',
-      //     exact: true,
-      //   },
-      // ],
     },
 
     {
@@ -186,29 +130,7 @@ export default defineConfig({
         },
       ],
     },
-    // {
-    //   name: 'account',
-    //   icon: 'user',
-    //   path: '/account',
-    //   routes: [
-    //     {
-    //       path: '/account',
-    //       redirect: '/account/center',
-    //     },
-    //     {
-    //       name: 'center',
-    //       icon: 'smile',
-    //       path: '/account/center',
-    //       component: './account/center',
-    //     },
-    //     {
-    //       name: 'settings',
-    //       icon: 'smile',
-    //       path: '/account/settings',
-    //       component: './account/settings',
-    //     },
-    //   ],
-    // },
+
     {
       path: '/admin',
       name: 'admin',

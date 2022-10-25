@@ -16,7 +16,7 @@ function AdministrativeInforStep() {
           <ProFormText
             label={'Họ và tên'}
             name="fullName"
-            // rules={[{ required: true, message: 'Vui lòng nhập tên bệnh nhân' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập tên bệnh nhân' }]}
             placeholder="Nhập họ và tên"
           />
         </Col>
@@ -24,8 +24,7 @@ function AdministrativeInforStep() {
           <ProFormDatePicker
             label={'Ngày sinh'}
             name="dateOfBirth"
-            // rules={[{ required: true, message: '请输入' }]}
-
+            rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
             placeholder="Nhập ngày sinh"
             fieldProps={{
               style: {
@@ -38,30 +37,10 @@ function AdministrativeInforStep() {
           <ProFormText
             label="Địa chỉ"
             name="address"
-            // rules={[
-            //   { required: true, message: 'Vui lòng nhập địa chỉ' },
-            //   // { type: 'email', message: '账户名应为邮箱格式' },
-            // ]}
+            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
             placeholder="Nhập địa chỉ bệnh nhân"
           />
         </Col>
-        {/* <Col lg={{ span: 6 }} md={{ span: 24 }} sm={24}>
-                <ProFormSelect
-                  label={'Địa chỉ'}
-                  name="owner2"
-                  rules={[{ required: true, message: '请选择管理员' }]}
-                  options={[
-                    {
-                      label: '付晓晓',
-                      value: 'xiao',
-                    },
-                    {
-                      label: '周毛毛',
-                      value: 'mao',
-                    },
-                  ]}
-                />
-              </Col> */}
       </Row>
       <Row gutter={16}>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
@@ -159,8 +138,7 @@ function AdministrativeInforStep() {
           <ProFormText
             label="Cân nặng (hiện tại)"
             name="weight"
-            // rules={[{ required: true, message: '请选择审批员' }]}
-
+            rules={[{ required: true, message: 'Vui lòng nhập cân nặng' }]}
             placeholder="Nhập cân nặng"
           />
         </Col>

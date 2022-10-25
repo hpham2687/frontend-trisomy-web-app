@@ -3,7 +3,7 @@ import AdministrativeInforStep from '@/pages/trisomy/patients/add/Administrative
 import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, FormInstance, Result } from 'antd';
+import { Button, Card, FormInstance, message, Result } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'umi';
 import type { AdministrativeStepDataType } from './data';
@@ -46,7 +46,6 @@ const stepDataInitalState = {
   weight: '',
   address: '',
   fullName: '',
-  dateOfBirth: '2000-3-28',
 };
 
 const AddPatient: React.FC<Record<string, any>> = () => {
@@ -54,7 +53,8 @@ const AddPatient: React.FC<Record<string, any>> = () => {
     useState<AdministrativeStepDataType>(stepDataInitalState);
   const [prehistoric, setPrehistoric] = useState<any>(stepDataInitalState);
   const [current, setCurrent] = useState(0);
-  const formRef = useRef<FormInstance>();
+  const formRefAdministrativeInforStep = useRef<FormInstance>();
+  const formRefPrehistoricStep = useRef<FormInstance>();
 
   const onSubmitAdministrativeInforStep = async (values: any) => {
     console.log(values);
@@ -95,16 +95,24 @@ const AddPatient: React.FC<Record<string, any>> = () => {
           current={current}
           onCurrentChange={setCurrent}
           submitter={{
+            searchConfig: {
+              submitText: 'Tiếp',
+            },
             render: (props: any, dom: any) => {
               if (props.step === 2) {
                 return null;
               }
-              return dom;
+              console.log(dom);
+              return null;
             },
           }}
+          // stepsFormRender={(steps, dom) => {
+
+          //   return dom;
+          // }}
         >
           <StepsForm.StepForm<any>
-            formRef={formRef}
+            formRef={formRefAdministrativeInforStep}
             title="Thông tin hành chính"
             initialValues={administrativeInforStep}
             onFinish={onSubmitAdministrativeInforStep}
@@ -114,7 +122,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
           </StepsForm.StepForm>
 
           <StepsForm.StepForm<StepDataType>
-            formRef={formRef}
+            formRef={formRefPrehistoricStep}
             title="Tiền sử"
             initialValues={prehistoric}
             onFinish={onSubmitPrehistoricStep}
@@ -127,29 +135,42 @@ const AddPatient: React.FC<Record<string, any>> = () => {
             <StepResult
               onFinish={async () => {
                 setCurrent(0);
-                formRef.current?.resetFields();
+                formRefAdministrativeInforStep.current?.resetFields();
               }}
             >
               <StepDescriptions stepData={prehistoric} />
             </StepResult>
           </StepsForm.StepForm>
         </StepsForm>
-        {/* <Divider style={{ margin: '40px 0 24px' }} /> */}
-        {/* <div className={styles.desc}>
-          <h3>abcd</h3>
-          <h4>efgh</h4>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem iusto nam ut excepturi
-            suscipit, libero aliquid neque mollitia corrupti beatae asperiores dolorum, recusandae
-            eius, quos dignissimos ipsa repellat illum officia!
-          </p>
-          <h4>转账到银行卡</h4>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam maiores molestias facere
-            a fugit! Quidem aspernatur vero minus porro perspiciatis amet distinctio in dolor sed
-            suscipit! Tenetur quod eaque numquam.
-          </p>
-        </div> */}
+
+        <div className="steps-action">
+          {current < 2 && (
+            <Button
+              type="primary"
+              onClick={() => {
+                if (current === 1) {
+                  formRefPrehistoricStep.current?.validateFields().then((values) => {
+                    setCurrent((prev) => prev + 1);
+                    onSubmitPrehistoricStep(values);
+                  });
+                  return;
+                }
+                formRefAdministrativeInforStep.current?.validateFields().then((values) => {
+                  setAdministrativeInforStep(values);
+                  setCurrent((prev) => prev + 1);
+                });
+              }}
+            >
+              Tiếp theo
+            </Button>
+          )}
+
+          {current > 0 && current < 2 && (
+            <Button style={{ margin: '0 8px' }} onClick={() => setCurrent((prev) => prev - 1)}>
+              Quay lại
+            </Button>
+          )}
+        </div>
       </Card>
     </PageContainer>
   );
