@@ -42,7 +42,7 @@ const { cancel } = Reqs.CancelToken.source();
 let refreshTokenRequest: Promise<any> | null = null;
 const responseInterceptor = async (response: Response, options: RequestOptionsInit) => {
   //@ts-ignore
-  const accessTokenExpired = response.statusCode === 401;
+  const accessTokenExpired = response.status === 401;
   console.log('resposne', response);
 
   if (accessTokenExpired) {
@@ -62,7 +62,7 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
         }),
       );
     } catch (err) {
-      token.delete();
+      // token.delete();
       cancel('Session time out.');
       throw err;
     } finally {

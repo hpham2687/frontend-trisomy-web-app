@@ -2,22 +2,17 @@
 import useAsync from '@/hooks/useAsync';
 import AdministrativeInforStep from '@/pages/trisomy/patients/add/AdministrativeInforStep';
 import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
+import { RollbackOutlined } from '@ant-design/icons';
 import { StepsForm } from '@ant-design/pro-form';
-import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, Descriptions, FormInstance, message, Result, Statistic } from 'antd';
+import { PageContainer, PageLoading } from '@ant-design/pro-layout';
+import { Button, Card, FormInstance, message, Result, Statistic } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import { history } from 'umi';
 import type { StepDataType } from './data';
 import { postEditPatient, queryPatientDetail } from './service';
 import './style/index.css';
 import styles from './style/index.less';
-
-const StepDescriptions: React.FC<{
-  stepData: StepDataType;
-  bordered?: boolean;
-}> = ({ stepData, bordered }) => {
-  return <>null</>;
-};
 
 const StepResult: React.FC<{
   onFinish: () => Promise<void>;
@@ -26,13 +21,12 @@ const StepResult: React.FC<{
     <Result
       status="success"
       title="Thành công"
-      subTitle="Sua bệnh nhân thành công"
+      subTitle="Sửa bệnh nhân thành công"
       extra={
         <>
           <Button type="primary" onClick={props.onFinish}>
             Xem tất cả bệnh nhân
           </Button>
-          {/* <Button>Xem tất cả bệnh nhân vừa thêm</Button> */}
         </>
       }
       className={styles.result}
@@ -46,7 +40,8 @@ const EditPatient: React.FC<Record<string, any>> = () => {
   const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType>(null);
   const [prehistoric, setPrehistoric] = useState<any>();
   const [current, setCurrent] = useState(0);
-  const formRef = useRef<FormInstance>();
+  const formRefAdministrativeInforStep = useRef<FormInstance>();
+  const formRefPrehistoricStep = useRef<FormInstance>();
   const { run, isLoading } = useAsync();
   const { patientId } = useParams<any>();
 
@@ -55,8 +50,8 @@ const EditPatient: React.FC<Record<string, any>> = () => {
       .then((response: any) => {
         setAdministrativeInforStep(response);
         console.log(response);
-        console.log(formRef.current);
-        formRef.current?.setFieldsValue({
+        // console.log(formRef.current);
+        formRefAdministrativeInforStep.current?.setFieldsValue({
           ...response,
         });
       })
@@ -64,7 +59,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
         console.log(error);
         message.error(error.error || 'Có lỗi xảy ra!');
       });
-  }, [patientId, formRef]);
+  }, [patientId, formRefAdministrativeInforStep]);
 
   const onSubmitAdministrativeInforStep = async (values: any) => {
     setAdministrativeInforStep(values);
@@ -95,10 +90,29 @@ const EditPatient: React.FC<Record<string, any>> = () => {
   };
 
   if (isLoading || !administrativeInforStep) {
-    return <> loading</>;
+    return (
+      <>
+        {' '}
+        <PageLoading />
+      </>
+    );
   }
   return (
-    <PageContainer content="Trang sửa thông tin thai phụ">
+    <PageContainer
+      content="Trang sửa thông tin thai phụ"
+      extra={[
+        <>
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
+          </div>
+        </>,
+      ]}
+    >
       <Card bordered={false}>
         <StepsForm
           containerStyle={{ width: '100%' }}
@@ -109,12 +123,13 @@ const EditPatient: React.FC<Record<string, any>> = () => {
               if (props.step === 2) {
                 return null;
               }
-              return dom;
+
+              return null;
             },
           }}
         >
           <StepsForm.StepForm<any>
-            formRef={formRef}
+            formRef={formRefAdministrativeInforStep}
             title="Thông tin hành chính"
             initialValues={administrativeInforStep}
             onFinish={onSubmitAdministrativeInforStep}
@@ -124,7 +139,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
           </StepsForm.StepForm>
 
           <StepsForm.StepForm<StepDataType>
-            formRef={formRef}
+            formRef={formRefPrehistoricStep}
             title="Tiền sử"
             initialValues={prehistoric}
             onFinish={onSubmitPrehistoricStep}
@@ -136,14 +151,44 @@ const EditPatient: React.FC<Record<string, any>> = () => {
           <StepsForm.StepForm title="Hoàn thành">
             <StepResult
               onFinish={async () => {
-                setCurrent(0);
-                formRef.current?.resetFields();
+                history.push('/trisomy/patients/');
               }}
-            >
-              <StepDescriptions stepData={prehistoric} />
-            </StepResult>
+            ></StepResult>
           </StepsForm.StepForm>
         </StepsForm>
+        <div className="steps-action">
+          {current < 2 && (
+            <Button
+              type="primary"
+              onClick={() => {
+                if (current === 1) {
+                  formRefPrehistoricStep.current?.validateFields().then((values) => {
+                    setCurrent((prev) => prev + 1);
+                    onSubmitPrehistoricStep(values);
+                  });
+                  return;
+                }
+                formRefAdministrativeInforStep.current
+                  ?.validateFields()
+                  .then((values) => {
+                    setAdministrativeInforStep(values);
+                    setCurrent((prev) => prev + 1);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
+            >
+              Tiếp theo
+            </Button>
+          )}
+
+          {current > 0 && current < 2 && (
+            <Button style={{ margin: '0 8px' }} onClick={() => setCurrent((prev) => prev - 1)}>
+              Quay lại
+            </Button>
+          )}
+        </div>
       </Card>
     </PageContainer>
   );

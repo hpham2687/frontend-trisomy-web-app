@@ -75,11 +75,13 @@ const PatientList: FC = () => {
       title: 'STT',
       dataIndex: 'key',
       key: 'key',
+      width: 60,
       render: (item, record, index) => index + 1,
     },
     {
       key: 'patientId',
       title: 'Mã bệnh nhân',
+      width: 150,
       dataIndex: 'patientId',
     },
     {
@@ -97,7 +99,7 @@ const PatientList: FC = () => {
       title: 'Ngày sinh',
       dataIndex: 'dateOfBirth',
       render: (dateOfBirth: string) => {
-        return moment(dateOfBirth).format('YYYY-MM-DD');
+        return moment(dateOfBirth).format('DD-MM-YYYY');
       },
     },
     {

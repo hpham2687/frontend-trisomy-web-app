@@ -12,14 +12,6 @@ import { postAddPatient } from './service';
 import './style/index.css';
 import styles from './style/index.less';
 
-const StepDescriptions: React.FC<{
-  stepData: AdministrativeStepDataType;
-  bordered?: boolean;
-}> = ({ stepData, bordered }) => {
-  const { payAccount, receiverAccount, receiverName, amount } = stepData;
-  return <>null</>;
-};
-
 const StepResult: React.FC<{
   onFinish: () => Promise<void>;
 }> = (props) => {
@@ -102,7 +94,6 @@ const AddPatient: React.FC<Record<string, any>> = () => {
               if (props.step === 2) {
                 return null;
               }
-              console.log(dom);
               return null;
             },
           }}
@@ -137,9 +128,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
                 setCurrent(0);
                 formRefAdministrativeInforStep.current?.resetFields();
               }}
-            >
-              <StepDescriptions stepData={prehistoric} />
-            </StepResult>
+            ></StepResult>
           </StepsForm.StepForm>
         </StepsForm>
 

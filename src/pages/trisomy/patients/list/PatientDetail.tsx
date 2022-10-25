@@ -26,7 +26,7 @@ const convertResponseToTableData = (tests: any) => {
     key: test.id,
     testId: test.id,
     testName: test.testName,
-    createdDate: 'cratedatae',
+    createdDate: moment(test.createdAt).format('DD-MM-YYYY'),
     action: test,
   }));
 };
@@ -201,7 +201,9 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
           <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
             {/* <Descriptions.Item label="Ngày sinh">27/03/2001</Descriptions.Item> */}
             <Descriptions.Item label="Địa chỉ">{patientDetail.address}</Descriptions.Item>
-            <Descriptions.Item label="Số điện thoại">{patientDetail.phone}</Descriptions.Item>
+            <Descriptions.Item label="Số điện thoại">
+              {patientDetail.phone || 'NaN'}
+            </Descriptions.Item>
             <Descriptions.Item label="Ngày sinh">
               {moment(patientDetail.dateOfBirth).format('YYYY-MM-DD')}
             </Descriptions.Item>
@@ -422,18 +424,6 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
           </div>
         </>,
       ]}
-      // tabActiveKey={tabStatus.tabActiveKey}
-      // onTabChange={onTabChange}
-      // tabList={[
-      //   {
-      //     key: 'detail',
-      //     tab: '详情',
-      //   },
-      //   {
-      //     key: 'rule',
-      //     tab: '规则',
-      //   },
-      // ]}
     >
       <div className={styles.main}>
         <GridContent>
