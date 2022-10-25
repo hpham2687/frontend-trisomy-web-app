@@ -85,8 +85,7 @@ const Login: React.FC = ({ index }: any) => {
                   submitText: 'Đăng nhập',
                 },
               }}
-              logo={<img alt="logo" src="/logo.svg" />}
-              title="Đại học Bách Khoa HN"
+              title="Trường Đại học Bách Khoa Hà Nội và Trường Đại học Y Hà Nội"
               subTitle={'Tầm soát bệnh di truyền ở thai nhi'}
               initialValues={{
                 autoLogin: true,

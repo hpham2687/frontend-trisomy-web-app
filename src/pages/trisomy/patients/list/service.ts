@@ -8,18 +8,25 @@ export const defaultDateRange = [
   getDefaultFilterTimestamp().end,
 ];
 
-const PAGE_LIMIT = 3;
-export async function queryPatients(
-  page: number,
-  startDate: string = defaultDateRange[0],
-  endDate: string = defaultDateRange[1],
-) {
+const PAGE_LIMIT = 10;
+export async function queryPatients({
+  page,
+  startDate = defaultDateRange[0],
+  endDate = defaultDateRange[1],
+  fullName,
+}: {
+  page: number;
+  startDate: string;
+  endDate: string;
+  fullName?: string;
+}) {
   return request('/patients', {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },
     params: {
       page,
+      fullName,
       limit: PAGE_LIMIT,
       startDate: moment(startDate).startOf('day').toISOString(),
       endDate: moment(endDate).endOf('day').toISOString(),

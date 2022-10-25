@@ -63,16 +63,17 @@ export default defineConfig({
     },
     {
       path: '/trisomy',
-      icon: 'form',
+      icon: 'DotChartOutlined',
       name: 'Bệnh Trisomy 21, 18, 13',
       routes: [
         {
           path: '/trisomy',
+          icon: 'PlusCircleOutlined',
           redirect: '/trisomy/patients/add',
         },
         {
           name: 'Thêm thai phụ',
-          icon: 'smile',
+          icon: 'PlusCircleOutlined',
           path: '/trisomy/patients/add',
           component: './trisomy/patients/add',
           exact: true,
@@ -129,6 +130,35 @@ export default defineConfig({
           component: './exception/500',
         },
       ],
+    },
+    {
+      name: 'Nhóm phát triển',
+      icon: 'ApartmentOutlined',
+      path: '/developers',
+      component: './members/Developers',
+      // routes: [
+      //   {
+      //     path: '/exception',
+      //     redirect: '/exception/403',
+      //   },
+      //   {
+      //     name: '403',
+      //     icon: 'smile',
+      //     path: '/exception/403',
+      //   },
+      //   {
+      //     name: '404',
+      //     icon: 'smile',
+      //     path: '/exception/404',
+      //     component: './exception/404',
+      //   },
+      //   {
+      //     name: '500',
+      //     icon: 'smile',
+      //     path: '/exception/500',
+      //     component: './exception/500',
+      //   },
+      // ],
     },
 
     {

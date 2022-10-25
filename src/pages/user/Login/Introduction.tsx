@@ -1,23 +1,21 @@
+import DeveloperList from '@/components/Common/DeveloperList';
 import { Tabs } from 'antd';
 import { useState } from 'react';
 
 const View = {
   TRISOMY: 'TRISOMY',
   THALASSEMIA: 'THALASSEMIA',
+  DEVELOPERS: 'DEVELOPERS',
 };
 function Introduction(props) {
   const [type, setType] = useState<string>(View.TRISOMY);
 
-  const onChange = (key: string) => {
-    console.log(key);
-    setType(key);
-  };
-
   return (
     <>
-      <Tabs onChange={setType} activeKey={type}>
+      <Tabs onChange={setType} activeKey={type} tabPosition={'top'} centered>
         <Tabs.TabPane key={View.TRISOMY} tab={<>Trisomy 21, 18, 13</>} />
-        <Tabs.TabPane key={View.THALASSEMIA} tab={<>Bệnh tan máu thalassemia</>} />
+        <Tabs.TabPane key={View.THALASSEMIA} tab={<>Bệnh Thalassemia</>} />
+        <Tabs.TabPane key={View.DEVELOPERS} tab={<>Nhóm phát triển</>} />
       </Tabs>
 
       {type === View.TRISOMY && (
@@ -51,6 +49,7 @@ function Introduction(props) {
           thalassemia và bệnh huyết sắc tố.
         </>
       )}
+      {type === View.DEVELOPERS && <DeveloperList orientation={'vertical'} />}
     </>
   );
 }

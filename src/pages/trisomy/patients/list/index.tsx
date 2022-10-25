@@ -40,16 +40,16 @@ const PatientList: FC = () => {
 
   const handleQueryPatients = useCallback(() => {
     const dateRange = form.getFieldValue('dateRange');
+    const fullName = form.getFieldValue('fullName');
     const startDate = dateRange[0];
     const endDate = dateRange[1];
-    run(queryPatients(page, startDate, endDate)).then((response: any) => {
+    run(queryPatients({ page, startDate, endDate, fullName })).then((response: any) => {
       setPatients(convertResponseToTableData(response.results));
       setTotals(response.total);
     });
   }, [page, form]);
 
   useEffect(() => {
-    console.log();
     handleQueryPatients();
   }, [page, handleQueryPatients]);
 
@@ -134,6 +134,7 @@ const PatientList: FC = () => {
       },
     },
   ];
+
   if (selectedPatient) {
     return <PatientDetail patientId={selectedPatient} setSelectedPatient={setSelectedPatient} />;
   }
@@ -142,13 +143,17 @@ const PatientList: FC = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values);
-
-        run(queryPatients(page, values.dateRange[0], values.dateRange[1])).then((response: any) => {
+        run(
+          queryPatients({
+            page,
+            startDate: values.dateRange[0],
+            endDate: values.dateRange[1],
+            fullName: values.fullName,
+          }),
+        ).then((response: any) => {
           setPatients(convertResponseToTableData(response.results));
           setTotals(response.total);
         });
-        // Convert to number type
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -163,14 +168,14 @@ const PatientList: FC = () => {
             <Form
               name="filter-form"
               form={form}
-              // validateMessages={validateMessages}
               initialValues={{
                 dateRange: defaultDateRange,
+                fullName: '',
               }}
             >
               <FilterWrapper>
                 <ProFormDateRangePicker name="dateRange" label="Lọc theo ngày" />
-                <ProFormText name="text" label="Lọc theo tên" placeholder="Lọc theo tên" />
+                <ProFormText name="fullName" label="Lọc theo tên" placeholder="Lọc theo tên" />
 
                 <Button type="primary" icon={<SearchOutlined />} onClick={handleFilter}>
                   Tìm kiếm
@@ -181,9 +186,9 @@ const PatientList: FC = () => {
               pagination={{
                 position: ['bottomRight'],
                 total: totals,
-                pageSize: 3,
-                onChange: (page: number) => {
-                  setPage(page - 1);
+                pageSize: 10,
+                onChange: (targetPageNumber: number) => {
+                  setPage(targetPageNumber - 1);
                 },
               }}
               loading={isLoading}

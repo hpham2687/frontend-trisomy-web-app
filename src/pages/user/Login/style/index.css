@@ -1,4 +1,7 @@
 @media only screen and (max-width: 600px) {
+  .ant-tabs-tab {
+    margin-left: 8px !important;
+  }
   span.ant-pro-form-login-title {
     margin-top: 24px;
     font-size: 24px;
@@ -6,4 +9,25 @@
   #lang-select {
     display: none;
   }
+  .ant-pro-form-login-title {
+    font-size: 24px !important;
+    line-height: 1.5;
+  }
+  .ant-pro-form-login-desc {
+    margin-top: 32px !important;
+  }
+}
+.ant-pro-form-login-title {
+  font-size: 24px !important;
+  line-height: 1.5;
+}
+.ant-pro-form-login-header {
+  height: auto !important;
+  line-height: 1.5 !important;
+}
+.ant-pro-form-login-desc {
+  margin-top: 24px !important;
+}
+.ant-pro-form-login-top {
+  margin-top: 16px;
 }

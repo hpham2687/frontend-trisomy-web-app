@@ -1,0 +1,11 @@
+.ant-list-items {
+  height: 600px !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .ant-list-items {
+    height: 400px !important;
+  }
+}
