@@ -31,7 +31,7 @@ function PrehistoricStep() {
             </Col>
           </Row>
         </Col>
-        <Col lg={{ span: 12 }} md={{ span: 12 }} sm={24}>
+        <Col lg={{ span: 12 }} md={{ span: 8 }} sm={24}>
           <SubSection>
             <h4 style={{ marginRight: 16 }}>Phụ khoa</h4>
             <ProFormRadio.Group name="checkbox-group" options={['Khoẻ mạnh', 'Có bệnh lý']} />

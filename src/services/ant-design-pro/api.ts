@@ -2,11 +2,16 @@
 /* eslint-disable */
 import token from '@/utils/token';
 import request from '@/utils/request';
+import jwt_decode from 'jwt-decode';
+
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
+  const accessToken = token.get().accessToken || '';
+  const decoded: any = jwt_decode(accessToken);
+  const { isAdmin = false } = decoded;
   return request<{
     data: API.CurrentUser;
-  }>('/user/currentUser', {
+  }>(isAdmin ? '/admin/currentUser' : '/user/currentUser', {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },

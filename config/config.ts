@@ -38,23 +38,23 @@ export default defineConfig({
           path: '/user/login',
           layout: false,
           name: 'login',
-          component: './user/Login',
+          component: './authentication/Login',
         },
         {
           path: '/user',
-          redirect: '/user/login',
+          redirect: '/authentication/login',
         },
         {
           name: 'register-result',
           icon: 'smile',
           path: '/user/register-result',
-          component: './user/register-result',
+          component: './authentication/register-result',
         },
         {
           name: 'register',
           icon: 'smile',
           path: '/user/register',
-          component: './user/register',
+          component: './authentication/register',
         },
         {
           component: '404',
@@ -62,26 +62,26 @@ export default defineConfig({
       ],
     },
     {
-      path: '/trisomy',
+      path: '/patients',
       icon: 'DotChartOutlined',
-      name: 'Bệnh Trisomy 21, 18, 13',
+      name: 'Thai phụ',
       routes: [
-        {
-          path: '/trisomy',
-          icon: 'PlusCircleOutlined',
-          redirect: '/trisomy/patients/add',
-        },
+        // {
+        //   path: '/patients',
+        //   icon: 'PlusCircleOutlined',
+        //   redirect: '/patients/add',
+        // },
         {
           name: 'Thêm thai phụ',
           icon: 'PlusCircleOutlined',
-          path: '/trisomy/patients/add',
+          path: '/patients/add',
           component: './trisomy/patients/add',
           exact: true,
         },
         {
           name: 'Sửa thông tin thai phụ',
           icon: 'smile',
-          path: '/trisomy/patients/:patientId/edit',
+          path: '/patients/:patientId/edit',
           hideInMenu: true,
           component: './trisomy/patients/edit',
           exact: true,
@@ -89,17 +89,17 @@ export default defineConfig({
         {
           name: 'Danh sách thai phụ',
           icon: 'table',
-          path: '/trisomy/patients/',
+          path: '/patients/',
           component: './trisomy/patients/list',
           exact: true,
         },
       ],
     },
-    {
-      path: '/thalassemia',
-      icon: 'form',
-      name: 'Bệnh Thalassemia',
-    },
+    // {
+    //   path: '/thalassemia',
+    //   icon: 'form',
+    //   name: 'Bệnh Thalassemia',
+    // },
 
     {
       name: 'exception',
@@ -162,26 +162,36 @@ export default defineConfig({
     },
 
     {
-      path: '/admin',
-      name: 'admin',
+      path: '/members',
+      name: 'Thành viên',
       icon: 'crown',
       access: 'canAdmin',
-      component: './members',
-      // routes: [
-      //   {
-      //     path: '/admin/sub-page',
-      //     name: 'sub-page',
-      //     icon: 'smile',
-      //     component: './Welcome',
-      //   },
-      //   {
-      //     component: './404',
-      //   },
-      // ],
+      // component: './members',
+      routes: [
+        {
+          path: '/members/add',
+          name: 'Thêm thành viên',
+          icon: 'smile',
+          component: './members/add',
+          exact: true,
+          access: 'canAdmin',
+        },
+        {
+          path: '/members/',
+          name: 'Danh sách',
+          icon: 'smile',
+          component: './members/list',
+          exact: true,
+          access: 'canAdmin',
+        },
+        // {
+        //   component: './404',
+        // },
+      ],
     },
     {
       path: '/',
-      redirect: '/trisomy/patients/',
+      redirect: '/patients/',
     },
     {
       component: '404',

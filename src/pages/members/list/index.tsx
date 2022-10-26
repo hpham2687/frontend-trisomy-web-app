@@ -63,7 +63,7 @@ const convertResponseToTableData = (patients: any) => {
     action: patient,
   }));
 };
-const PatientList: FC = () => {
+const MembersList: FC = () => {
   const { run, isLoading } = useAsync();
   const { run: runDeletePatient, isLoading: isLoadingDeletePatient } = useAsync();
   const [patients, setPatients] = useState([]);
@@ -150,7 +150,7 @@ const PatientList: FC = () => {
                   setSelectedPatient(patient.id);
                 }}
               >
-                Phân tích
+                Chi tiết
               </span>
               <Link
                 to={`/trisomy/patients/${patient.id}/edit`}
@@ -239,7 +239,7 @@ const PatientList: FC = () => {
                     history.push('/patients/add');
                   }}
                 >
-                  Thêm thai phụ
+                  Thêm thành viên
                 </Button>
               </FilterWrapper>
             </Form>
@@ -263,4 +263,4 @@ const PatientList: FC = () => {
   );
 };
 
-export default PatientList;
+export default MembersList;

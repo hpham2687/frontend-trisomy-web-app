@@ -11,7 +11,6 @@ function GeneralInfo({ body, ...rest }: any) {
       //     Thêm
       //   </Button>,
       // ]}
-
       title="Kết quả chuẩn đoán AI "
       // onOk={handleOk}
       //  onCancel={handleCancel}

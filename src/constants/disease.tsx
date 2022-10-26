@@ -2,6 +2,14 @@ import { FamilyDiseaseDataType } from '../types/disease';
 import { PersonalDiseaseDataType } from '@/types/disease';
 import { ProFormRadio, ProFormText } from '@ant-design/pro-form';
 import { ColumnsType } from 'antd/lib/table';
+import styled from 'styled-components';
+
+const DiseaseDetailInput = styled(ProFormText)`
+  input {
+    min-width: 300px;
+  }
+`;
+
 // patient/create table data
 export const personalDiseaseData: PersonalDiseaseDataType[] = [
   {
@@ -145,7 +153,7 @@ export const familyDiseaseColumns: ColumnsType<FamilyDiseaseDataType> = [
     dataIndex: 'tags',
     render: (_, record, index) => (
       <>
-        <ProFormText name={`name2-${index}`} placeholder="Nhập cụ thể" />
+        <DiseaseDetailInput name={`name2-${index}`} placeholder="Nhập cụ thể" />
       </>
     ),
   },
@@ -157,11 +165,13 @@ export const personalDiseaseColumns: ColumnsType<PersonalDiseaseDataType> = [
     dataIndex: 'diseaseName',
     key: 'diseaseName',
     render: (text) => text,
+    width: 120,
   },
   {
     title: 'Tình trạng',
     dataIndex: 'personalDisease',
     key: 'personalDisease',
+    width: 180,
     render: (value, _, index) => (
       <ProFormRadio.Group
         name={`personalDisease-${index}`}
@@ -176,7 +186,12 @@ export const personalDiseaseColumns: ColumnsType<PersonalDiseaseDataType> = [
     dataIndex: 'tags',
     render: (_, record, index) => (
       <>
-        <ProFormText name={`name2-${index}`} placeholder="Nhập cụ thể" />
+        <DiseaseDetailInput
+          className="diseaseDetail"
+          width="md"
+          name={`name2-${index}`}
+          placeholder="Nhập cụ thể"
+        />
       </>
     ),
   },

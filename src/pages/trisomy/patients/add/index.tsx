@@ -150,7 +150,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
                 });
               }}
             >
-              Tiếp theo
+              {current === 1 ? 'Lưu' : 'Tiếp theo'}
             </Button>
           )}
 

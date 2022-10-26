@@ -1,7 +1,7 @@
 import token from '@/utils/token';
 import { getCreateDeleteTestResultEndpoint } from '@/constants/tests';
 import request from '@/utils/request';
-export async function addBloodTestResult({
+export async function addTestResult({
   patientId,
   payload,
   testName,
@@ -18,7 +18,7 @@ export async function addBloodTestResult({
     method: 'POST',
   });
 }
-export async function editBloodTestResult({
+export async function editTestResult({
   patientId,
   payload,
   testName,

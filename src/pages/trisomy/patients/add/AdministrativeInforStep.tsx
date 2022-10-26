@@ -33,9 +33,8 @@ function AdministrativeInforStep() {
           <ProFormText
             label="Địa chỉ"
             name="address"
-            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+            // rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
             placeholder="Nhập địa chỉ bệnh nhân"
-            extra="Chỉ nhập tỉnh"
           />
         </Col>
       </Row>
@@ -137,7 +136,7 @@ function AdministrativeInforStep() {
           <ProFormText
             label="Cân nặng (hiện tại)"
             name="weight"
-            rules={[{ required: true, message: 'Vui lòng nhập cân nặng' }]}
+            // rules={[{ required: true, message: 'Vui lòng nhập cân nặng' }]}
             placeholder="Nhập cân nặng"
             extra="Đơn vị kg"
           />

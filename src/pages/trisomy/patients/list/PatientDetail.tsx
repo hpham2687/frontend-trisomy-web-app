@@ -11,7 +11,19 @@ import {
 } from '@ant-design/icons';
 import ProForm, { ProFormInstance, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
 import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
-import { Button, Card, Descriptions, message, Modal, Row, Statistic, Table } from 'antd';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Descriptions,
+  Form,
+  message,
+  Modal,
+  Row,
+  Statistic,
+  Table,
+} from 'antd';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'umi';
@@ -20,13 +32,14 @@ import styles from './style/index.less';
 import './style/index.css';
 import styled from 'styled-components';
 import { BreakPoints } from '@/constants/common';
+const CheckboxGroup = Checkbox.Group;
 
 const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
     key: test.id,
     testId: test.id,
     testName: test.testName,
-    createdDate: moment(test.createdAt).format('DD-MM-YYYY'),
+    createdDate: moment(Number(test.testDate)).format('DD-MM-YYYY'),
     action: test,
   }));
 };
@@ -173,7 +186,9 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
     Modal.confirm({
       title: 'Xác nhận',
       icon: <ExclamationCircleOutlined />,
-      content: `Bạn có chắc là muốn xóa kết quả xét nghiệm ${removeTest.testName} ngày chứ?`,
+      content: `Bạn có chắc là muốn xóa kết quả ${getVietnameseTestName(
+        removeTest.testName,
+      )} ngày chứ?`,
       okText: 'Có',
       cancelText: 'Không',
 
@@ -249,10 +264,10 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
                 payload: {
                   modalKey: ModalKey.GENERAL_INFO,
                   customProps: {
+                    footer: null,
                     body: (
                       <>
                         <ProForm
-                          readonly={false}
                           name="validate_other"
                           initialValues={{
                             doctor_selection: 'trisomy21',
@@ -262,44 +277,52 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
                           }}
                           formRef={formRef}
                           onFinish={async (value) => console.log(value)}
-                          submitter={{
-                            render: () => {
-                              <></>;
-                            },
-                          }}
+                          submitter={{ render: () => {} }}
                         >
-                          <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
+                          <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
                             <Descriptions.Item label="trisomy 21">0.32</Descriptions.Item>
                             <Descriptions.Item label="trisomy 18">0.44</Descriptions.Item>
                             <Descriptions.Item label="trisomy 13">0.2</Descriptions.Item>
                           </Descriptions>
-                          <ProFormSelect
-                            label={'Kết luận của bác sĩ'}
-                            name="doctor_selection"
-                            // rules={[{ required: true, message: '请选择审批员' }]}
-                            options={[
-                              {
-                                label: 'Trisomy 21',
-                                value: 'trisomy21',
-                              },
-
-                              {
-                                label: 'Trisomy 18',
-                                value: 'trisomy18',
-                              },
-
-                              {
-                                label: 'Trisomy 13',
-                                value: 'trisomy13',
-                              },
-                            ]}
-                            placeholder="Nhập nghề nghiệp"
-                          />
+                          <div style={{ marginBottom: 16 }}>
+                            <p>Kết luận của bác sĩ</p>
+                            <Form.Item name="diseaseName">
+                              <Checkbox.Group>
+                                <Row>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
+                                      Trisomy 21
+                                    </Checkbox>
+                                  </Col>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
+                                      Trisomy 18
+                                    </Checkbox>
+                                  </Col>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
+                                      Trisomy 13
+                                    </Checkbox>
+                                  </Col>
+                                </Row>
+                              </Checkbox.Group>
+                            </Form.Item>
+                          </div>
                           <ProFormTextArea
                             label="Chẩn đoán của bác sỹ"
-                            name="invoiceType"
+                            name="doctorComment"
                             placeholder="Nhập chẩn đoán của bác sỹ"
                           />
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              formRef.current?.validateFields().then((values) => {
+                                console.log(values);
+                              });
+                            }}
+                          >
+                            Lưu kết quả
+                          </Button>
                         </ProForm>
                       </>
                     ),
@@ -329,9 +352,9 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
                           initialValues={{
                             doctor_selection: 'trisomy21',
                           }}
-                          onValuesChange={(_, values) => {
-                            console.log(values);
-                          }}
+                          // onValuesChange={(_, values) => {
+                          //   console.log(values);
+                          // }}
                           formRef={formRef}
                           onFinish={async (value) => console.log(value)}
                           submitter={{
