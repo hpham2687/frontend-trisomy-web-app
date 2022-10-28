@@ -2,22 +2,24 @@
 import { ProFormDatePicker, ProFormRadio, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { Col, Divider, Row } from 'antd';
 
-function AdministrativeInforStep() {
+function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readonly: false }) {
   return (
     <>
       <h3 style={{ marginBottom: '24px' }}>Thông tin thai phụ</h3>
       <Row gutter={16}>
         <Col md={6} xs={24}>
           <ProFormText
+            readonly={readonly}
             label={'Họ và tên'}
             name="fullName"
             rules={[{ required: true, message: 'Vui lòng nhập tên bệnh nhân' }]}
             placeholder="Nhập họ và tên"
-            extra="Nguyễn Thị A"
+            extra={!readonly && 'Nguyễn Thị A'}
           />
         </Col>
         <Col md={6} xs={24}>
           <ProFormDatePicker
+            readonly={readonly}
             label={'Ngày sinh'}
             name="dateOfBirth"
             rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
@@ -35,6 +37,7 @@ function AdministrativeInforStep() {
             name="address"
             // rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
             placeholder="Nhập địa chỉ bệnh nhân"
+            readonly={readonly}
           />
         </Col>
       </Row>
@@ -48,6 +51,7 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập địa chỉ bệnh nhân"
+            readonly={readonly}
           />
         </Col>
         <Col lg={6} md={12} xs={24}>
@@ -66,6 +70,7 @@ function AdministrativeInforStep() {
               },
             ]}
             placeholder="Nhập nghề nghiệp"
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 24 }} xs={24}>
@@ -73,7 +78,7 @@ function AdministrativeInforStep() {
             label={'Học vấn'}
             name="education"
             // rules={[{ required: true, message: '请选择审批员' }]}
-
+            readonly={readonly}
             options={[
               {
                 label: 'Mù chữ',
@@ -104,6 +109,7 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập dân tộc"
+            readonly={readonly}
           />
         </Col>
       </Row>
@@ -117,7 +123,8 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập chiều cao"
-            extra="Đơn vị cm"
+            extra={!readonly && 'Đơn vị cm'}
+            readonly={readonly}
           />
         </Col>
         <Col lg={6} md={12} xs={24}>
@@ -129,7 +136,8 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập cân nặng"
-            extra="Đơn vị kg"
+            extra={!readonly && 'Đơn vị kg'}
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 24 }} xs={24}>
@@ -138,7 +146,8 @@ function AdministrativeInforStep() {
             name="weight"
             // rules={[{ required: true, message: 'Vui lòng nhập cân nặng' }]}
             placeholder="Nhập cân nặng"
-            extra="Đơn vị kg"
+            extra={!readonly && 'Đơn vị kg'}
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
@@ -150,6 +159,7 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập huyết áp bệnh nhân"
+            readonly={readonly}
           />
         </Col>
       </Row>
@@ -163,6 +173,7 @@ function AdministrativeInforStep() {
             name="husbandFullName"
             // rules={[{ required: true, message: 'Vui lòng nhập tên bệnh nhân' }]}
             placeholder="Nhập họ và tên"
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
@@ -176,6 +187,7 @@ function AdministrativeInforStep() {
                 width: '100%',
               },
             }}
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
@@ -187,6 +199,7 @@ function AdministrativeInforStep() {
             //   // { type: 'email', message: '账户名应为邮箱格式' },
             // ]}
             placeholder="Nhập số điện thoại chồng bệnh nhân"
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 6 }} xs={24}>
@@ -205,6 +218,7 @@ function AdministrativeInforStep() {
               },
             ]}
             placeholder="Nhập nghề nghiệp"
+            readonly={readonly}
           />
         </Col>
       </Row>
@@ -218,6 +232,7 @@ function AdministrativeInforStep() {
               { label: 'Có', value: true },
               { label: 'Không', value: false },
             ]}
+            readonly={readonly}
           />
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
@@ -229,6 +244,7 @@ function AdministrativeInforStep() {
               { label: 'Có', value: true },
               { label: 'Không', value: false },
             ]}
+            readonly={readonly}
           />
         </Col>
       </Row>

@@ -3,7 +3,14 @@ import { ModalKey } from '@/components/Modals';
 import { getVietnameseTestName, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
 import { deleteTestResult, queryPatientDetail } from '@/pages/patients/list/service';
-import { ExclamationCircleOutlined, FundOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  BorderOuterOutlined,
+  ExclamationCircleOutlined,
+  EyeOutlined,
+  FundOutlined,
+  PlusOutlined,
+  RollbackOutlined,
+} from '@ant-design/icons';
 import ProForm, { ProFormInstance, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
 import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
 import {
@@ -205,27 +212,7 @@ function PatientDetail() {
       },
     });
   };
-  const headerDescription = (
-    <RouteContext.Consumer>
-      {({ isMobile }) => (
-        <>
-          <Descriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-            {/* <Descriptions.Item label="Ngày sinh">27/03/2001</Descriptions.Item> */}
-            <Descriptions.Item label="Địa chỉ">{patientDetail.address}</Descriptions.Item>
-            <Descriptions.Item label="Số điện thoại">
-              {patientDetail.phone || 'NaN'}
-            </Descriptions.Item>
-            <Descriptions.Item label="Ngày sinh">
-              {moment(patientDetail.dateOfBirth).format('YYYY-MM-DD')}
-            </Descriptions.Item>
-            {/* <Descriptions.Item label="生效日期">2017-07-07 ~ 2017-08-08</Descriptions.Item>
-            <Descriptions.Item label="备注">请于两个工作日内确认</Descriptions.Item> */}
-          </Descriptions>
-        </>
-      )}
-    </RouteContext.Consumer>
-  );
-  // const [form] = Form.useForm<{ name: string; company: string }>();
+
   const contentList = {
     tab1: (
       <>
@@ -273,7 +260,7 @@ function PatientDetail() {
                           }}
                           formRef={formRef}
                           onFinish={async (value) => console.log(value)}
-                          submitter={{ render: () => {} }}
+                          submitter={{ render: () => null }}
                         >
                           <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
                             <Descriptions.Item label="trisomy 21">0.32</Descriptions.Item>
@@ -354,9 +341,7 @@ function PatientDetail() {
                           formRef={formRef}
                           onFinish={async (value) => console.log(value)}
                           submitter={{
-                            render: () => {
-                              <></>;
-                            },
+                            render: () => null,
                           }}
                         >
                           <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
@@ -431,18 +416,20 @@ function PatientDetail() {
       className={styles.pageHeader}
       // content={headerDescription}
       // extraContent={extra}
-      // extra={[
-      //   <>
-      //     <div
-      //       style={{ cursor: 'pointer' }}
-      //       onClick={() => {
-      //         history.goBack();
-      //       }}
-      //     >
-      //       <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
-      //     </div>
-      //   </>,
-      // ]}
+      extra={[
+        <>
+          <Button
+            style={{ display: 'flex', alignItems: 'center', padding: 0 }}
+            type="link"
+            onClick={() => {
+              history.push(`/patients/${patientId}/view`);
+            }}
+            icon={<EyeOutlined style={{ fontSize: 24 }} />}
+          >
+            Chi tiết
+          </Button>
+        </>,
+      ]}
     >
       <div className={styles.main}>
         <GridContent>

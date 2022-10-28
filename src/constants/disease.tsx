@@ -114,7 +114,9 @@ export const familyDiseaseData: FamilyDiseaseDataType[] = [
   },
 ];
 
-export const familyDiseaseColumns: ColumnsType<FamilyDiseaseDataType> = [
+export const familyDiseaseColumns: ({ readonly }: any) => ColumnsType<FamilyDiseaseDataType> = (
+  { readonly }: any = { readonly: false },
+) => [
   {
     title: 'Bệnh',
     dataIndex: 'diseaseName',
@@ -130,6 +132,7 @@ export const familyDiseaseColumns: ColumnsType<FamilyDiseaseDataType> = [
         name={`motherFamily-${index}`}
         initialValue={value ? 'Có' : 'Không'}
         options={['Có', 'Không']}
+        readonly={readonly}
       />
     ),
   },
@@ -143,6 +146,7 @@ export const familyDiseaseColumns: ColumnsType<FamilyDiseaseDataType> = [
           name={`husbandFamily-${index}`}
           initialValue={value ? 'Có' : 'Không'}
           options={['Có', 'Không']}
+          readonly={readonly}
         />
       );
     },
@@ -153,13 +157,19 @@ export const familyDiseaseColumns: ColumnsType<FamilyDiseaseDataType> = [
     dataIndex: 'tags',
     render: (_, record, index) => (
       <>
-        <DiseaseDetailInput name={`name2-${index}`} placeholder="Nhập cụ thể" />
+        <DiseaseDetailInput
+          name={`family-${index}`}
+          placeholder="Nhập cụ thể"
+          readonly={readonly}
+        />
       </>
     ),
   },
 ];
 
-export const personalDiseaseColumns: ColumnsType<PersonalDiseaseDataType> = [
+export const personalDiseaseColumns: ({ readonly }: any) => ColumnsType<PersonalDiseaseDataType> = (
+  { readonly }: any = { readonly: false },
+) => [
   {
     title: 'Bệnh',
     dataIndex: 'diseaseName',
@@ -177,6 +187,7 @@ export const personalDiseaseColumns: ColumnsType<PersonalDiseaseDataType> = [
         name={`personalDisease-${index}`}
         initialValue={value ? 'Có' : 'Không'}
         options={['Có', 'Không']}
+        readonly={readonly}
       />
     ),
   },
@@ -191,6 +202,7 @@ export const personalDiseaseColumns: ColumnsType<PersonalDiseaseDataType> = [
           width="md"
           name={`name2-${index}`}
           placeholder="Nhập cụ thể"
+          readonly={readonly}
         />
       </>
     ),

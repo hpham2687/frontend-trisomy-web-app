@@ -102,14 +102,15 @@ const EditPatient: React.FC<Record<string, any>> = () => {
       content="Trang sửa thông tin thai phụ"
       extra={[
         <>
-          <div
-            style={{ cursor: 'pointer' }}
+          <Button
+            type="link"
+            style={{ padding: 0 }}
             onClick={() => {
               history.goBack();
             }}
           >
             <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
-          </div>
+          </Button>
         </>,
       ]}
     >

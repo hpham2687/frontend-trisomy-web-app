@@ -9,7 +9,7 @@ import { ProFormRadio, ProFormText, ProFormTextArea } from '@ant-design/pro-form
 import { Col, Divider, Row, Table } from 'antd';
 import styled from 'styled-components';
 
-function PrehistoricStep() {
+function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: false }) {
   return (
     <>
       <h3 style={{ marginBottom: '24px' }}>Tiền sử</h3>
@@ -19,13 +19,17 @@ function PrehistoricStep() {
         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={24}>
           <SubSection>
             <h4 style={{ marginRight: 16 }}>Nội ngoại khoa</h4>
-            <ProFormRadio.Group name="noi-ngoai-khoa" options={['Khoẻ mạnh', 'Có bệnh lý']} />
+            <ProFormRadio.Group
+              name="noi-ngoai-khoa"
+              options={['Khoẻ mạnh', 'Có bệnh lý']}
+              readonly={readonly}
+            />
           </SubSection>
           <Row gutter={16} style={{ maxHeight: 400, overflow: 'scroll' }}>
             <Col lg={24} md={12} sm={24}>
               <Table
                 pagination={false}
-                columns={personalDiseaseColumns}
+                columns={personalDiseaseColumns({ readonly })}
                 dataSource={personalDiseaseData}
               />
             </Col>
@@ -34,7 +38,11 @@ function PrehistoricStep() {
         <Col lg={{ span: 12 }} md={{ span: 8 }} sm={24}>
           <SubSection>
             <h4 style={{ marginRight: 16 }}>Phụ khoa</h4>
-            <ProFormRadio.Group name="checkbox-group" options={['Khoẻ mạnh', 'Có bệnh lý']} />
+            <ProFormRadio.Group
+              name="checkbox-group"
+              options={['Khoẻ mạnh', 'Có bệnh lý']}
+              readonly={readonly}
+            />
           </SubSection>
           <Row gutter={16}>
             <Col lg={12} md={12} sm={24}>
@@ -46,6 +54,7 @@ function PrehistoricStep() {
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
                 // ]}
                 placeholder="Nhập tuổi bắt đầu có kinh"
+                readonly={readonly}
               />
             </Col>
 
@@ -58,6 +67,7 @@ function PrehistoricStep() {
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
                 // ]}
                 placeholder="Nhập chu kỳ kinh nguyệt"
+                readonly={readonly}
               />
             </Col>
 
@@ -70,6 +80,7 @@ function PrehistoricStep() {
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
                 // ]}
                 placeholder="Nhập số ngày thấy kinh"
+                readonly={readonly}
               />
             </Col>
             <Col lg={12} md={12} sm={24}>
@@ -81,6 +92,7 @@ function PrehistoricStep() {
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
                 // ]}
                 placeholder="Nhập tuổi lấy chồng"
+                readonly={readonly}
               />
             </Col>
           </Row>
@@ -90,6 +102,7 @@ function PrehistoricStep() {
                 label="Bệnh phụ khoa đã mắc và điều trị"
                 name="invoiceType"
                 placeholder="Nhập bệnh phụ khoa đã mắc và điều trị"
+                readonly={readonly}
               />
             </Col>
           </Row>
@@ -103,7 +116,7 @@ function PrehistoricStep() {
         <Col lg={24} md={12} sm={24}>
           <Table
             pagination={false}
-            columns={familyDiseaseColumns}
+            columns={familyDiseaseColumns({ readonly })}
             dataSource={familyDiseaseData}
             style={{ marginBottom: '24px' }}
           />

@@ -82,6 +82,14 @@ export default defineConfig({
           exact: true,
         },
         {
+          name: 'Xem thông tin thai phụ',
+          icon: 'smile',
+          path: '/patients/:patientId/view',
+          hideInMenu: true,
+          component: './patients/view',
+          exact: true,
+        },
+        {
           name: 'Danh sách thai phụ',
           icon: 'table',
           path: '/patients/',
