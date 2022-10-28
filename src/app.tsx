@@ -57,12 +57,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
-    onPageChange: () => {
-      const { location } = history;
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
-    },
+    // onPageChange: () => {
+    //   const { location } = history;
+    //   if (!initialState?.currentUser && location.pathname !== loginPath) {
+    //     history.push(loginPath);
+    //   }
+    // },
 
     menuHeaderRender: undefined,
     // 自定义 403 页面

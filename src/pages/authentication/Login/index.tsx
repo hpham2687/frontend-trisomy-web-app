@@ -1,25 +1,16 @@
-import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons';
-import { Alert, Col, message, Row, Tabs } from 'antd';
-import React, { useState } from 'react';
-import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
-import {
-  useIntl,
-  history,
-  FormattedMessage,
-  SelectLang,
-  useModel,
-  connect,
-  IndexModelState,
-  Loading,
-} from 'umi';
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
-import { getFakeCaptcha } from '@/services/ant-design-pro/login';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
+import { Alert, message, Tabs } from 'antd';
+import React, { useState } from 'react';
+import { connect, history, IndexModelState, Loading, useIntl, useModel } from 'umi';
 
+import UnauthenticatedHeader from '@/components/Unautenticated/Header';
+import token from '@/utils/token';
 import './style/index.css';
 import styles from './style/index.less';
-import token from '@/utils/token';
-import Introduction from './Introduction';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -69,141 +60,134 @@ const Login: React.FC = ({ index }: any) => {
   const { status, type: loginType } = userLoginState;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.lang} data-lang id="lang-select">
-        {SelectLang && <SelectLang />}
-      </div>
-      <div className={styles.content}>
-        <Row>
-          <Col md={12} xs={24}>
-            <Introduction />
-          </Col>
-          <Col md={12} xs={24}>
-            <LoginForm
-              submitter={{
-                searchConfig: {
-                  submitText: 'Đăng nhập',
-                },
-              }}
-              title="Trường Đại học Bách Khoa Hà Nội và Trường Đại học Y Hà Nội"
-              subTitle={'Tầm soát bệnh di truyền ở thai nhi'}
-              initialValues={{
-                autoLogin: true,
-              }}
-              onFinish={async (values) => {
-                await handleSubmit(values as API.LoginParams);
+    <>
+      <UnauthenticatedHeader />
+      <div className={styles.container}>
+        <div className={styles.content}>
+          {/* <Row> */}
+          {/* <Col md={12} xs={24}> */}
+          <LoginForm
+            submitter={{
+              searchConfig: {
+                submitText: 'Đăng nhập',
+              },
+            }}
+            title="Trường Đại học Bách Khoa Hà Nội và Trường Đại học Y Hà Nội"
+            subTitle={'Tầm soát bệnh di truyền ở thai nhi'}
+            initialValues={{
+              autoLogin: true,
+            }}
+            onFinish={async (values) => {
+              await handleSubmit(values as API.LoginParams);
+            }}
+          >
+            <Tabs
+              activeKey={type}
+              onChange={(e) => {
+                setType(e);
               }}
             >
-              <Tabs
-                activeKey={type}
-                onChange={(e) => {
-                  console.log(e);
+              <Tabs.TabPane key="doctor" tab={'Bác sĩ'} />
+              <Tabs.TabPane key="admin" tab={'Quản trị viên'} />
+            </Tabs>
 
-                  setType(e);
-                }}
-              >
-                <Tabs.TabPane key="doctor" tab={'Bác sĩ'} />
-                <Tabs.TabPane key="admin" tab={'Quản trị viên'} />
-              </Tabs>
-
-              {status === 'error' && loginType === 'account' && (
-                <LoginMessage
-                  content={intl.formatMessage({
-                    id: 'pages.login.accountLogin.errorMessage',
-                    defaultMessage: '账户或密码错误(admin/ant.design)',
-                  })}
-                />
-              )}
-              {type === 'doctor' && (
-                <>
-                  <ProFormText
-                    name="email"
-                    fieldProps={{
-                      size: 'large',
-                      prefix: <UserOutlined className={styles.prefixIcon} />,
-                    }}
-                    placeholder={'Nhập email của bác sĩ'}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhập email của bác sĩ',
-                      },
-                    ]}
-                  />
-                  <ProFormText.Password
-                    name="password"
-                    fieldProps={{
-                      size: 'large',
-                      prefix: <LockOutlined className={styles.prefixIcon} />,
-                    }}
-                    placeholder={'Nhập mật khẩu'}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhận mật khẩu',
-                      },
-                    ]}
-                  />
-                </>
-              )}
-
-              {status === 'error' && loginType === 'mobile' && (
-                <LoginMessage content="验证码错误" />
-              )}
-              {type === 'admin' && (
-                <>
-                  <ProFormText
-                    name="email"
-                    fieldProps={{
-                      size: 'large',
-                      prefix: <UserOutlined className={styles.prefixIcon} />,
-                    }}
-                    placeholder={'Nhập email của bác sĩ'}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhập email của bác sĩ',
-                      },
-                    ]}
-                  />
-                  <ProFormText.Password
-                    name="password"
-                    fieldProps={{
-                      size: 'large',
-                      prefix: <LockOutlined className={styles.prefixIcon} />,
-                    }}
-                    placeholder={'Nhập mật khẩu'}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng nhận mật khẩu',
-                      },
-                    ]}
-                  />
-                </>
-              )}
-              <div
-                style={{
-                  marginBottom: 24,
-                }}
-              >
-                <ProFormCheckbox noStyle name="autoLogin">
-                  Nhớ mật khẩu
-                </ProFormCheckbox>
-                <a
-                  style={{
-                    float: 'right',
+            {status === 'error' && loginType === 'account' && (
+              <LoginMessage
+                content={intl.formatMessage({
+                  id: 'pages.login.accountLogin.errorMessage',
+                  defaultMessage: '账户或密码错误(admin/ant.design)',
+                })}
+              />
+            )}
+            {type === 'doctor' && (
+              <>
+                <ProFormText
+                  name="email"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <UserOutlined className={styles.prefixIcon} />,
                   }}
-                >
-                  Quên mật khẩu
-                </a>
-              </div>
-            </LoginForm>
-          </Col>
-        </Row>
+                  placeholder={'Nhập email của bác sĩ'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập email của bác sĩ',
+                    },
+                  ]}
+                />
+                <ProFormText.Password
+                  name="password"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <LockOutlined className={styles.prefixIcon} />,
+                  }}
+                  placeholder={'Nhập mật khẩu'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhận mật khẩu',
+                    },
+                  ]}
+                />
+              </>
+            )}
+
+            {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+            {type === 'admin' && (
+              <>
+                <ProFormText
+                  name="email"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <UserOutlined className={styles.prefixIcon} />,
+                  }}
+                  placeholder={'Nhập email của bác sĩ'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhập email của bác sĩ',
+                    },
+                  ]}
+                />
+                <ProFormText.Password
+                  name="password"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <LockOutlined className={styles.prefixIcon} />,
+                  }}
+                  placeholder={'Nhập mật khẩu'}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng nhận mật khẩu',
+                    },
+                  ]}
+                />
+              </>
+            )}
+            <div
+              style={{
+                marginBottom: 24,
+              }}
+            >
+              <ProFormCheckbox noStyle name="autoLogin">
+                Nhớ mật khẩu
+              </ProFormCheckbox>
+              <a
+                style={{
+                  float: 'right',
+                }}
+              >
+                Quên mật khẩu
+              </a>
+            </div>
+          </LoginForm>
+          {/* </Col> */}
+          {/* </Row> */}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 };
 

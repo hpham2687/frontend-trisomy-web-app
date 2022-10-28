@@ -31,6 +31,14 @@ export default defineConfig({
   // umi routes: https://umijs.org/docs/routing
   routes: [
     {
+      name: 'Giới thiệu',
+      layout: false,
+      icon: 'smile',
+      path: '/introduction',
+      hideInMenu: true,
+      component: './introduction',
+    },
+    {
       path: '/user',
       layout: false,
       routes: [
@@ -39,22 +47,6 @@ export default defineConfig({
           layout: false,
           name: 'login',
           component: './authentication/Login',
-        },
-        {
-          path: '/user',
-          redirect: '/authentication/login',
-        },
-        {
-          name: 'register-result',
-          icon: 'smile',
-          path: '/user/register-result',
-          component: './authentication/register-result',
-        },
-        {
-          name: 'register',
-          icon: 'smile',
-          path: '/user/register',
-          component: './authentication/register',
         },
         {
           component: '404',
@@ -66,11 +58,6 @@ export default defineConfig({
       icon: 'DotChartOutlined',
       name: 'Thai phụ',
       routes: [
-        // {
-        //   path: '/patients',
-        //   icon: 'PlusCircleOutlined',
-        //   redirect: '/patients/add',
-        // },
         {
           name: 'Thêm thai phụ',
           icon: 'PlusCircleOutlined',
@@ -95,11 +82,6 @@ export default defineConfig({
         },
       ],
     },
-    // {
-    //   path: '/thalassemia',
-    //   icon: 'form',
-    //   name: 'Bệnh Thalassemia',
-    // },
 
     {
       name: 'exception',
@@ -136,29 +118,6 @@ export default defineConfig({
       icon: 'ApartmentOutlined',
       path: '/developers',
       component: './members/Developers',
-      // routes: [
-      //   {
-      //     path: '/exception',
-      //     redirect: '/exception/403',
-      //   },
-      //   {
-      //     name: '403',
-      //     icon: 'smile',
-      //     path: '/exception/403',
-      //   },
-      //   {
-      //     name: '404',
-      //     icon: 'smile',
-      //     path: '/exception/404',
-      //     component: './exception/404',
-      //   },
-      //   {
-      //     name: '500',
-      //     icon: 'smile',
-      //     path: '/exception/500',
-      //     component: './exception/500',
-      //   },
-      // ],
     },
 
     {
@@ -166,7 +125,6 @@ export default defineConfig({
       name: 'Thành viên',
       icon: 'crown',
       access: 'canAdmin',
-      // component: './members',
       routes: [
         {
           path: '/members/add',
