@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import AdministrativeInforStep from '@/pages/trisomy/patients/add/AdministrativeInforStep';
-import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
+import AdministrativeInforStep from '@/pages/patients/add/AdministrativeInforStep';
+import PrehistoricStep from '@/pages/patients/add/PrehistoricStep';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Button, Card, FormInstance, message, Result } from 'antd';
@@ -22,7 +22,7 @@ const StepResult: React.FC<{
       subTitle="Thêm bệnh nhân thành công"
       extra={
         <>
-          <Link to="/trisomy/patients/">
+          <Link to="/patients/">
             <Button type="primary" onClick={props.onFinish}>
               Xem tất cả bệnh nhân
             </Button>
@@ -35,7 +35,6 @@ const StepResult: React.FC<{
 };
 
 const stepDataInitalState = {
-  weight: '',
   address: '',
   fullName: '',
 };
@@ -72,7 +71,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
         }
       } catch (error) {
         console.log(error);
-        message.error(error);
+        message.error(JSON.stringify(error));
         return false;
       }
     },

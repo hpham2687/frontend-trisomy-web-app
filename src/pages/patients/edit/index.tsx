@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import useAsync from '@/hooks/useAsync';
-import AdministrativeInforStep from '@/pages/trisomy/patients/add/AdministrativeInforStep';
-import PrehistoricStep from '@/pages/trisomy/patients/add/PrehistoricStep';
+import AdministrativeInforStep from '@/pages/patients/add/AdministrativeInforStep';
+import PrehistoricStep from '@/pages/patients/add/PrehistoricStep';
 import { RollbackOutlined } from '@ant-design/icons';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer, PageLoading } from '@ant-design/pro-layout';
@@ -151,7 +151,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
           <StepsForm.StepForm title="Hoàn thành">
             <StepResult
               onFinish={async () => {
-                history.push('/trisomy/patients/');
+                history.push('/patients/');
               }}
             ></StepResult>
           </StepsForm.StepForm>
@@ -179,7 +179,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
                   });
               }}
             >
-              Tiếp theo
+              {current === 1 ? 'Lưu' : 'Tiếp theo'}
             </Button>
           )}
 

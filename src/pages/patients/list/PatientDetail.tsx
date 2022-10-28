@@ -2,7 +2,7 @@
 import { ModalKey } from '@/components/Modals';
 import { getVietnameseTestName, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
-import { deleteTestResult, queryPatientDetail } from '@/pages/trisomy/patients/list/service';
+import { deleteTestResult, queryPatientDetail } from '@/pages/patients/list/service';
 import {
   ExclamationCircleOutlined,
   FundOutlined,
@@ -32,14 +32,13 @@ import styles from './style/index.less';
 import './style/index.css';
 import styled from 'styled-components';
 import { BreakPoints } from '@/constants/common';
-const CheckboxGroup = Checkbox.Group;
 
 const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
     key: test.id,
     testId: test.id,
-    testName: test.testName,
-    createdDate: moment(Number(test.testDate)).format('DD-MM-YYYY'),
+    testName: test.test_name,
+    createdDate: moment(Number(test.test_date)).format('DD-MM-YYYY'),
     action: test,
   }));
 };
@@ -63,7 +62,7 @@ const operationTabList = [
 ];
 
 const getTestDetail = (tests: any, testName: string) => {
-  return tests.find((test: any) => test.testName === testName).action;
+  return tests.find((test: any) => test.test_name === testName).action;
 };
 
 const getModalKey = (testName: string) => {
@@ -150,13 +149,13 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
             <span
               style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
               onClick={() => {
-                const editingData = getTestDetail(patientDetail.tests, test.testName);
+                const editingData = getTestDetail(patientDetail.tests, test.test_name);
                 console.log(editingData);
 
                 dispatch({
                   type: 'modal/showModal',
                   payload: {
-                    modalKey: getModalKey(test.testName),
+                    modalKey: getModalKey(test.test_name),
                     customProps: {
                       patientDetail,
                       editingData,
@@ -187,13 +186,13 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
       title: 'Xác nhận',
       icon: <ExclamationCircleOutlined />,
       content: `Bạn có chắc là muốn xóa kết quả ${getVietnameseTestName(
-        removeTest.testName,
+        removeTest.test_name,
       )} ngày chứ?`,
       okText: 'Có',
       cancelText: 'Không',
 
       onOk: () => {
-        const removeTestName = removeTest.testName;
+        const removeTestName = removeTest.test_name;
         runDeleteTest(deleteTestResult({ patientId, testName: removeTestName })).then(() => {
           message.success(`Xóa kết quả ${removeTestName} thành công!`);
 
@@ -201,7 +200,7 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
           setPatientDetail((prev: any) => {
             let tests = prev.tests;
             if (tests?.length > 0) {
-              tests = tests.filter((test: any) => test.testName !== removeTestName);
+              tests = tests.filter((test: any) => test.test_name !== removeTestName);
             }
             return { ...prev, tests };
           });

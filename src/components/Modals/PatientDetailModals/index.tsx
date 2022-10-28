@@ -202,7 +202,7 @@ export const ModalInputBloodTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -317,7 +317,7 @@ export const ModalInputSerumIronTestResult = ({
         wrapperCol={{ span: 24 }}
         layout="vertical"
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -428,7 +428,7 @@ export const ModalInputHemoglobinTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}

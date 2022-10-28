@@ -1,5 +1,5 @@
 import useAsync from '@/hooks/useAsync';
-import PatientDetail from '@/pages/trisomy/patients/list/PatientDetail';
+import PatientDetail from '@/pages/patients/list/PatientDetail';
 import { ExclamationCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
@@ -153,7 +153,7 @@ const PatientList: FC = () => {
                 Phân tích
               </span>
               <Link
-                to={`/trisomy/patients/${patient.id}/edit`}
+                to={`/patients/${patient.id}/edit`}
                 style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
               >
                 Sửa
