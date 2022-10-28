@@ -69,7 +69,6 @@ const PatientList: FC = () => {
   const [patients, setPatients] = useState([]);
   const [totals, setTotals] = useState(0);
   const [page, setPage] = useState(0);
-  const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [form] = Form.useForm();
 
   const handleQueryPatients = useCallback(() => {
@@ -147,7 +146,7 @@ const PatientList: FC = () => {
               <span
                 style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
                 onClick={() => {
-                  setSelectedPatient(patient.id);
+                  history.push(`/patients/${patient.id}`);
                 }}
               >
                 Phân tích
@@ -170,10 +169,6 @@ const PatientList: FC = () => {
       },
     },
   ];
-
-  if (selectedPatient) {
-    return <PatientDetail patientId={selectedPatient} setSelectedPatient={setSelectedPatient} />;
-  }
 
   const handleFilter = () => {
     form

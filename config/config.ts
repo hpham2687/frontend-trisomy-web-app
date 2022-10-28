@@ -66,6 +66,14 @@ export default defineConfig({
           exact: true,
         },
         {
+          name: 'Phân tích thai phụ',
+          icon: 'smile',
+          path: '/patients/:patientId',
+          hideInMenu: true,
+          component: './patients/list/PatientDetail',
+          exact: true,
+        },
+        {
           name: 'Sửa thông tin thai phụ',
           icon: 'smile',
           path: '/patients/:patientId/edit',

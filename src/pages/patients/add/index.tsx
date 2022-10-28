@@ -49,7 +49,6 @@ const AddPatient: React.FC<Record<string, any>> = () => {
 
   const onSubmitAdministrativeInforStep = async (values: any) => {
     console.log(values);
-    // setCurrent(1);
     setAdministrativeInforStep(values);
     return true;
   };

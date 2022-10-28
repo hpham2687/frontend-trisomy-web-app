@@ -42,7 +42,6 @@ const ModalModel: ModalModelType = {
 
   reducers: {
     showModal: (state, action) => {
-      console.log('enter showmodal');
       const modalCustomProps = action.payload?.customProps || {};
       if (!action.payload) {
         return {
@@ -50,8 +49,6 @@ const ModalModel: ModalModelType = {
           onModalClose: null,
         };
       }
-      console.log({ modalCustomProps });
-
       return {
         ...initialState,
         displayModal: action.payload.modalKey,

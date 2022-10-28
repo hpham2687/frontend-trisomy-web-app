@@ -3,12 +3,7 @@ import { ModalKey } from '@/components/Modals';
 import { getVietnameseTestName, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
 import { deleteTestResult, queryPatientDetail } from '@/pages/patients/list/service';
-import {
-  ExclamationCircleOutlined,
-  FundOutlined,
-  PlusOutlined,
-  RollbackOutlined,
-} from '@ant-design/icons';
+import { ExclamationCircleOutlined, FundOutlined, PlusOutlined } from '@ant-design/icons';
 import ProForm, { ProFormInstance, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
 import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
 import {
@@ -26,7 +21,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'umi';
+import { history, useDispatch, useParams } from 'umi';
 
 import styles from './style/index.less';
 import './style/index.css';
@@ -62,7 +57,7 @@ const operationTabList = [
 ];
 
 const getTestDetail = (tests: any, testName: string) => {
-  return tests.find((test: any) => test.test_name === testName).action;
+  return tests.find((test: any) => test.testName === testName).action;
 };
 
 const getModalKey = (testName: string) => {
@@ -74,7 +69,7 @@ const getModalKey = (testName: string) => {
   return map[testName];
 };
 
-function PatientDetail({ patientId, setSelectedPatient }: any) {
+function PatientDetail() {
   const [tabStatus, seTabStatus] = useState({
     operationKey: 'tab1',
     tabActiveKey: 'detail',
@@ -84,6 +79,7 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
   const { run: runDeleteTest, isLoading: isLoadingDelete } = useAsync();
   const dispatch = useDispatch();
   const formRef = useRef<ProFormInstance>();
+  const { patientId } = useParams<any>();
 
   const onOperationTabChange = (key: string) => {
     seTabStatus({ ...tabStatus, operationKey: key });
@@ -150,6 +146,7 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
               style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
               onClick={() => {
                 const editingData = getTestDetail(patientDetail.tests, test.test_name);
+                editingData.test_date = moment(Number(editingData.test_date));
                 console.log(editingData);
 
                 dispatch({
@@ -432,20 +429,20 @@ function PatientDetail({ patientId, setSelectedPatient }: any) {
     <PageContainer
       title={`Bệnh nhân ：${patientDetail?.fullName}`}
       className={styles.pageHeader}
-      content={headerDescription}
-      extraContent={extra}
-      extra={[
-        <>
-          <div
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setSelectedPatient(null);
-            }}
-          >
-            <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
-          </div>
-        </>,
-      ]}
+      // content={headerDescription}
+      // extraContent={extra}
+      // extra={[
+      //   <>
+      //     <div
+      //       style={{ cursor: 'pointer' }}
+      //       onClick={() => {
+      //         history.goBack();
+      //       }}
+      //     >
+      //       <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
+      //     </div>
+      //   </>,
+      // ]}
     >
       <div className={styles.main}>
         <GridContent>
