@@ -11,7 +11,7 @@ export async function currentUser(options?: { [key: string]: any }) {
   const { isAdmin = false } = decoded;
   return request<{
     data: API.CurrentUser;
-  }>(isAdmin ? '/admin/currentUser' : '/user/currentUser', {
+  }>(isAdmin ? '/admin/currentUser' : '/users/currentUser', {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },

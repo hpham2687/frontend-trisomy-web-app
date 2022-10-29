@@ -8,6 +8,8 @@ import { useDispatch } from 'umi';
 import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
 
+import './style/index.css';
+
 const isTestAdded = (tests: any, testName: string) => {
   return tests.find((test: any) => test.testName === testName);
 };
@@ -124,6 +126,7 @@ export const ModalInputBloodTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,
+  readonly,
   onCancel,
   ...rest
 }: any) => {
@@ -185,15 +188,19 @@ export const ModalInputBloodTestResult = ({
       isLoading={isLoading}
       loading={true}
       onCancel={onCancel}
-      footer={[
-        <Button key="back" onClick={onCancel}>
-          Hủy
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
-          {editingData ? 'Sửa' : 'Thêm'}
-        </Button>,
-        ,
-      ]}
+      footer={
+        readonly
+          ? null
+          : [
+              <Button key="back" onClick={onCancel}>
+                Hủy
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleOk}>
+                {editingData ? 'Sửa' : 'Thêm'}
+              </Button>,
+              ,
+            ]
+      }
       {...rest}
     >
       <StyledForm
@@ -206,29 +213,65 @@ export const ModalInputBloodTestResult = ({
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
+            className={`${readonly ? 'readonly' : ''}`}
             format="DD-MM-YYYY"
           />
         </Form.Item>
-        <Form.Item name={'ctm_rbc'} label="RBC" rules={[{ required: true }]} extra="Đơn vị G/l">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_rbc'}
+          label="RBC"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị G/l'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_hgb'} label="HGB" rules={[{ required: true }]} extra="Đơn vị g/l ">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_hgb'}
+          label="HGB"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị g/l'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_hct'} label="HCT" rules={[{ required: true }]} extra="Đơn vị l/l ">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_hct'}
+          label="HCT"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị l/l'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_mcv'} label="MCV" rules={[{ required: true }]} extra="Đơn vị fl ">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_mcv'}
+          label="MCV"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị fl'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_mch'} label="MCH" rules={[{ required: true }]} extra="Đơn vị pg ">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_mch'}
+          label="MCH"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị pg'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_mchc'} label="MCHC" rules={[{ required: true }]} extra="Đơn vị g/l ">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_mchc'}
+          label="MCHC"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị g/l'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'ctm_rdw'} label="RDƯ" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'ctm_rdw'}
+          label="RDƯ"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -239,6 +282,7 @@ export const ModalInputSerumIronTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,
+  readonly,
   onCancel,
   ...rest
 }: any) => {
@@ -298,15 +342,19 @@ export const ModalInputSerumIronTestResult = ({
       isLoading={isLoading}
       loading={true}
       onCancel={onCancel}
-      footer={[
-        <Button key="back" onClick={onCancel}>
-          Hủy
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
-          {editingData ? 'Sửa' : 'Thêm'}
-        </Button>,
-        ,
-      ]}
+      footer={
+        readonly
+          ? null
+          : [
+              <Button key="back" onClick={onCancel}>
+                Hủy
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleOk}>
+                {editingData ? 'Sửa' : 'Thêm'}
+              </Button>,
+              ,
+            ]
+      }
       {...rest}
     >
       <Form
@@ -322,6 +370,7 @@ export const ModalInputSerumIronTestResult = ({
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
             format="DD-MM-YYYY"
+            className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
         <Form.Item
@@ -329,19 +378,19 @@ export const ModalInputSerumIronTestResult = ({
           name={'ctm_sathuyetthanh'}
           label="Định lượng sắt huyết thanh"
           rules={[{ required: true }]}
-          extra="Đơn vị umol/l"
+          extra={readonly ? '' : 'Đơn vị umol/l'}
           wrapperCol={{ span: 24 }}
         >
-          <Input type="number" />
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 12 }}
           name={'ctm_ferritinehuyetthanh'}
           label="Định lượng Ferritine huyết thanh"
           rules={[{ required: true }]}
-          extra="Đơn vị ug/l"
+          extra={readonly ? '' : 'Đơn vị ug/l'}
         >
-          <Input type="number" />
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </Form>
     </BaseModal>
@@ -351,6 +400,7 @@ export const ModalInputHemoglobinTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,
+  readonly,
   onCancel,
   ...rest
 }: any) => {
@@ -409,17 +459,20 @@ export const ModalInputHemoglobinTestResult = ({
       title="Xét nghiện điện di huyết sắc tố"
       onOk={handleOk}
       isLoading={isLoading}
-      loading={true}
       onCancel={onCancel}
-      footer={[
-        <Button key="back" onClick={onCancel}>
-          Hủy
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
-          {editingData ? 'Sửa' : 'Thêm'}
-        </Button>,
-        ,
-      ]}
+      footer={
+        readonly
+          ? null
+          : [
+              <Button key="back" onClick={onCancel}>
+                Hủy
+              </Button>,
+              <Button key="submit" type="primary" onClick={handleOk}>
+                {editingData ? 'Sửa' : 'Thêm'}
+              </Button>,
+              ,
+            ]
+      }
       {...rest}
     >
       <StyledForm
@@ -433,28 +486,64 @@ export const ModalInputHemoglobinTestResult = ({
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
             format="DD-MM-YYYY"
+            className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        <Form.Item name={'dd_hba1'} label="HbA1" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hba1'}
+          label="HbA1"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hba2'} label="HbA2" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hba2'}
+          label="HbA2"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hbe'} label="HbE" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hbe'}
+          label="HbE"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hbh'} label="Hb H" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hbh'}
+          label="Hb H"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hbbar'} label="Hb Bar" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hbbar'}
+          label="Hb Bar"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hbf'} label="HbF" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hbf'}
+          label="HbF"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'dd_hbkhac'} label="Hb khác" rules={[{ required: true }]} extra="Đơn vị %">
-          <Input type="number" />
+        <Form.Item
+          name={'dd_hbkhac'}
+          label="Hb khác"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị %'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -550,6 +639,5 @@ export const ModalInputTripleTestResult = ({ onCancel, ...rest }: any) => {
 const StyledForm = styled(Form)`
   .ant-form-item-label {
     min-width: 80px !important;
-    /* text-align: left !important; */
   }
 `;

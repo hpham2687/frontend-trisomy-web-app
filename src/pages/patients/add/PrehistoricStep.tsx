@@ -27,7 +27,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
           </SubSection>
           <Row gutter={16} style={{ maxHeight: 400, overflow: 'scroll' }}>
             <Col lg={24} md={12} sm={24}>
-              <Table
+              <TableWrapper
                 pagination={false}
                 columns={personalDiseaseColumns({ readonly })}
                 dataSource={personalDiseaseData}
@@ -114,7 +114,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
 
       <Row gutter={16}>
         <Col lg={24} md={12} sm={24}>
-          <Table
+          <TableWrapper
             pagination={false}
             columns={familyDiseaseColumns({ readonly })}
             dataSource={familyDiseaseData}
@@ -128,6 +128,11 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
 
 export default PrehistoricStep;
 
+const TableWrapper = styled(Table)`
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+`;
 const SubSection = styled(Row)`
   margin-bottom: 32px;
   align-items: center;

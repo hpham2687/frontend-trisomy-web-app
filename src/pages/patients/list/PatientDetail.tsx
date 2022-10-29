@@ -4,15 +4,13 @@ import { getVietnameseTestName, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
 import { deleteTestResult, queryPatientDetail } from '@/pages/patients/list/service';
 import {
-  BorderOuterOutlined,
   ExclamationCircleOutlined,
   EyeOutlined,
   FundOutlined,
   PlusOutlined,
-  RollbackOutlined,
 } from '@ant-design/icons';
 import ProForm, { ProFormInstance, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
-import { GridContent, PageContainer, RouteContext } from '@ant-design/pro-layout';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import {
   Button,
   Card,
@@ -128,7 +126,32 @@ function PatientDetail() {
       dataIndex: 'testName',
       key: 'testName',
       render: (text, record, index) => {
-        return getVietnameseTestName(text);
+        const testName = record.action.test_name;
+        return (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              const editingData = getTestDetail(patientDetail.tests, testName);
+              editingData.test_date = moment(Number(editingData.test_date));
+              dispatch({
+                type: 'modal/showModal',
+                payload: {
+                  modalKey: getModalKey(testName),
+                  customProps: {
+                    patientDetail,
+                    editingData,
+                    readonly: true,
+                    getPatientDetail: () => {
+                      getPatientDetail();
+                    },
+                  },
+                },
+              });
+            }}
+          >
+            {getVietnameseTestName(text)}{' '}
+          </span>
+        );
       },
     },
     // {
@@ -204,7 +227,7 @@ function PatientDetail() {
           setPatientDetail((prev: any) => {
             let tests = prev.tests;
             if (tests?.length > 0) {
-              tests = tests.filter((test: any) => test.test_name !== removeTestName);
+              tests = tests.filter((test: any) => test.testName !== removeTestName);
             }
             return { ...prev, tests };
           });
@@ -263,9 +286,9 @@ function PatientDetail() {
                           submitter={{ render: () => null }}
                         >
                           <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
-                            <Descriptions.Item label="trisomy 21">0.32</Descriptions.Item>
-                            <Descriptions.Item label="trisomy 18">0.44</Descriptions.Item>
-                            <Descriptions.Item label="trisomy 13">0.2</Descriptions.Item>
+                            <Descriptions.Item label="Trisomy 21">0.32</Descriptions.Item>
+                            <Descriptions.Item label="Trisomy 18">0.44</Descriptions.Item>
+                            <Descriptions.Item label="Trisomy 13">0.2</Descriptions.Item>
                           </Descriptions>
                           <div style={{ marginBottom: 16 }}>
                             <p>Kết luận của bác sĩ</p>

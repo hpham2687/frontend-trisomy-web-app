@@ -1,0 +1,5 @@
+.readonly {
+  border: none;
+  outline: none;
+  pointer-events: none;
+}
