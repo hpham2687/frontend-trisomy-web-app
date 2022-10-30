@@ -7,23 +7,16 @@ import styled from 'styled-components';
 import { useDispatch } from 'umi';
 import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
-
 import './style/index.css';
-
-const isTestAdded = (tests: any, testName: string) => {
-  return tests.find((test: any) => test.testName === testName);
-};
 
 export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }: any) => {
   const dispatch = useDispatch();
-  const { tests } = patientDetail;
 
   return (
     <BaseModal footer={null} title="Chọn xét nghiệm" {...rest}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <Button
           type="primary"
-          disabled={isTestAdded(tests, TEST_NAME.BLOOD_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -44,8 +37,6 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          // style={{ marginLeft: 8, marginBottom: 8 }}
-          disabled={isTestAdded(tests, TEST_NAME.SERUM_IRON_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -65,8 +56,6 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          // style={{ marginLeft: 8 }}
-          disabled={isTestAdded(tests, TEST_NAME.HEMOGLOBIN_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -675,7 +664,7 @@ export const ModalInputDoubleTestResult = ({
         initialValues={editingData}
       >
         <Form.Item
-          name={'testDate'}
+          name={'test_date'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -785,7 +774,7 @@ export const ModalInputTripleTestResult = ({
         initialValues={editingData}
       >
         <Form.Item
-          name={'testDate'}
+          name={'test_date'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -895,7 +884,7 @@ export const ModalInputUntraSoundTestResult = ({
         initialValues={editingData}
       >
         <Form.Item
-          name={'testDate'}
+          name={'test_date'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >

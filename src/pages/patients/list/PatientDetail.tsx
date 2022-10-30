@@ -41,7 +41,7 @@ const convertResponseToTableData = (tests: any) => {
     testId: test.id,
     testName: test.test_name,
     createdDate: moment(test.created_at).format('DD-MM-YYYY'),
-    testDate: moment(Number(test.test_date)).format('DD-MM-YYYY'),
+    testDate: test.test_date,
     action: test,
   }));
 };
@@ -49,17 +49,13 @@ const convertResponseToTableData = (tests: any) => {
 const convertResponseToDateObj = (tests: any) => {
   const dateOptions: any = [];
   const obj = {};
-  console.log({ tests });
-
   tests?.forEach((test: any) => {
     const date = test.testDate;
-    console.log({ date });
     if (!obj[date]) {
       obj[date] = test;
       dateOptions.push(<Option key={date}>{date}</Option>);
     }
   });
-  console.log(dateOptions);
   return dateOptions;
 };
 
@@ -83,6 +79,8 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.BLOOD_TEST]: 'INPUT_BLOOD_TEST_RESULT',
     [TEST_NAME.SERUM_IRON_TEST]: 'INPUT_SERUM_IRON_TEST_RESULT',
     [TEST_NAME.HEMOGLOBIN_TEST]: 'INPUT_HEMOGLOBIN_TEST_RESULT',
+    [TEST_NAME.DOUBLE_TEST]: 'INPUT_DOUBLE_TEST_RESULT',
+    [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
   };
   return map[testName];
 };
@@ -106,7 +104,8 @@ function PatientDetail() {
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
       console.log(response);
-      const { blood_test, hemoglobin_test, serum_iron_test, ...rest } = response;
+      const { blood_test, hemoglobin_test, serum_iron_test, double_test, triple_test, ...rest } =
+        response;
       const tests = [];
       if (blood_test) {
         tests.push(blood_test);
@@ -116,6 +115,14 @@ function PatientDetail() {
       }
       if (serum_iron_test) {
         tests.push(response.serum_iron_test);
+      }
+      if (double_test) {
+        console.log(double_test);
+
+        tests.push(double_test);
+      }
+      if (triple_test) {
+        tests.push(response.triple_test);
       }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
@@ -168,11 +175,6 @@ function PatientDetail() {
         );
       },
     },
-    // {
-    //   title: 'Trạng thái',
-    //   dataIndex: 'status',
-    //   key: 'name',
-    // },
     {
       title: 'Ngày thêm kết quả',
       dataIndex: 'createdDate',
@@ -182,6 +184,8 @@ function PatientDetail() {
       title: 'Ngày xét nghiệm',
       dataIndex: 'testDate',
       key: 'testDate',
+      sorter: (a: any, b: any) => Number(a.testDate) - Number(b.testDate),
+      render: (testDate: any) => moment(Number(testDate)).format('DD-MM-YYYY'),
     },
     {
       title: 'Hành động',
@@ -196,8 +200,6 @@ function PatientDetail() {
               onClick={() => {
                 const editingData = getTestDetail(patientDetail.tests, test.test_name);
                 editingData.test_date = moment(Number(editingData.test_date));
-                console.log(editingData);
-
                 dispatch({
                   type: 'modal/showModal',
                   payload: {
@@ -485,6 +487,7 @@ function PatientDetail() {
           loading={isLoading || isLoadingDelete}
           dataSource={patientDetail?.tests || []}
           columns={columns}
+          rowKey={(obj) => obj.test_name}
           pagination={{ position: ['bottomRight'] }}
         />
       </>
