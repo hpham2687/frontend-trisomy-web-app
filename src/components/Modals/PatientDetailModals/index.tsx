@@ -239,7 +239,11 @@ export const ModalInputBloodTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -395,7 +399,11 @@ export const ModalInputSerumIronTestResult = ({
         wrapperCol={{ span: 24 }}
         layout="vertical"
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -511,7 +519,11 @@ export const ModalInputHemoglobinTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -579,7 +591,7 @@ export const ModalInputHemoglobinTestResult = ({
     </BaseModal>
   );
 };
-export const ModalInputDoubleTestResult = ({ 
+export const ModalInputDoubleTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,
@@ -587,228 +599,228 @@ export const ModalInputDoubleTestResult = ({
   onCancel,
   ...rest
 }: any) => {
-const [form] = Form.useForm();
-const { run, isLoading } = useAsync();
+  const [form] = Form.useForm();
+  const { run, isLoading } = useAsync();
 
-const handleOk = () => {
-  form
-    .validateFields()
-    .then((values) => {
-      form.resetFields();
-      console.log(values);
-      const payload = {};
-      Object.keys(values).forEach(function (key: string) {
-        payload[key] = Number(values[key]);
-      });
-
-      let promise = addTestResult;
-      if (editingData) {
-        promise = editTestResult;
-      }
-      run(
-        promise({
-          patientId: patientDetail.id,
-          testName: TEST_NAME.DOUBLE_TEST,
-          payload,
-        }),
-      )
-        .then((response: any) => {
-          console.log(response);
-          getPatientDetail();
-          message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
-          onCancel();
-        })
-        .catch((error: any) => {
-          console.log(error);
-          message.error(error.error || 'Có lỗi xảy ra!');
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
+        const payload = {};
+        Object.keys(values).forEach(function (key: string) {
+          payload[key] = Number(values[key]);
         });
-    })
-    .catch((info) => {
-      console.log('Validate Failed:', info);
-    });
-};
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-};
+        let promise = addTestResult;
+        if (editingData) {
+          promise = editTestResult;
+        }
+        run(
+          promise({
+            patientId: patientDetail.id,
+            testName: TEST_NAME.DOUBLE_TEST,
+            payload,
+          }),
+        )
+          .then((response: any) => {
+            console.log(response);
+            getPatientDetail();
+            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
+            onCancel();
+          })
+          .catch((error: any) => {
+            console.log(error);
+            message.error(error.error || 'Có lỗi xảy ra!');
+          });
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
-return (
-  <BaseModal 
-    title="Xét nghiệm Double Test" 
-    onOk={handleOk} 
-    isLoading={isLoading}
-    loading={true}
-    onCancel={onCancel} 
-    footer={[
-      <Button key="back" onClick={onCancel}>
-        Hủy
-      </Button>,
-      <Button key="submit" type="primary" onClick={handleOk}>
-        {editingData ? 'Sửa' : 'Thêm'}
-      </Button>,
-      ,
-    ]}
-    {...rest}
-  >
-    <StyledForm
-      name="nest-messages"
-      form={form}
-      validateMessages={validateMessages}
-      initialValues={editingData}
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+
+  return (
+    <BaseModal
+      title="Xét nghiệm Double Test"
+      onOk={handleOk}
+      isLoading={isLoading}
+      loading={true}
+      onCancel={onCancel}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Hủy
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          {editingData ? 'Sửa' : 'Thêm'}
+        </Button>,
+        ,
+      ]}
+      {...rest}
     >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
-        <DatePicker
-          placeholder="Nhập ngày xét nghiệm"
-          style={{ width: '100%' }}
-          format="DD-MM-YYYY"
-          className={`${readonly ? 'readonly' : ''}`}
-        />
-      </Form.Item>
-      <Form.Item 
-      name={'β-hCG_tu_do'} 
-      label="β-hCG tự do" rules={[{ required: true }]}>
-        <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
-      </Form.Item>
-      <Form.Item 
-      name={'PAPP-A'} 
-      label="PAPP-A" rules={[{ required: true }]}>
-        <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
-      </Form.Item>
-    </StyledForm>
-  </BaseModal>
-);
+      <StyledForm
+        name="nest-messages"
+        form={form}
+        validateMessages={validateMessages}
+        initialValues={editingData}
+      >
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
+          <DatePicker
+            placeholder="Nhập ngày xét nghiệm"
+            style={{ width: '100%' }}
+            format="DD-MM-YYYY"
+            className={`${readonly ? 'readonly' : ''}`}
+          />
+        </Form.Item>
+        <Form.Item name={'bhcg'} label="β-hCG tự do" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item name={'pappa'} label="PAPP-A" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+      </StyledForm>
+    </BaseModal>
+  );
 };
 
 export const ModalInputTripleTestResult = ({
-patientDetail,
-editingData,
-getPatientDetail, 
-readonly,
-onCancel, 
-...rest 
+  patientDetail,
+  editingData,
+  getPatientDetail,
+  readonly,
+  onCancel,
+  ...rest
 }: any) => {
-const [form] = Form.useForm();
-const { run, isLoading } = useAsync();
+  const [form] = Form.useForm();
+  const { run, isLoading } = useAsync();
 
-const handleOk = () => {
-  form
-    .validateFields()
-    .then((values) => {
-      form.resetFields();
-      console.log(values);
-      const payload = {};
-      // Convert to number type
-      Object.keys(values).forEach(function (key: string) {
-        payload[key] = Number(values[key]);
-      });
-
-      let promise = addTestResult;
-      if (editingData) {
-        promise = editTestResult;
-      }
-      run(
-        promise({
-          patientId: patientDetail.id,
-          testName: TEST_NAME.BLOOD_TEST,
-          payload,
-        }),
-      )
-        .then(() => {
-          message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
-          getPatientDetail();
-          onCancel();
-        })
-        .catch((error: any) => {
-          console.log(error);
-          message.error(error.error || 'Có lỗi xảy ra!');
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
+        const payload = {};
+        // Convert to number type
+        Object.keys(values).forEach(function (key: string) {
+          payload[key] = Number(values[key]);
         });
-    })
-    .catch((info) => {
-      console.log('Validate Failed:', info);
-    });
-};
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-};
+        let promise = addTestResult;
+        if (editingData) {
+          promise = editTestResult;
+        }
+        run(
+          promise({
+            patientId: patientDetail.id,
+            testName: TEST_NAME.TRIPLE_TEST,
+            payload,
+          }),
+        )
+          .then(() => {
+            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
+            getPatientDetail();
+            onCancel();
+          })
+          .catch((error: any) => {
+            console.log(error);
+            message.error(error.error || 'Có lỗi xảy ra!');
+          });
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
-return (
-  <BaseModal 
-  title="Xét nghiệm Triple Test" 
-  onOk={handleOk} 
-  isLoading={isLoading}
-  loading={true}
-  onCancel={onCancel}
-  footer={[
-    <Button key="back" onClick={onCancel}>
-      Hủy
-    </Button>,
-    <Button key="submit" type="primary" onClick={handleOk}>
-      {editingData ? 'Sửa' : 'Thêm'}
-    </Button>,
-    ,
-  ]} 
-  {...rest}
-  >
-    <StyledForm
-      name="nest-messages"
-      form={form}
-      validateMessages={validateMessages}
-      initialValues={editingData}
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+
+  const onFinish = (values: any) => {
+    console.log(values);
+  };
+
+  return (
+    <BaseModal
+      title="Xét nghiệm Triple Test"
+      onOk={handleOk}
+      isLoading={isLoading}
+      loading={true}
+      onCancel={onCancel}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Hủy
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          {editingData ? 'Sửa' : 'Thêm'}
+        </Button>,
+        ,
+      ]}
+      {...rest}
     >
-      <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
-        <DatePicker
-          placeholder="Nhập ngày xét nghiệm"
-          style={{ width: '100%' }}
-          format="DD-MM-YYYY"
-          className={`${readonly ? 'readonly' : ''}`}
-        />
-      </Form.Item>
-      <Form.Item 
-      name={'uE3'} 
-      label="uE3" rules={[{ required: true }]}>
-        <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
-      </Form.Item>
-      <Form.Item 
-      name={'AFP'} 
-      label="AFP" rules={[{ required: true }]}>
-        <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
-      </Form.Item>
-      <Form.Item 
-      name={'hCG'} 
-      label="hCG" rules={[{ required: true }]}>
-        <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
-      </Form.Item>
-    </StyledForm>
-  </BaseModal>
-);
+      <StyledForm
+        name="nest-messages"
+        form={form}
+        validateMessages={validateMessages}
+        initialValues={editingData}
+      >
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
+          <DatePicker
+            placeholder="Nhập ngày xét nghiệm"
+            style={{ width: '100%' }}
+            format="DD-MM-YYYY"
+            className={`${readonly ? 'readonly' : ''}`}
+          />
+        </Form.Item>
+        <Form.Item name={'ue3'} label="uE3" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item name={'afp'} label="AFP" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item name={'hcg'} label="hCG" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+      </StyledForm>
+    </BaseModal>
+  );
 };
 
 export const ModalInputUntraSoundTestResult = ({
   patientDetail,
   editingData,
-  getPatientDetail, 
+  getPatientDetail,
   readonly,
-  onCancel, 
-  ...rest 
-  }: any) => {
+  onCancel,
+  ...rest
+}: any) => {
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
-  
+
   const handleOk = () => {
     form
       .validateFields()
@@ -820,7 +832,7 @@ export const ModalInputUntraSoundTestResult = ({
         Object.keys(values).forEach(function (key: string) {
           payload[key] = Number(values[key]);
         });
-  
+
         let promise = addTestResult;
         if (editingData) {
           promise = editTestResult;
@@ -846,7 +858,7 @@ export const ModalInputUntraSoundTestResult = ({
         console.log('Validate Failed:', info);
       });
   };
-  
+
   const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -857,32 +869,36 @@ export const ModalInputUntraSoundTestResult = ({
       range: '${label} must be between ${min} and ${max}',
     },
   };
-  
+
   return (
-    <BaseModal 
-    title="Siêu âm" 
-    onOk={handleOk} 
-    isLoading={isLoading}
-    loading={true}
-    onCancel={onCancel}
-    footer={[
-      <Button key="back" onClick={onCancel}>
-        Hủy
-      </Button>,
-      <Button key="submit" type="primary" onClick={handleOk}>
-        {editingData ? 'Sửa' : 'Thêm'}
-      </Button>,
-      ,
-    ]} 
-    {...rest}
+    <BaseModal
+      title="Siêu âm"
+      onOk={handleOk}
+      isLoading={isLoading}
+      loading={true}
+      onCancel={onCancel}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Hủy
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          {editingData ? 'Sửa' : 'Thêm'}
+        </Button>,
+        ,
+      ]}
+      {...rest}
     >
       <StyledFormUtraSound
-        name="nest-messages-untrasound"
+        name="untrasound-form"
         form={form}
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày siêu âm"
             style={{ width: '100%' }}
@@ -890,41 +906,44 @@ export const ModalInputUntraSoundTestResult = ({
             className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        <Form.Item 
-        name={'so_tuan_tuoi'} 
-        label={"Số tuần tuổi"} rules={[{ required: true }]}
-        extra={readonly ? '' : 'Tính theo ngày tuổi'}
+        <Form.Item
+          name={'weeks_old'}
+          label={'Số tuần tuổi'}
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Tính theo ngày tuổi'}
         >
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item 
-        name={'nhip_tim_thai_nhi'} 
-        label="Nhịp tim thai nhi" rules={[{ required: true }]}>
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
+        <Form.Item name={'heartbeat'} label="Nhịp tim thai nhi" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item 
-        name={'chieu_dai_dau_mong'} 
-        label="Chiều dài đầu mông" rules={[{ required: true }]}>
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
+        <Form.Item
+          name={'crown_rump_length'}
+          // Crown Rump Length
+          label="Chiều dài đầu mông"
+          rules={[{ required: true }]}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item 
-        name={'do_mo_da_gay'} 
-        label="Độ mờ da gáy" rules={[{ required: true }]}>
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`}/>
+        <Form.Item name={'nuchal_translucency'} label="Độ mờ da gáy" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </StyledFormUtraSound>
     </BaseModal>
   );
-  };
+};
 
 const StyledForm = styled(Form)`
-.ant-form-item-label {
-  min-width: 100px !important;
-}
+  .ant-form-item-label {
+    min-width: 100px !important;
+  }
 `;
 
 const StyledFormUtraSound = styled(Form)`
-.ant-form-item-label {
-  min-width: 150px !important;
-}
+  .ant-col.ant-form-item-label {
+    text-align: left;
+  }
+  .ant-row.ant-form-item-row {
+    flex-direction: column;
+  }
 `;
