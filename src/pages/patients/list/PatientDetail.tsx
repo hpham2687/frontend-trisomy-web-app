@@ -21,6 +21,7 @@ import {
   message,
   Modal,
   Row,
+  Select,
   Statistic,
   Table,
 } from 'antd';
@@ -32,23 +33,35 @@ import styles from './style/index.less';
 import './style/index.css';
 import styled from 'styled-components';
 import { BreakPoints } from '@/constants/common';
+const { Option } = Select;
 
 const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
     key: test.id,
     testId: test.id,
     testName: test.test_name,
-    createdDate: moment(Number(test.test_date)).format('DD-MM-YYYY'),
+    createdDate: moment(test.created_at).format('DD-MM-YYYY'),
+    testDate: moment(Number(test.test_date)).format('DD-MM-YYYY'),
     action: test,
   }));
 };
 
-const extra = (
-  <div className={styles.moreInfo}>
-    <Statistic title="Ngày đăng ký khám" value="NaN" />
-    <Statistic style={{ marginLeft: 8 }} title="Ngày khám gần nhất" value="NaN" />
-  </div>
-);
+const convertResponseToDateObj = (tests: any) => {
+  const dateOptions: any = [];
+  const obj = {};
+  console.log({ tests });
+
+  tests?.forEach((test: any) => {
+    const date = test.testDate;
+    console.log({ date });
+    if (!obj[date]) {
+      obj[date] = test;
+      dateOptions.push(<Option key={date}>{date}</Option>);
+    }
+  });
+  console.log(dateOptions);
+  return dateOptions;
+};
 
 const operationTabList = [
   {
@@ -104,6 +117,7 @@ function PatientDetail() {
       if (serum_iron_test) {
         tests.push(response.serum_iron_test);
       }
+
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
     });
   }, [patientId]);
@@ -160,9 +174,14 @@ function PatientDetail() {
     //   key: 'name',
     // },
     {
-      title: 'Ngày thêm xét nghiệm',
+      title: 'Ngày thêm kết quả',
       dataIndex: 'createdDate',
-      key: 'name',
+      key: 'createdDate',
+    },
+    {
+      title: 'Ngày xét nghiệm',
+      dataIndex: 'testDate',
+      key: 'testDate',
     },
     {
       title: 'Hành động',
@@ -236,6 +255,10 @@ function PatientDetail() {
     });
   };
 
+  const handleChange = (value: string | string[]) => {
+    console.log(`Selected: ${value}`);
+  };
+
   const contentList = {
     tab1: (
       <>
@@ -285,29 +308,52 @@ function PatientDetail() {
                           onFinish={async (value) => console.log(value)}
                           submitter={{ render: () => null }}
                         >
-                          <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
-                            <Descriptions.Item label="Trisomy 21">0.32</Descriptions.Item>
-                            <Descriptions.Item label="Trisomy 18">0.44</Descriptions.Item>
-                            <Descriptions.Item label="Trisomy 13">0.2</Descriptions.Item>
+                          <Form.Item name="dates" label="Chọn các ngày XN">
+                            <Select
+                              mode="multiple"
+                              size={'middle'}
+                              placeholder="Chọn các ngày xét nghiệm"
+                              onChange={handleChange}
+                              style={{ width: '100%' }}
+                            >
+                              {convertResponseToDateObj(patientDetail?.tests)}
+                            </Select>
+                          </Form.Item>
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              formRef.current?.validateFields().then((values) => {
+                                console.log(values);
+                              });
+                            }}
+                          >
+                            Chuẩn đoán
+                          </Button>
+                          {/* step 2 */}
+                          <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
+                            <Descriptions.Item label="Thalassemia alpha">0.3</Descriptions.Item>
+                            <Descriptions.Item label="Thalassemia beta">0.3</Descriptions.Item>
+                            <Descriptions.Item label="Không mang bệnh">0.4</Descriptions.Item>
                           </Descriptions>
+
                           <div style={{ marginBottom: 16 }}>
                             <p>Kết luận của bác sĩ</p>
                             <Form.Item name="diseaseName">
-                              <Checkbox.Group>
+                              <Checkbox.Group style={{ width: '100%' }}>
                                 <Row>
                                   <Col span={8}>
                                     <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
-                                      Trisomy 21
+                                      Alpha
                                     </Checkbox>
                                   </Col>
                                   <Col span={8}>
                                     <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
-                                      Trisomy 18
+                                      Beta
                                     </Checkbox>
                                   </Col>
                                   <Col span={8}>
                                     <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
-                                      Trisomy 13
+                                      Không mang bệnh
                                     </Checkbox>
                                   </Col>
                                 </Row>
@@ -367,33 +413,57 @@ function PatientDetail() {
                             render: () => null,
                           }}
                         >
-                          <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
-                            <Descriptions.Item label="trisomy 21">0.32</Descriptions.Item>
-                            <Descriptions.Item label="trisomy 18">0.44</Descriptions.Item>
-                            <Descriptions.Item label="trisomy 13">0.2</Descriptions.Item>
+                          <Form.Item name="dates" label="Chọn các ngày XN">
+                            <Select
+                              mode="multiple"
+                              size={'middle'}
+                              placeholder="Chọn các ngày xét nghiệm"
+                              onChange={handleChange}
+                              style={{ width: '100%' }}
+                            >
+                              {convertResponseToDateObj(patientDetail?.tests)}
+                            </Select>
+                          </Form.Item>
+                          <Button
+                            type="primary"
+                            onClick={() => {
+                              formRef.current?.validateFields().then((values) => {
+                                console.log(values);
+                              });
+                            }}
+                          >
+                            Chuẩn đoán
+                          </Button>
+                          {/* step 2 */}
+                          <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
+                            <Descriptions.Item label="Trisomy 21">0.32</Descriptions.Item>
+                            <Descriptions.Item label="Trisomy 18">0.44</Descriptions.Item>
+                            <Descriptions.Item label="Trisomy 13">0.2</Descriptions.Item>
                           </Descriptions>
-                          <ProFormSelect
-                            label={'Kết luận của bác sĩ'}
-                            name="doctor_selection"
-                            // rules={[{ required: true, message: '请选择审批员' }]}
-                            options={[
-                              {
-                                label: 'Trisomy 21',
-                                value: 'trisomy21',
-                              },
-
-                              {
-                                label: 'Trisomy 18',
-                                value: 'trisomy18',
-                              },
-
-                              {
-                                label: 'Trisomy 13',
-                                value: 'trisomy13',
-                              },
-                            ]}
-                            placeholder="Nhập nghề nghiệp"
-                          />
+                          <div style={{ marginBottom: 16 }}>
+                            <p>Kết luận của bác sĩ</p>
+                            <Form.Item name="diseaseName">
+                              <Checkbox.Group>
+                                <Row>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
+                                      Trisomy 21
+                                    </Checkbox>
+                                  </Col>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
+                                      Trisomy 18
+                                    </Checkbox>
+                                  </Col>
+                                  <Col span={8}>
+                                    <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
+                                      Trisomy 13
+                                    </Checkbox>
+                                  </Col>
+                                </Row>
+                              </Checkbox.Group>
+                            </Form.Item>
+                          </div>
                           <ProFormTextArea
                             label="Chẩn đoán của bác sỹ"
                             name="invoiceType"
