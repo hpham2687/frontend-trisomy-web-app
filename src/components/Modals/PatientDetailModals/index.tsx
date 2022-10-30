@@ -126,6 +126,27 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         >
           Triple test
         </Button>
+        <Button
+          type="primary"
+          disabled={patientDetail?.triple_test}
+          // style={{ marginLeft: 8 }}
+          onClick={() => {
+            dispatch({
+              type: 'modal/showModal',
+              payload: {
+                modalKey: ModalKey.INPUT_UNTRASOUND_TEST_RESULT,
+                customProps: {
+                  patientDetail,
+                  getPatientDetail: () => {
+                    getPatientDetail();
+                  },
+                },
+              },
+            });
+          }}
+        >
+          Siêu âm thai nhi
+        </Button>
       </div>
     </BaseModal>
   );
@@ -218,7 +239,11 @@ export const ModalInputBloodTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -374,7 +399,11 @@ export const ModalInputSerumIronTestResult = ({
         wrapperCol={{ span: 24 }}
         layout="vertical"
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -490,7 +519,11 @@ export const ModalInputHemoglobinTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'test_date'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'test_date'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -641,7 +674,11 @@ export const ModalInputDoubleTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -649,7 +686,7 @@ export const ModalInputDoubleTestResult = ({
             className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        <Form.Item name={'b   hcg'} label="β-hCG tự do" rules={[{ required: true }]}>
+        <Form.Item name={'bhcg'} label="β-hCG tự do" rules={[{ required: true }]}>
           <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item name={'pappa'} label="PAPP-A" rules={[{ required: true }]}>
@@ -689,7 +726,7 @@ export const ModalInputTripleTestResult = ({
         run(
           promise({
             patientId: patientDetail.id,
-            testName: TEST_NAME.BLOOD_TEST,
+            testName: TEST_NAME.TRIPLE_TEST,
             payload,
           }),
         )
@@ -747,7 +784,11 @@ export const ModalInputTripleTestResult = ({
         validateMessages={validateMessages}
         initialValues={editingData}
       >
-        <Form.Item name={'testDate'} label="Ngày XN" rules={[{ required: true }]}>
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
           <DatePicker
             placeholder="Nhập ngày xét nghiệm"
             style={{ width: '100%' }}
@@ -769,9 +810,140 @@ export const ModalInputTripleTestResult = ({
   );
 };
 
+export const ModalInputUntraSoundTestResult = ({
+  patientDetail,
+  editingData,
+  getPatientDetail,
+  readonly,
+  onCancel,
+  ...rest
+}: any) => {
+  const [form] = Form.useForm();
+  const { run, isLoading } = useAsync();
+
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
+        console.log(values);
+        const payload = {};
+        // Convert to number type
+        Object.keys(values).forEach(function (key: string) {
+          payload[key] = Number(values[key]);
+        });
+
+        let promise = addTestResult;
+        if (editingData) {
+          promise = editTestResult;
+        }
+        run(
+          promise({
+            patientId: patientDetail.id,
+            testName: TEST_NAME.UNTRASOUND_TEST,
+            payload,
+          }),
+        )
+          .then(() => {
+            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả siêu âm thành công!`);
+            getPatientDetail();
+            onCancel();
+          })
+          .catch((error: any) => {
+            console.log(error);
+            message.error(error.error || 'Có lỗi xảy ra!');
+          });
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
+
+  const validateMessages = {
+    required: '${label} is required!',
+    types: {
+      email: '${label} is not a valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+
+  return (
+    <BaseModal
+      title="Siêu âm"
+      onOk={handleOk}
+      isLoading={isLoading}
+      loading={true}
+      onCancel={onCancel}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Hủy
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          {editingData ? 'Sửa' : 'Thêm'}
+        </Button>,
+        ,
+      ]}
+      {...rest}
+    >
+      <StyledFormUtraSound
+        name="untrasound-form"
+        form={form}
+        validateMessages={validateMessages}
+        initialValues={editingData}
+      >
+        <Form.Item
+          name={'testDate'}
+          label="Ngày XN"
+          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+        >
+          <DatePicker
+            placeholder="Nhập ngày siêu âm"
+            style={{ width: '100%' }}
+            format="DD-MM-YYYY"
+            className={`${readonly ? 'readonly' : ''}`}
+          />
+        </Form.Item>
+        <Form.Item
+          name={'weeks_old'}
+          label={'Số tuần tuổi'}
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Tính theo ngày tuổi'}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item name={'heartbeat'} label="Nhịp tim thai nhi" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item
+          name={'crown_rump_length'}
+          // Crown Rump Length
+          label="Chiều dài đầu mông"
+          rules={[{ required: true }]}
+        >
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+        <Form.Item name={'nuchal_translucency'} label="Độ mờ da gáy" rules={[{ required: true }]}>
+          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
+        </Form.Item>
+      </StyledFormUtraSound>
+    </BaseModal>
+  );
+};
+
 const StyledForm = styled(Form)`
   .ant-form-item-label {
     min-width: 100px !important;
-    /* text-align: left !important; */
+  }
+`;
+
+const StyledFormUtraSound = styled(Form)`
+  .ant-col.ant-form-item-label {
+    text-align: left;
+  }
+  .ant-row.ant-form-item-row {
+    flex-direction: column;
   }
 `;

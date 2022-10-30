@@ -4,6 +4,7 @@ export const TEST_NAME = {
   HEMOGLOBIN_TEST: 'HEMOGLOBIN_TEST',
   TRIPLE_TEST: 'TRIPLE_TEST',
   DOUBLE_TEST: 'DOUBLE_TEST',
+  UNTRASOUND_TEST: 'UNTRASOUND_TEST',
 };
 
 export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: string) => {
@@ -13,6 +14,7 @@ export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: s
     HEMOGLOBIN_TEST: 'hemoglobin-test',
     TRIPLE_TEST: 'triple-test',
     DOUBLE_TEST: 'double-test',
+    UNTRASOUND_TEST: 'untra-sound-test',
   };
   return '/patients/' + patientId + '/' + map[testName];
 };
@@ -24,6 +26,7 @@ export const getVietnameseTestName = (testName: string) => {
     HEMOGLOBIN_TEST: 'XN điện di huyết sắc tố',
     TRIPLE_TEST: 'XN triple test',
     DOUBLE_TEST: 'XN double test',
+    UNTRASOUND_TEST: 'XN siêu âm',
   };
   return map[testName];
 };
