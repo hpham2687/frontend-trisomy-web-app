@@ -14,7 +14,7 @@ export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: s
     HEMOGLOBIN_TEST: 'hemoglobin-test',
     TRIPLE_TEST: 'triple-test',
     DOUBLE_TEST: 'double-test',
-    UNTRASOUND_TEST: 'untra-sound-test',
+    UNTRASOUND_TEST: 'untrasound-test',
   };
   return '/patients/' + patientId + '/' + map[testName];
 };
