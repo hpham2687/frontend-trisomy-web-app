@@ -53,7 +53,7 @@ const convertResponseToDateObj = (tests: any) => {
     const date = test.testDate;
     if (!obj[date]) {
       obj[date] = test;
-      dateOptions.push(<Option key={date}>{date}</Option>);
+      dateOptions.push(<Option key={date}>{moment(Number(date)).format('DD-MM-YYYY')}</Option>);
     }
   });
   return dateOptions;
@@ -105,8 +105,15 @@ function PatientDetail() {
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
       console.log(response);
-      const { blood_test, hemoglobin_test, serum_iron_test, double_test, triple_test, untrasound_test, ...rest } =
-        response;
+      const {
+        blood_test,
+        hemoglobin_test,
+        serum_iron_test,
+        double_test,
+        triple_test,
+        untrasound_test,
+        ...rest
+      } = response;
       const tests = [];
       if (blood_test) {
         tests.push(blood_test);
