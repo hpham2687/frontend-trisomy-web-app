@@ -745,10 +745,6 @@ export const ModalInputTripleTestResult = ({
     },
   };
 
-  const onFinish = (values: any) => {
-    console.log(values);
-  };
-
   return (
     <BaseModal
       title="Xét nghiệm Triple Test"
@@ -799,7 +795,7 @@ export const ModalInputTripleTestResult = ({
   );
 };
 
-export const ModalInputUntraSoundTestResult = ({
+export const ModalInputUntrasoundTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,

@@ -81,6 +81,7 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.HEMOGLOBIN_TEST]: 'INPUT_HEMOGLOBIN_TEST_RESULT',
     [TEST_NAME.DOUBLE_TEST]: 'INPUT_DOUBLE_TEST_RESULT',
     [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
+    [TEST_NAME.UNTRASOUND_TEST]: 'INPUT_UNTRASOUND_TEST',
   };
   return map[testName];
 };
@@ -104,7 +105,7 @@ function PatientDetail() {
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
       console.log(response);
-      const { blood_test, hemoglobin_test, serum_iron_test, double_test, triple_test, ...rest } =
+      const { blood_test, hemoglobin_test, serum_iron_test, double_test, triple_test, untrasound_test, ...rest } =
         response;
       const tests = [];
       if (blood_test) {
@@ -123,6 +124,10 @@ function PatientDetail() {
       }
       if (triple_test) {
         tests.push(response.triple_test);
+      }
+      if (untrasound_test) {
+        console.log(untrasound_test);
+        tests.push(response.untrasound_test);
       }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });

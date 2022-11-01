@@ -6,7 +6,7 @@ import {
   ModalInputHemoglobinTestResult,
   ModalInputSerumIronTestResult,
   ModalInputTripleTestResult,
-  ModalInputUntraSoundTestResult,
+  ModalInputUntrasoundTestResult,
   ModalSelectTestType,
 } from './PatientDetailModals';
 
@@ -28,7 +28,7 @@ modalMap[ModalKey.INPUT_DOUBLE_TEST_RESULT] = ModalInputDoubleTestResult;
 modalMap[ModalKey.INPUT_TRIPLE_TEST_RESULT] = ModalInputTripleTestResult;
 modalMap[ModalKey.INPUT_SERUM_IRON_TEST_RESULT] = ModalInputSerumIronTestResult;
 modalMap[ModalKey.INPUT_HEMOGLOBIN_TEST_RESULT] = ModalInputHemoglobinTestResult;
-modalMap[ModalKey.INPUT_UNTRASOUND_TEST_RESULT] = ModalInputUntraSoundTestResult;
+modalMap[ModalKey.INPUT_UNTRASOUND_TEST_RESULT] = ModalInputUntrasoundTestResult;
 modalMap[ModalKey.ADD_TEST_RESULT] = ModalSelectTestType;
 modalMap[ModalKey.GENERAL_INFO] = GeneralInfo;
 

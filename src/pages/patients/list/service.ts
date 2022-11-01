@@ -41,7 +41,7 @@ export async function queryPatientDetail(patientId: string) {
 
 export async function deleteTestResult(data: {
   patientId: string;
-  testName: 'blood-test' | 'serum-iron-test' | 'hemoglobin-test';
+  testName: 'blood-test' | 'serum-iron-test' | 'hemoglobin-test' | 'double-test' | 'triple-test' | 'untrasound-test';
 }) {
   return request(getCreateDeleteTestResultEndpoint(data.testName, data.patientId), {
     data,
