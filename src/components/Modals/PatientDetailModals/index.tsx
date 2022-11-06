@@ -163,26 +163,42 @@ export const ModalInputBloodTestResult = ({
           payload[key] = Number(values[key]);
         });
 
-        let promise = addTestResult;
         if (editingData) {
-          promise = editTestResult;
+          run(
+            editTestResult({
+              patientId: patientDetail.id,
+              testId: editingData.id,
+              payload,
+              testName: TEST_NAME.BLOOD_TEST,
+            }),
+          )
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
+        } else {
+          run(
+            addTestResult({
+              patientId: patientDetail.id,
+              testName: TEST_NAME.BLOOD_TEST,
+              payload,
+            }),
+          )
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
         }
-        run(
-          promise({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.BLOOD_TEST,
-            payload,
-          }),
-        )
-          .then(() => {
-            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
-            getPatientDetail();
-            onCancel();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -311,29 +327,25 @@ export const ModalInputSerumIronTestResult = ({
 }: any) => {
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
-
+  //TODO: handle route edit test
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        form.resetFields();
-        const payload = {};
-        Object.keys(values).forEach(function (key: string) {
-          payload[key] = Number(values[key]);
-        });
-        let promise = addTestResult;
-        if (editingData) {
-          promise = editTestResult;
-        }
+    form.validateFields().then((values) => {
+      form.resetFields();
+      const payload = {};
+      Object.keys(values).forEach(function (key: string) {
+        payload[key] = Number(values[key]);
+      });
+      if (editingData) {
         run(
-          promise({
+          editTestResult({
             patientId: patientDetail.id,
-            testName: TEST_NAME.SERUM_IRON_TEST,
+            testId: editingData.id,
             payload,
+            testName: TEST_NAME.SERUM_IRON_TEST,
           }),
         )
           .then(() => {
-            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
+            message.success(`Sửa kết quả xét nghiệm thành công!`);
             getPatientDetail();
             onCancel();
           })
@@ -341,10 +353,25 @@ export const ModalInputSerumIronTestResult = ({
             console.log(error);
             message.error(error.error || 'Có lỗi xảy ra!');
           });
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+      } else {
+        run(
+          addTestResult({
+            patientId: patientDetail.id,
+            testName: TEST_NAME.SERUM_IRON_TEST,
+            payload,
+          }),
+        )
+          .then(() => {
+            message.success(`Thêm kết quả xét nghiệm thành công!`);
+            getPatientDetail();
+            onCancel();
+          })
+          .catch((error: any) => {
+            console.log(error);
+            message.error(error.error || 'Có lỗi xảy ra!');
+          });
+      }
+    });
   };
 
   const validateMessages = {
@@ -443,27 +470,42 @@ export const ModalInputHemoglobinTestResult = ({
         Object.keys(values).forEach(function (key: string) {
           payload[key] = Number(values[key]);
         });
-        let promise = addTestResult;
         if (editingData) {
-          promise = editTestResult;
+          run(
+            editTestResult({
+              patientId: patientDetail.id,
+              testId: editingData.id,
+              payload,
+              testName: TEST_NAME.HEMOGLOBIN_TEST,
+            }),
+          )
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
+        } else {
+          run(
+            addTestResult({
+              patientId: patientDetail.id,
+              testName: TEST_NAME.HEMOGLOBIN_TEST,
+              payload,
+            }),
+          )
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
         }
-        run(
-          promise({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.HEMOGLOBIN_TEST,
-            payload,
-          }),
-        )
-          .then((response: any) => {
-            console.log(response);
-            getPatientDetail();
-            message.success('Thêm kết quả xét nghiệm thành công!');
-            onCancel();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -601,27 +643,42 @@ export const ModalInputDoubleTestResult = ({
           payload[key] = Number(values[key]);
         });
 
-        let promise = addTestResult;
         if (editingData) {
-          promise = editTestResult;
+          run(
+            editTestResult({
+              patientId: patientDetail.id,
+              testId: editingData.id,
+              payload,
+              testName: TEST_NAME.DOUBLE_TEST,
+            }),
+          )
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
+        } else {
+          run(
+            addTestResult({
+              patientId: patientDetail.id,
+              testName: TEST_NAME.DOUBLE_TEST,
+              payload,
+            }),
+          )
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
         }
-        run(
-          promise({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.DOUBLE_TEST,
-            payload,
-          }),
-        )
-          .then((response: any) => {
-            console.log(response);
-            getPatientDetail();
-            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
-            onCancel();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -708,26 +765,42 @@ export const ModalInputTripleTestResult = ({
           payload[key] = Number(values[key]);
         });
 
-        let promise = addTestResult;
         if (editingData) {
-          promise = editTestResult;
+          run(
+            editTestResult({
+              patientId: patientDetail.id,
+              testId: editingData.id,
+              payload,
+              testName: TEST_NAME.TRIPLE_TEST,
+            }),
+          )
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
+        } else {
+          run(
+            addTestResult({
+              patientId: patientDetail.id,
+              testName: TEST_NAME.TRIPLE_TEST,
+              payload,
+            }),
+          )
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
         }
-        run(
-          promise({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.TRIPLE_TEST,
-            payload,
-          }),
-        )
-          .then(() => {
-            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả xét nghiệm thành công!`);
-            getPatientDetail();
-            onCancel();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -818,26 +891,42 @@ export const ModalInputUntrasoundTestResult = ({
           payload[key] = Number(values[key]);
         });
 
-        let promise = addTestResult;
         if (editingData) {
-          promise = editTestResult;
+          run(
+            editTestResult({
+              patientId: patientDetail.id,
+              testId: editingData.id,
+              payload,
+              testName: TEST_NAME.UNTRASOUND_TEST,
+            }),
+          )
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
+        } else {
+          run(
+            addTestResult({
+              patientId: patientDetail.id,
+              testName: TEST_NAME.UNTRASOUND_TEST,
+              payload,
+            }),
+          )
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            });
         }
-        run(
-          promise({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.UNTRASOUND_TEST,
-            payload,
-          }),
-        )
-          .then(() => {
-            message.success(`${editingData ? 'Sửa' : 'Thêm'} kết quả siêu âm thành công!`);
-            getPatientDetail();
-            onCancel();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);

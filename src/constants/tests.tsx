@@ -7,6 +7,17 @@ export const TEST_NAME = {
   UNTRASOUND_TEST: 'UNTRASOUND_TEST',
 };
 
+export const getEditRemoveTestEndpoint = (testName: string, testId: number, patientId: string) => {
+  const map = {
+    BLOOD_TEST: 'blood-test',
+    SERUM_IRON_TEST: 'serum-iron-test',
+    HEMOGLOBIN_TEST: 'hemoglobin-test',
+    TRIPLE_TEST: 'triple-test',
+    DOUBLE_TEST: 'double-test',
+    UNTRASOUND_TEST: 'untrasound-test',
+  };
+  return `/patients/${patientId}/${map[testName]}/${testId}`;
+};
 export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: string) => {
   const map = {
     BLOOD_TEST: 'blood-test',

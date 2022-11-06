@@ -70,10 +70,6 @@ const operationTabList = [
   },
 ];
 
-const getTestDetail = (tests: any, testName: string) => {
-  return tests.find((test: any) => test.testName === testName).action;
-};
-
 const getModalKey = (testName: string) => {
   const map = {
     [TEST_NAME.BLOOD_TEST]: 'INPUT_BLOOD_TEST_RESULT',
@@ -81,7 +77,7 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.HEMOGLOBIN_TEST]: 'INPUT_HEMOGLOBIN_TEST_RESULT',
     [TEST_NAME.DOUBLE_TEST]: 'INPUT_DOUBLE_TEST_RESULT',
     [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
-    [TEST_NAME.UNTRASOUND_TEST]: 'INPUT_UNTRASOUND_TEST',
+    [TEST_NAME.UNTRASOUND_TEST]: 'INPUT_UNTRASOUND_TEST_RESULT',
   };
   return map[testName];
 };
@@ -104,37 +100,34 @@ function PatientDetail() {
 
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
-      console.log(response);
       const {
-        blood_test,
-        hemoglobin_test,
-        serum_iron_test,
-        double_test,
-        triple_test,
-        untrasound_test,
+        blood_tests,
+        hemoglobin_tests,
+        serum_iron_tests,
+        double_tests,
+        triple_tests,
+        untrasound_tests,
         ...rest
       } = response;
-      const tests = [];
-      if (blood_test) {
-        tests.push(blood_test);
-      }
-      if (hemoglobin_test) {
-        tests.push(hemoglobin_test);
-      }
-      if (serum_iron_test) {
-        tests.push(response.serum_iron_test);
-      }
-      if (double_test) {
-        console.log(double_test);
+      let tests: any = [];
 
-        tests.push(double_test);
+      if (blood_tests) {
+        tests = [...tests, ...blood_tests];
       }
-      if (triple_test) {
-        tests.push(response.triple_test);
+      if (hemoglobin_tests) {
+        tests = [...tests, ...hemoglobin_tests];
       }
-      if (untrasound_test) {
-        console.log(untrasound_test);
-        tests.push(response.untrasound_test);
+      if (serum_iron_tests) {
+        tests = [...tests, ...serum_iron_tests];
+      }
+      if (double_tests) {
+        tests = [...tests, ...double_tests];
+      }
+      if (triple_tests) {
+        tests = [...tests, ...triple_tests];
+      }
+      if (untrasound_tests) {
+        tests = [...tests, ...untrasound_tests];
       }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
@@ -158,13 +151,12 @@ function PatientDetail() {
       title: 'Tên xét nghiệm',
       dataIndex: 'testName',
       key: 'testName',
-      render: (text, record, index) => {
-        const testName = record.action.test_name;
+      render: (testName: string, record: any, index) => {
         return (
           <span
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              const editingData = getTestDetail(patientDetail.tests, testName);
+              const editingData = record.action;
               editingData.test_date = moment(Number(editingData.test_date));
               dispatch({
                 type: 'modal/showModal',
@@ -182,7 +174,7 @@ function PatientDetail() {
               });
             }}
           >
-            {getVietnameseTestName(text)}{' '}
+            {getVietnameseTestName(testName)}{' '}
           </span>
         );
       },
@@ -203,14 +195,13 @@ function PatientDetail() {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
-      render: (test: any) => {
+      render: (test: any, record: any) => {
         return (
           <>
-            {/* <span>Xem</span> */}
             <span
               style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
               onClick={() => {
-                const editingData = getTestDetail(patientDetail.tests, test.test_name);
+                const editingData = record.action;
                 editingData.test_date = moment(Number(editingData.test_date));
                 dispatch({
                   type: 'modal/showModal',
@@ -253,18 +244,32 @@ function PatientDetail() {
 
       onOk: () => {
         const removeTestName = removeTest.test_name;
-        runDeleteTest(deleteTestResult({ patientId, testName: removeTestName })).then(() => {
-          message.success(`Xóa kết quả ${removeTestName} thành công!`);
+        const testId = removeTest.id;
+        runDeleteTest(deleteTestResult({ patientId, testName: removeTestName, testId })).then(
+          () => {
+            message.success(`Xóa kết quả ${removeTestName} thành công!`);
 
-          // Remove test from state list
-          setPatientDetail((prev: any) => {
-            let tests = prev.tests;
-            if (tests?.length > 0) {
-              tests = tests.filter((test: any) => test.testName !== removeTestName);
-            }
-            return { ...prev, tests };
-          });
-        });
+            // Remove test from state list
+            setPatientDetail((prev: any) => {
+              let tests = prev.tests;
+              if (tests?.length > 0) {
+                console.log(tests);
+
+                tests = tests.filter((test: any) => {
+                  if (test.testName !== removeTestName) {
+                    return true;
+                  } else {
+                    if (test.testId !== testId) {
+                      return true;
+                    }
+                    return false;
+                  }
+                });
+              }
+              return { ...prev, tests };
+            });
+          },
+        );
       },
     });
   };

@@ -1,4 +1,4 @@
-import { getCreateDeleteTestResultEndpoint } from '@/constants/tests';
+import { getEditRemoveTestEndpoint } from './../../../constants/tests';
 import request from '@/utils/request';
 import { getDefaultFilterTimestamp } from '@/utils/time';
 import token from '@/utils/token';
@@ -41,9 +41,10 @@ export async function queryPatientDetail(patientId: string) {
 
 export async function deleteTestResult(data: {
   patientId: string;
-  testName: 'blood-test' | 'serum-iron-test' | 'hemoglobin-test' | 'double-test' | 'triple-test' | 'untrasound-test';
+  testId: number;
+  testName: string;
 }) {
-  return request(getCreateDeleteTestResultEndpoint(data.testName, data.patientId), {
+  return request(getEditRemoveTestEndpoint(data.testName, data.testId, data.patientId), {
     data,
     method: 'DELETE',
     headers: {

@@ -62,7 +62,6 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
         }),
       );
     } catch (err) {
-      // token.delete();
       cancel('Session time out.');
       throw err;
     } finally {
