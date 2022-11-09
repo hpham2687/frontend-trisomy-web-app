@@ -40,7 +40,6 @@ const convertResponseToTableData = (tests: any) => {
     key: test.id,
     testId: test.id,
     testName: test.test_name,
-    createdDate: moment(test.created_at).format('DD-MM-YYYY'),
     testDate: test.test_date,
     action: test,
   }));
@@ -179,11 +178,7 @@ function PatientDetail() {
         );
       },
     },
-    {
-      title: 'Ngày thêm kết quả',
-      dataIndex: 'createdDate',
-      key: 'createdDate',
-    },
+
     {
       title: 'Ngày xét nghiệm',
       dataIndex: 'testDate',
@@ -327,27 +322,6 @@ function PatientDetail() {
                           onFinish={async (value) => console.log(value)}
                           submitter={{ render: () => null }}
                         >
-                          <Form.Item name="dates" label="Chọn các ngày XN">
-                            <Select
-                              mode="multiple"
-                              size={'middle'}
-                              placeholder="Chọn các ngày xét nghiệm"
-                              onChange={handleChange}
-                              style={{ width: '100%' }}
-                            >
-                              {convertResponseToDateObj(patientDetail?.tests)}
-                            </Select>
-                          </Form.Item>
-                          <Button
-                            type="primary"
-                            onClick={() => {
-                              formRef.current?.validateFields().then((values) => {
-                                console.log(values);
-                              });
-                            }}
-                          >
-                            Chuẩn đoán
-                          </Button>
                           {/* step 2 */}
                           <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
                             <Descriptions.Item label="Thalassemia alpha">0.3</Descriptions.Item>
@@ -432,27 +406,6 @@ function PatientDetail() {
                             render: () => null,
                           }}
                         >
-                          <Form.Item name="dates" label="Chọn các ngày XN">
-                            <Select
-                              mode="multiple"
-                              size={'middle'}
-                              placeholder="Chọn các ngày xét nghiệm"
-                              onChange={handleChange}
-                              style={{ width: '100%' }}
-                            >
-                              {convertResponseToDateObj(patientDetail?.tests)}
-                            </Select>
-                          </Form.Item>
-                          <Button
-                            type="primary"
-                            onClick={() => {
-                              formRef.current?.validateFields().then((values) => {
-                                console.log(values);
-                              });
-                            }}
-                          >
-                            Chuẩn đoán
-                          </Button>
                           {/* step 2 */}
                           <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
                             <Descriptions.Item label="Trisomy 21">0.32</Descriptions.Item>
