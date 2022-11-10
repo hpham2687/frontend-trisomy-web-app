@@ -2,14 +2,18 @@
 import { ModalKey } from '@/components/Modals';
 import { getVietnameseTestName, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
-import { deleteTestResult, queryPatientDetail } from '@/pages/patients/list/service';
+import {
+  deleteTestResult,
+  predictThalassemia,
+  queryPatientDetail,
+} from '@/pages/patients/list/service';
 import {
   ExclamationCircleOutlined,
   EyeOutlined,
   FundOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import ProForm, { ProFormInstance, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, { ProFormInstance, ProFormTextArea } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import {
   Button,
@@ -22,7 +26,6 @@ import {
   Modal,
   Row,
   Select,
-  Statistic,
   Table,
 } from 'antd';
 import moment from 'moment';
@@ -33,6 +36,12 @@ import styles from './style/index.less';
 import './style/index.css';
 import styled from 'styled-components';
 import { BreakPoints } from '@/constants/common';
+import {
+  numericalOrderColumn,
+  testActionColumn,
+  testDateColumn,
+  testNameColumn,
+} from '@/constants/patientDetail';
 const { Option } = Select;
 
 const convertResponseToTableData = (tests: any) => {
@@ -139,92 +148,52 @@ function PatientDetail() {
     }
   }, [patientId]);
 
-  const columns = [
-    {
-      title: 'STT',
-      dataIndex: 'index',
-      key: 'index',
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: 'Tên xét nghiệm',
-      dataIndex: 'testName',
-      key: 'testName',
-      render: (testName: string, record: any, index) => {
-        return (
-          <span
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              const editingData = record.action;
-              editingData.test_date = moment(Number(editingData.test_date));
-              dispatch({
-                type: 'modal/showModal',
-                payload: {
-                  modalKey: getModalKey(testName),
-                  customProps: {
-                    patientDetail,
-                    editingData,
-                    readonly: true,
-                    getPatientDetail: () => {
-                      getPatientDetail();
-                    },
-                  },
-                },
-              });
-            }}
-          >
-            {getVietnameseTestName(testName)}{' '}
-          </span>
-        );
+  const handleViewTest = (data: any) => {
+    const editingData = data;
+    editingData.test_date = moment(Number(editingData.test_date));
+    dispatch({
+      type: 'modal/showModal',
+      payload: {
+        modalKey: getModalKey(data.test_name),
+        customProps: {
+          patientDetail,
+          editingData,
+          readonly: true,
+          getPatientDetail: () => {
+            getPatientDetail();
+          },
+        },
       },
-    },
+    });
+  };
 
-    {
-      title: 'Ngày xét nghiệm',
-      dataIndex: 'testDate',
-      key: 'testDate',
-      sorter: (a: any, b: any) => Number(a.testDate) - Number(b.testDate),
-      render: (testDate: any) => moment(Number(testDate)).format('DD-MM-YYYY'),
-    },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      key: 'action',
-      render: (test: any, record: any) => {
-        return (
-          <>
-            <span
-              style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-              onClick={() => {
-                const editingData = record.action;
-                editingData.test_date = moment(Number(editingData.test_date));
-                dispatch({
-                  type: 'modal/showModal',
-                  payload: {
-                    modalKey: getModalKey(test.test_name),
-                    customProps: {
-                      patientDetail,
-                      editingData,
-                      getPatientDetail: () => {
-                        getPatientDetail();
-                      },
-                    },
-                  },
-                });
-              }}
-            >
-              Sửa
-            </span>
-            <span
-              onClick={() => handleShowConfirmDelete(test)}
-              style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}
-            >
-              Xóa
-            </span>
-          </>
-        );
+  const handleEditTest = (data: any) => {
+    const editingData = data;
+    editingData.test_date = moment(Number(editingData.test_date));
+    dispatch({
+      type: 'modal/showModal',
+      payload: {
+        modalKey: getModalKey(data.test_name),
+        customProps: {
+          patientDetail,
+          editingData,
+          getPatientDetail: () => {
+            getPatientDetail();
+          },
+        },
       },
-    },
+    });
+  };
+
+  const handleDeleteTest = (test: any) => {
+    handleShowConfirmDelete(test);
+  };
+
+  const columns: any = [
+    numericalOrderColumn,
+    testNameColumn({ handleViewTest }),
+    testDateColumn,
+    testActionColumn({ handleEditTest, handleDeleteTest }),
   ];
 
   const handleShowConfirmDelete = (removeTest: any) => {
@@ -269,8 +238,129 @@ function PatientDetail() {
     });
   };
 
-  const handleChange = (value: string | string[]) => {
-    console.log(`Selected: ${value}`);
+  const handleShowThalassemiaResult = () => {
+    dispatch({
+      type: 'modal/showModal',
+      payload: {
+        modalKey: ModalKey.GENERAL_INFO,
+        customProps: {
+          footer: null,
+          body: (
+            <>
+              <ProForm
+                name="validate_other"
+                initialValues={{
+                  doctor_selection: 'trisomy21',
+                }}
+                onValuesChange={(_, values) => {
+                  console.log(values);
+                }}
+                formRef={formRef}
+                onFinish={async (value) => console.log(value)}
+                submitter={{ render: () => null }}
+              >
+                {/* step 2 */}
+                <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
+                  <Descriptions.Item label="Thalassemia alpha">0.3</Descriptions.Item>
+                  <Descriptions.Item label="Thalassemia beta">0.3</Descriptions.Item>
+                  <Descriptions.Item label="Không mang bệnh">0.4</Descriptions.Item>
+                </Descriptions>
+
+                <div style={{ marginBottom: 16 }}>
+                  <p>Kết luận của bác sĩ</p>
+                  <Form.Item name="diseaseName">
+                    <Checkbox.Group style={{ width: '100%' }}>
+                      <Row>
+                        <Col span={8}>
+                          <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
+                            Alpha
+                          </Checkbox>
+                        </Col>
+                        <Col span={8}>
+                          <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
+                            Beta
+                          </Checkbox>
+                        </Col>
+                        <Col span={8}>
+                          <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
+                            Không mang bệnh
+                          </Checkbox>
+                        </Col>
+                      </Row>
+                    </Checkbox.Group>
+                  </Form.Item>
+                </div>
+                <ProFormTextArea
+                  label="Chẩn đoán của bác sỹ"
+                  name="doctorComment"
+                  placeholder="Nhập chẩn đoán của bác sỹ"
+                />
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    formRef.current?.validateFields().then((values) => {
+                      console.log(values);
+                    });
+                  }}
+                >
+                  Lưu kết quả
+                </Button>
+              </ProForm>
+            </>
+          ),
+        },
+      },
+    });
+  };
+
+  const handlePredictThalassemia = () => {
+    const { tests } = patientDetail;
+    const bloodTest = tests.find((test: any) => test.testName === TEST_NAME.BLOOD_TEST)?.action;
+    const serumIronTest = tests.find(
+      (test: any) => test.testName === TEST_NAME.SERUM_IRON_TEST,
+    )?.action;
+    const hemoglobinTest = tests.find(
+      (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
+    )?.action;
+    console.log(bloodTest);
+    console.log(hemoglobinTest);
+
+    const shouldEnablePredictThalassemia = !!(bloodTest && serumIronTest && hemoglobinTest);
+    console.log(shouldEnablePredictThalassemia);
+    if (!shouldEnablePredictThalassemia) {
+      return alert('Not enough data');
+    }
+    console.log();
+    const data2Send = {
+      ctm_rbc: bloodTest.ctm_rbc,
+      ctm_hgb: bloodTest.ctm_hgb,
+      ctm_hct: bloodTest.ctm_hct,
+      ctm_mcv: bloodTest.ctm_mcv,
+      ctm_mch: bloodTest.ctm_mch,
+      ctm_mchc: bloodTest.ctm_mchc,
+      ctm_rdw: bloodTest.ctm_rdw,
+      ctm_sathuyetthanh: serumIronTest.ctm_sathuyetthanh,
+      ctm_ferritinehuyetthanh: serumIronTest.ctm_ferritinehuyetthanh,
+
+      dd_hba1: hemoglobinTest.dd_hba1,
+      dd_hba2: hemoglobinTest.dd_hba2,
+      dd_hbe: hemoglobinTest.dd_hbe,
+      dd_hbh: hemoglobinTest.dd_hbh,
+      dd_hbbar: hemoglobinTest.dd_hbbar,
+      dd_hbkhac: hemoglobinTest.dd_hbkhac,
+      dd_hbf: hemoglobinTest.dd_hbf,
+    };
+    console.log(data2Send);
+
+    // check if blood, serrum , hemoglobin inputed
+    predictThalassemia(data2Send)
+      .then((response: any) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+    // Post API request
+
+    //handleShowThalassemiaResult
   };
 
   const contentList = {
@@ -301,80 +391,7 @@ function PatientDetail() {
             className="ai-diagnosis-button"
             type="primary"
             style={{ marginBottom: 24, marginLeft: 8 }}
-            onClick={() => {
-              dispatch({
-                type: 'modal/showModal',
-                payload: {
-                  modalKey: ModalKey.GENERAL_INFO,
-                  customProps: {
-                    footer: null,
-                    body: (
-                      <>
-                        <ProForm
-                          name="validate_other"
-                          initialValues={{
-                            doctor_selection: 'trisomy21',
-                          }}
-                          onValuesChange={(_, values) => {
-                            console.log(values);
-                          }}
-                          formRef={formRef}
-                          onFinish={async (value) => console.log(value)}
-                          submitter={{ render: () => null }}
-                        >
-                          {/* step 2 */}
-                          <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
-                            <Descriptions.Item label="Thalassemia alpha">0.3</Descriptions.Item>
-                            <Descriptions.Item label="Thalassemia beta">0.3</Descriptions.Item>
-                            <Descriptions.Item label="Không mang bệnh">0.4</Descriptions.Item>
-                          </Descriptions>
-
-                          <div style={{ marginBottom: 16 }}>
-                            <p>Kết luận của bác sĩ</p>
-                            <Form.Item name="diseaseName">
-                              <Checkbox.Group style={{ width: '100%' }}>
-                                <Row>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
-                                      Alpha
-                                    </Checkbox>
-                                  </Col>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
-                                      Beta
-                                    </Checkbox>
-                                  </Col>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
-                                      Không mang bệnh
-                                    </Checkbox>
-                                  </Col>
-                                </Row>
-                              </Checkbox.Group>
-                            </Form.Item>
-                          </div>
-                          <ProFormTextArea
-                            label="Chẩn đoán của bác sỹ"
-                            name="doctorComment"
-                            placeholder="Nhập chẩn đoán của bác sỹ"
-                          />
-                          <Button
-                            type="primary"
-                            onClick={() => {
-                              formRef.current?.validateFields().then((values) => {
-                                console.log(values);
-                              });
-                            }}
-                          >
-                            Lưu kết quả
-                          </Button>
-                        </ProForm>
-                      </>
-                    ),
-                  },
-                },
-              });
-            }}
+            onClick={handlePredictThalassemia}
           >
             <FundOutlined />
             AI chẩn đoán Thalassemia
@@ -457,7 +474,7 @@ function PatientDetail() {
           loading={isLoading || isLoadingDelete}
           dataSource={patientDetail?.tests || []}
           columns={columns}
-          rowKey={(obj) => obj.test_name}
+          rowKey={(obj) => obj.id}
           pagination={{ position: ['bottomRight'] }}
         />
       </>
