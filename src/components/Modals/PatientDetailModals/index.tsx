@@ -2,14 +2,13 @@
 import BaseModal from '@/components/Common/Modal';
 import { TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
-import { Button, Col, Row, DatePicker, Form, Input, message, Radio } from 'antd';
-import type { RadioChangeEvent } from 'antd';
+import { ProFormRadio } from '@ant-design/pro-form';
+import { Button, Col, Row, DatePicker, Form, Input, message } from 'antd';
 import styled from 'styled-components';
 import { useDispatch } from 'umi';
 import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
-import { useState } from 'react';
 
 export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }: any) => {
   const dispatch = useDispatch();
@@ -879,13 +878,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
 }: any) => {
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
-  const [value, setValue] = useState(1);
-  
-  const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
-    setValue(e.target.value);
-  };
-  
+
   const handleOk = () => {
     form
     .validateFields()
@@ -1002,54 +995,49 @@ export const ModalInputFirstUltrasoundTestResult = ({
         >
           <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item 
-          name="nose_bone"
-          label = "Xương mũi"
-          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
-          >
-          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
-            <Row>
-                <Col span={8}>
-                  <Radio value={true}>Có</Radio>
-                </Col>
-                <Col span={8}>
-                  <Radio value={false}>Không</Radio>
-                </Col>
-            </Row>   
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item 
-          name="heart_defect"
-          label = "Dị tật tim"
-          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
-          >
-          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
-            <Row>
-                <Col span={8}>
-                  <Radio value={true}>Có</Radio>
-                </Col>
-                <Col span={8}>
-                  <Radio value={false}>Không</Radio>
-                </Col>
-            </Row>   
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item 
-          name="cervical_lymph_node"
-          label = "Nang bạch huyết vùng cổ"
-          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
-          >
-          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
-            <Row>
-                <Col span={8}>
-                  <Radio value={true}>Có</Radio>
-                </Col>
-                <Col span={8}>
-                  <Radio value={false}>Không</Radio>
-                </Col>
-            </Row>   
-          </Radio.Group>
-        </Form.Item>
+        <Row>
+        <Col span={12}>
+          <ProFormRadio.Group
+            radioType="button"
+            label="Xương mũi"
+            name="nose_bone"
+            options={[
+              { label: 'Có', value: true },
+              { label: 'Không', value: false },
+            ]}
+            readonly={readonly}
+            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+          />
+        </Col>
+        <Col span={12}>
+          <ProFormRadio.Group
+            radioType="button"
+            label="Dị tật tim"
+            name="heart_defect"
+            options={[
+              { label: 'Có', value: true },
+              { label: 'Không', value: false },
+            ]}
+            readonly={readonly}
+            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ProFormRadio.Group
+            radioType="button"
+            label="Nang bạch huyết ở vùng cổ"
+            name="cervical_lymph_node"
+            options={[
+              { label: 'Có', value: true },
+              { label: 'Không', value: false },
+            ]}
+            readonly={readonly}
+            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+          />
+        </Col>
+      </Row>
       </StyledFormUltraSound>
     </BaseModal>
   );
