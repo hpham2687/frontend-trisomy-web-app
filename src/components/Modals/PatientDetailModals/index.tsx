@@ -2,12 +2,14 @@
 import BaseModal from '@/components/Common/Modal';
 import { TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
-import { Button, DatePicker, Form, Input, message } from 'antd';
+import { Button, Col, Row, DatePicker, Form, Input, message, Radio } from 'antd';
+import type { RadioChangeEvent } from 'antd';
 import styled from 'styled-components';
 import { useDispatch } from 'umi';
 import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
+import { useState } from 'react';
 
 export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }: any) => {
   const dispatch = useDispatch();
@@ -117,13 +119,12 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          disabled={patientDetail?.triple_test}
           // style={{ marginLeft: 8 }}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
               payload: {
-                modalKey: ModalKey.INPUT_UNTRASOUND_TEST_RESULT,
+                modalKey: ModalKey.INPUT_FIRST_ULTRASOUND_TEST_RESULT,
                 customProps: {
                   patientDetail,
                   getPatientDetail: () => {
@@ -134,7 +135,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
             });
           }}
         >
-          Siêu âm thai nhi
+          Siêu âm kỳ 1
         </Button>
       </div>
     </BaseModal>
@@ -852,7 +853,7 @@ export const ModalInputTripleTestResult = ({
             style={{ width: '100%' }}
             format="DD-MM-YYYY"
             className={`${readonly ? 'readonly' : ''}`}
-          />
+            />
         </Form.Item>
         <Form.Item name={'ue3'} label="uE3" rules={[{ required: true }]}>
           <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
@@ -868,7 +869,7 @@ export const ModalInputTripleTestResult = ({
   );
 };
 
-export const ModalInputUntrasoundTestResult = ({
+export const ModalInputFirstUltrasoundTestResult = ({
   patientDetail,
   editingData,
   getPatientDetail,
@@ -878,12 +879,18 @@ export const ModalInputUntrasoundTestResult = ({
 }: any) => {
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
-
+  const [value, setValue] = useState(1);
+  
+  const onChange = (e: RadioChangeEvent) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+  };
+  
   const handleOk = () => {
     form
-      .validateFields()
-      .then((values) => {
-        form.resetFields();
+    .validateFields()
+    .then((values) => {
+      form.resetFields();
         console.log(values);
         const payload = {};
         // Convert to number type
@@ -897,7 +904,7 @@ export const ModalInputUntrasoundTestResult = ({
               patientId: patientDetail.id,
               testId: editingData.id,
               payload,
-              testName: TEST_NAME.UNTRASOUND_TEST,
+              testName: TEST_NAME.FIRST_ULTRASOUND_TEST,
             }),
           )
             .then(() => {
@@ -913,7 +920,7 @@ export const ModalInputUntrasoundTestResult = ({
           run(
             addTestResult({
               patientId: patientDetail.id,
-              testName: TEST_NAME.UNTRASOUND_TEST,
+              testName: TEST_NAME.FIRST_ULTRASOUND_TEST,
               payload,
             }),
           )
@@ -946,7 +953,7 @@ export const ModalInputUntrasoundTestResult = ({
 
   return (
     <BaseModal
-      title="Siêu âm"
+      title="Siêu âm kỳ 1"
       onOk={handleOk}
       isLoading={isLoading}
       loading={true}
@@ -962,8 +969,8 @@ export const ModalInputUntrasoundTestResult = ({
       ]}
       {...rest}
     >
-      <StyledFormUtraSound
-        name="untrasound-form"
+      <StyledFormUltraSound
+        name="first-ultrasound-form"
         form={form}
         validateMessages={validateMessages}
         initialValues={editingData}
@@ -981,28 +988,69 @@ export const ModalInputUntrasoundTestResult = ({
           />
         </Form.Item>
         <Form.Item
-          name={'weeks_old'}
-          label={'Số tuần tuổi'}
-          rules={[{ required: true }]}
-          extra={readonly ? '' : 'Tính theo ngày tuổi'}
-        >
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
-        </Form.Item>
-        <Form.Item name={'heartbeat'} label="Nhịp tim thai nhi" rules={[{ required: true }]}>
-          <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
-        </Form.Item>
-        <Form.Item
           name={'crown_rump_length'}
           // Crown Rump Length
           label="Chiều dài đầu mông"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: 'Vui lòng nhập thông tin chiều dài đầu mông' }]}
         >
           <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-        <Form.Item name={'nuchal_translucency'} label="Độ mờ da gáy" rules={[{ required: true }]}>
+        <Form.Item 
+          name={'nuchal_translucency'} 
+          label="Độ mờ da gáy NT" 
+          rules={[{ required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' }]}
+        >
           <Input type="number" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
-      </StyledFormUtraSound>
+        <Form.Item 
+          name="nose_bone"
+          label = "Xương mũi"
+          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
+          >
+          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
+            <Row>
+                <Col span={8}>
+                  <Radio value={true}>Có</Radio>
+                </Col>
+                <Col span={8}>
+                  <Radio value={false}>Không</Radio>
+                </Col>
+            </Row>   
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item 
+          name="heart_defect"
+          label = "Dị tật tim"
+          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
+          >
+          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
+            <Row>
+                <Col span={8}>
+                  <Radio value={true}>Có</Radio>
+                </Col>
+                <Col span={8}>
+                  <Radio value={false}>Không</Radio>
+                </Col>
+            </Row>   
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item 
+          name="cervical_lymph_node"
+          label = "Nang bạch huyết vùng cổ"
+          rules={[{ required: true, message: 'Vui lòng chọn thông tin' }]}
+          >
+          <Radio.Group onChange={onChange} value={value} style={{ width: '100%' }}>
+            <Row>
+                <Col span={8}>
+                  <Radio value={true}>Có</Radio>
+                </Col>
+                <Col span={8}>
+                  <Radio value={false}>Không</Radio>
+                </Col>
+            </Row>   
+          </Radio.Group>
+        </Form.Item>
+      </StyledFormUltraSound>
     </BaseModal>
   );
 };
@@ -1013,7 +1061,7 @@ const StyledForm = styled(Form)`
   }
 `;
 
-const StyledFormUtraSound = styled(Form)`
+const StyledFormUltraSound = styled(Form)`
   .ant-col.ant-form-item-label {
     text-align: left;
   }

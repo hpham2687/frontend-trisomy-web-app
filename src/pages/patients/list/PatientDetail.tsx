@@ -76,7 +76,7 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.HEMOGLOBIN_TEST]: 'INPUT_HEMOGLOBIN_TEST_RESULT',
     [TEST_NAME.DOUBLE_TEST]: 'INPUT_DOUBLE_TEST_RESULT',
     [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
-    [TEST_NAME.UNTRASOUND_TEST]: 'INPUT_UNTRASOUND_TEST_RESULT',
+    [TEST_NAME.FIRST_ULTRASOUND_TEST]: 'INPUT_FIRST_ULTRASOUND_TEST_RESULT',
   };
   return map[testName];
 };
@@ -105,7 +105,7 @@ function PatientDetail() {
         serum_iron_tests,
         double_tests,
         triple_tests,
-        untrasound_tests,
+        first_ultrasound_tests,
         ...rest
       } = response;
       let tests: any = [];
@@ -125,8 +125,8 @@ function PatientDetail() {
       if (triple_tests) {
         tests = [...tests, ...triple_tests];
       }
-      if (untrasound_tests) {
-        tests = [...tests, ...untrasound_tests];
+      if (first_ultrasound_tests) {
+        tests = [...tests, ...first_ultrasound_tests];
       }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
