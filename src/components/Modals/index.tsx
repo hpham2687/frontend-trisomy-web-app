@@ -7,6 +7,7 @@ import {
   ModalInputSerumIronTestResult,
   ModalInputTripleTestResult,
   ModalInputFirstUltrasoundTestResult,
+  ModalInputSecondUltrasoundTestResult,
   ModalSelectTestType,
 } from './PatientDetailModals';
 
@@ -17,6 +18,7 @@ export const ModalKey = {
   INPUT_SERUM_IRON_TEST_RESULT: 'INPUT_SERUM_IRON_TEST_RESULT',
   INPUT_HEMOGLOBIN_TEST_RESULT: 'INPUT_HEMOGLOBIN_TEST_RESULT',
   INPUT_FIRST_ULTRASOUND_TEST_RESULT: 'INPUT_FIRST_ULTRASOUND_TEST_RESULT',
+  INPUT_SECOND_ULTRASOUND_TEST_RESULT: 'INPUT_SECOND_ULTRASOUND_TEST_RESULT',
 
   ADD_TEST_RESULT: 'ADD_TEST_RESULT',
   GENERAL_INFO: 'GENERAL_INFO',
@@ -29,6 +31,7 @@ modalMap[ModalKey.INPUT_TRIPLE_TEST_RESULT] = ModalInputTripleTestResult;
 modalMap[ModalKey.INPUT_SERUM_IRON_TEST_RESULT] = ModalInputSerumIronTestResult;
 modalMap[ModalKey.INPUT_HEMOGLOBIN_TEST_RESULT] = ModalInputHemoglobinTestResult;
 modalMap[ModalKey.INPUT_FIRST_ULTRASOUND_TEST_RESULT] = ModalInputFirstUltrasoundTestResult;
+modalMap[ModalKey.INPUT_SECOND_ULTRASOUND_TEST_RESULT] = ModalInputSecondUltrasoundTestResult;
 modalMap[ModalKey.ADD_TEST_RESULT] = ModalSelectTestType;
 modalMap[ModalKey.GENERAL_INFO] = GeneralInfo;
 

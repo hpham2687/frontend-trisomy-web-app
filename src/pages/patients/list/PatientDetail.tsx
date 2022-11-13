@@ -77,6 +77,7 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.DOUBLE_TEST]: 'INPUT_DOUBLE_TEST_RESULT',
     [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
     [TEST_NAME.FIRST_ULTRASOUND_TEST]: 'INPUT_FIRST_ULTRASOUND_TEST_RESULT',
+    [TEST_NAME.SECOND_ULTRASOUND_TEST]: 'INPUT_SECOND_ULTRASOUND_TEST_RESULT',
   };
   return map[testName];
 };
@@ -106,6 +107,7 @@ function PatientDetail() {
         double_tests,
         triple_tests,
         first_ultrasound_tests,
+        second_ultrasound_tests,
         ...rest
       } = response;
       let tests: any = [];
@@ -128,6 +130,9 @@ function PatientDetail() {
       if (first_ultrasound_tests) {
         tests = [...tests, ...first_ultrasound_tests];
       }
+      if (second_ultrasound_tests) {
+        tests = [...tests, ...second_ultrasound_tests];
+      }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
     });
@@ -144,13 +149,13 @@ function PatientDetail() {
       title: 'STT',
       dataIndex: 'index',
       key: 'index',
-      render: (text, record, index) => index + 1,
+      render: (text: any, record: any, index: number) => index + 1,
     },
     {
       title: 'Tên xét nghiệm',
       dataIndex: 'testName',
       key: 'testName',
-      render: (testName: string, record: any, index) => {
+      render: (testName: string, record: any, index: any) => {
         return (
           <span
             style={{ cursor: 'pointer' }}
