@@ -9,14 +9,19 @@ import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
 
+const isTestExist = (tests: any[], name: string) => {
+  return !!tests?.find((test) => test.testName === name);
+};
+
 export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }: any) => {
   const dispatch = useDispatch();
-
+  const { tests } = patientDetail;
   return (
     <BaseModal footer={null} title="Chọn xét nghiệm" {...rest}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.BLOOD_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -37,6 +42,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.SERUM_IRON_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -56,6 +62,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.HEMOGLOBIN_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -75,7 +82,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          disabled={patientDetail?.double_test}
+          disabled={isTestExist(tests, TEST_NAME.DOUBLE_TEST)}
           // style={{ marginLeft: 8 }}
           onClick={() => {
             dispatch({
@@ -96,7 +103,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          disabled={patientDetail?.triple_test}
+          disabled={isTestExist(tests, TEST_NAME.TRIPLE_TEST)}
           // style={{ marginLeft: 8 }}
           onClick={() => {
             dispatch({

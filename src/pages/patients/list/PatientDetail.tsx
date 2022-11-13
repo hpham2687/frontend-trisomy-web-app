@@ -29,7 +29,7 @@ import {
   Table,
 } from 'antd';
 import moment from 'moment';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { history, useDispatch, useParams } from 'umi';
 
 import styles from './style/index.less';
@@ -97,6 +97,7 @@ function PatientDetail() {
   });
   const [patientDetail, setPatientDetail] = useState<any>(null);
   const { run, isLoading } = useAsync();
+  const { run: runPredictThalassemia, isLoading: isLoadingPredictThalassemia } = useAsync();
   const { run: runDeleteTest, isLoading: isLoadingDelete } = useAsync();
   const dispatch = useDispatch();
   const formRef = useRef<ProFormInstance>();
@@ -105,6 +106,22 @@ function PatientDetail() {
   const onOperationTabChange = (key: string) => {
     seTabStatus({ ...tabStatus, operationKey: key });
   };
+
+  const shouldEnablePredictThalassemia = useMemo(() => {
+    if (patientDetail) {
+      const { tests } = patientDetail;
+      const bloodTest = tests.find((test: any) => test.testName === TEST_NAME.BLOOD_TEST)?.action;
+      const serumIronTest = tests.find(
+        (test: any) => test.testName === TEST_NAME.SERUM_IRON_TEST,
+      )?.action;
+      const hemoglobinTest = tests.find(
+        (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
+      )?.action;
+
+      return !!(bloodTest && serumIronTest && hemoglobinTest);
+    }
+    return false;
+  }, [patientDetail]);
 
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
@@ -217,8 +234,6 @@ function PatientDetail() {
             setPatientDetail((prev: any) => {
               let tests = prev.tests;
               if (tests?.length > 0) {
-                console.log(tests);
-
                 tests = tests.filter((test: any) => {
                   if (test.testName !== removeTestName) {
                     return true;
@@ -238,7 +253,7 @@ function PatientDetail() {
     });
   };
 
-  const handleShowThalassemiaResult = () => {
+  const handleShowThalassemiaResult = (result: any) => {
     dispatch({
       type: 'modal/showModal',
       payload: {
@@ -261,9 +276,15 @@ function PatientDetail() {
               >
                 {/* step 2 */}
                 <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
-                  <Descriptions.Item label="Thalassemia alpha">0.3</Descriptions.Item>
-                  <Descriptions.Item label="Thalassemia beta">0.3</Descriptions.Item>
-                  <Descriptions.Item label="Không mang bệnh">0.4</Descriptions.Item>
+                  <Descriptions.Item label="Thalassemia alpha">
+                    {result.alpha_gen.toFixed(2)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Thalassemia beta">
+                    {result.beta_gen.toFixed(2)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Không mang bệnh">
+                    {result.no_gen.toFixed(2)}
+                  </Descriptions.Item>
                 </Descriptions>
 
                 <div style={{ marginBottom: 16 }}>
@@ -314,7 +335,11 @@ function PatientDetail() {
   };
 
   const handlePredictThalassemia = () => {
+    if (!shouldEnablePredictThalassemia) {
+      return alert('Not enough data');
+    }
     const { tests } = patientDetail;
+
     const bloodTest = tests.find((test: any) => test.testName === TEST_NAME.BLOOD_TEST)?.action;
     const serumIronTest = tests.find(
       (test: any) => test.testName === TEST_NAME.SERUM_IRON_TEST,
@@ -322,15 +347,6 @@ function PatientDetail() {
     const hemoglobinTest = tests.find(
       (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
     )?.action;
-    console.log(bloodTest);
-    console.log(hemoglobinTest);
-
-    const shouldEnablePredictThalassemia = !!(bloodTest && serumIronTest && hemoglobinTest);
-    console.log(shouldEnablePredictThalassemia);
-    if (!shouldEnablePredictThalassemia) {
-      return alert('Not enough data');
-    }
-    console.log();
     const data2Send = {
       ctm_rbc: bloodTest.ctm_rbc,
       ctm_hgb: bloodTest.ctm_hgb,
@@ -350,17 +366,16 @@ function PatientDetail() {
       dd_hbkhac: hemoglobinTest.dd_hbkhac,
       dd_hbf: hemoglobinTest.dd_hbf,
     };
-    console.log(data2Send);
 
     // check if blood, serrum , hemoglobin inputed
-    predictThalassemia(data2Send)
-      .then((response: any) => {
-        console.log(response);
-      })
-      .catch((error) => console.log(error));
+    runPredictThalassemia(
+      predictThalassemia(data2Send)
+        .then((response: any) => {
+          handleShowThalassemiaResult(response);
+        })
+        .catch((error) => console.log(error)),
+    );
     // Post API request
-
-    //handleShowThalassemiaResult
   };
 
   const contentList = {
@@ -388,10 +403,12 @@ function PatientDetail() {
             Thêm xét nghiệm
           </Button>
           <Button
+            loading={isLoadingPredictThalassemia}
             className="ai-diagnosis-button"
             type="primary"
             style={{ marginBottom: 24, marginLeft: 8 }}
             onClick={handlePredictThalassemia}
+            disabled={!shouldEnablePredictThalassemia}
           >
             <FundOutlined />
             AI chẩn đoán Thalassemia

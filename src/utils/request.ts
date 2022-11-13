@@ -11,12 +11,6 @@ import { extend, RequestInterceptor, RequestOptionsInit, ResponseError } from 'u
 // import router from 'umi/router';
 import Reqs from 'umi-request';
 
-// Part 1: "Simple" Error Handler =))
-const errorHandler = (error: ResponseError) => {
-  console.log('HTTP ERROR', error);
-  throw error;
-};
-
 // Part 2: Request Interceptors, (use this instead of "headers" directly in request config)
 const requestInterceptor: RequestInterceptor = (url, options) => {
   return {
@@ -43,8 +37,6 @@ let refreshTokenRequest: Promise<any> | null = null;
 const responseInterceptor = async (response: Response, options: RequestOptionsInit) => {
   //@ts-ignore
   const accessTokenExpired = response.status === 401;
-  console.log('resposne', response);
-
   if (accessTokenExpired) {
     try {
       if (!refreshTokenRequest) {
