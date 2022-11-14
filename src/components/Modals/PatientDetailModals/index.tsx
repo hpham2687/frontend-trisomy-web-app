@@ -11,14 +11,19 @@ import { ModalKey } from '..';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
 
+const isTestExist = (tests: any[], name: string) => {
+  return !!tests?.find((test) => test.testName === name);
+};
+
 export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }: any) => {
   const dispatch = useDispatch();
-
+  const { tests } = patientDetail;
   return (
     <BaseModal footer={null} title="Chọn xét nghiệm" {...rest}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.BLOOD_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -39,6 +44,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.SERUM_IRON_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -58,6 +64,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.HEMOGLOBIN_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -77,7 +84,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          disabled={patientDetail?.double_test}
+          disabled={isTestExist(tests, TEST_NAME.DOUBLE_TEST)}
           // style={{ marginLeft: 8 }}
           onClick={() => {
             dispatch({
@@ -98,7 +105,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          disabled={patientDetail?.triple_test}
+          disabled={isTestExist(tests, TEST_NAME.TRIPLE_TEST)}
           // style={{ marginLeft: 8 }}
           onClick={() => {
             dispatch({
@@ -119,7 +126,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
-          // style={{ marginLeft: 8 }}
+          disabled={isTestExist(tests, TEST_NAME.FIRST_ULTRASOUND_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -139,6 +146,7 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
         </Button>
         <Button
           type="primary"
+          disabled={isTestExist(tests, TEST_NAME.SECOND_ULTRASOUND_TEST)}
           onClick={() => {
             dispatch({
               type: 'modal/showModal',
@@ -282,7 +290,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị G/l'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_hgb'}
@@ -290,7 +303,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị g/l'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_hct'}
@@ -298,7 +316,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị l/l'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_mcv'}
@@ -306,7 +329,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị fl'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_mch'}
@@ -314,7 +342,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị pg'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_mchc'}
@@ -322,7 +355,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị g/l'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'ctm_rdw'}
@@ -330,7 +368,12 @@ export const ModalInputBloodTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            readOnly={readonly}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -455,7 +498,11 @@ export const ModalInputSerumIronTestResult = ({
           extra={readonly ? '' : 'Đơn vị umol/l'}
           wrapperCol={{ span: 24 }}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           labelCol={{ span: 12 }}
@@ -464,7 +511,11 @@ export const ModalInputSerumIronTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị ug/l'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
       </Form>
     </BaseModal>
@@ -588,7 +639,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hba2'}
@@ -596,7 +651,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hbe'}
@@ -604,7 +663,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hbh'}
@@ -612,7 +675,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hbbar'}
@@ -620,7 +687,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hbf'}
@@ -628,7 +699,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'dd_hbkhac'}
@@ -636,7 +711,11 @@ export const ModalInputHemoglobinTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -752,29 +831,41 @@ export const ModalInputDoubleTestResult = ({
             className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        <Form.Item 
-          name={'bhcg'} 
-          label="β-hCG tự do" 
+        <Form.Item
+          name={'bhcg'}
+          label="β-hCG tự do"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị MoM'}
-          >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
-        </Form.Item>
-        <Form.Item 
-          name={'pappa'} 
-          label="PAPP-A" 
-          rules={[{ required: true }]}
-          extra={readonly ? '' : 'Đơn vị MoM'}
-          >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
-        </Form.Item>
-        <Form.Item 
-        name={'nt'} 
-        label="NT" 
-        rules={[{ required: true }]}
-        extra={readonly ? '' : 'Đơn vị MoM'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
+        </Form.Item>
+        <Form.Item
+          name={'pappa'}
+          label="PAPP-A"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị MoM'}
+        >
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
+        </Form.Item>
+        <Form.Item
+          name={'nt'}
+          label="NT"
+          rules={[{ required: true }]}
+          extra={readonly ? '' : 'Đơn vị MoM'}
+        >
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -890,31 +981,43 @@ export const ModalInputTripleTestResult = ({
             style={{ width: '100%' }}
             format="DD-MM-YYYY"
             className={`${readonly ? 'readonly' : ''}`}
-            />
+          />
         </Form.Item>
-        <Form.Item 
-          name={'ue3'} 
-          label="uE3" 
+        <Form.Item
+          name={'ue3'}
+          label="uE3"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị MoM'}
-          >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+        >
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
-        <Form.Item 
-          name={'afp'} 
-          label="AFP" 
+        <Form.Item
+          name={'afp'}
+          label="AFP"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị MoM'}
-          >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+        >
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
-        <Form.Item 
-          name={'hcg'} 
-          label="hCG" 
+        <Form.Item
+          name={'hcg'}
+          label="hCG"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị MoM'}
-          >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`} />
+        >
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
       </StyledForm>
     </BaseModal>
@@ -934,9 +1037,9 @@ export const ModalInputFirstUltrasoundTestResult = ({
 
   const handleOk = () => {
     form
-    .validateFields()
-    .then((values) => {
-      form.resetFields();
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
         console.log(values);
         const payload = {};
         // Convert to number type
@@ -996,7 +1099,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
       range: '${label} must be between ${min} and ${max}',
     },
   };
-  
+
   return (
     <BaseModal
       title="Siêu âm kỳ 1"
@@ -1033,13 +1136,17 @@ export const ModalInputFirstUltrasoundTestResult = ({
             className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        <Form.Item 
-          name={'nuchal_translucency'} 
-          label="Độ mờ da gáy NT" 
+        <Form.Item
+          name={'nuchal_translucency'}
+          label="Độ mờ da gáy NT"
           rules={[{ required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' }]}
           extra={readonly ? '' : 'Đơn vị mm'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`}/>
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Form.Item
           name={'crown_rump_length'}
@@ -1048,59 +1155,67 @@ export const ModalInputFirstUltrasoundTestResult = ({
           rules={[{ required: false, message: 'Vui lòng nhập thông tin chiều dài đầu mông' }]}
           extra={readonly ? '' : 'Đơn vị mm'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() } className={`${readonly ? 'readonly' : ''}`}/>
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
-        <Form.Item 
-          name={'heartbeat'} 
-          label="Nhịp tim thai" 
+        <Form.Item
+          name={'heartbeat'}
+          label="Nhịp tim thai"
           rules={[{ required: false, message: '' }]}
           extra={readonly ? '' : 'Đơn vị lần/phút'}
         >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() }  className={`${readonly ? 'readonly' : ''}`}/>
+          <Input
+            type="number"
+            onWheel={(event) => event.currentTarget.blur()}
+            className={`${readonly ? 'readonly' : ''}`}
+          />
         </Form.Item>
         <Row>
-        <Col span={12}>
-          <ProFormRadio.Group
-            radioType="button"
-            label="Xương mũi"
-            name="nose_bone"
-            options={[
-              { label: 'Có', value: true },
-              { label: 'Không', value: false },
-            ]}
-            readonly={readonly}
-            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
-          />
-        </Col>
-        <Col span={12}>
-          <ProFormRadio.Group
-            radioType="button"
-            label="Dị tật tim"
-            name="heart_defect"
-            options={[
-              { label: 'Có', value: true },
-              { label: 'Không', value: false },
-            ]}
-            readonly={readonly}
-            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <ProFormRadio.Group
-            radioType="button"
-            label="Nang bạch huyết vùng cổ"
-            name="cervical_lymph_node"
-            options={[
-              { label: 'Có', value: true },
-              { label: 'Không', value: false },
-            ]}
-            readonly={readonly}
-            rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
-          />
-        </Col>
-      </Row>
+          <Col span={12}>
+            <ProFormRadio.Group
+              radioType="button"
+              label="Xương mũi"
+              name="nose_bone"
+              options={[
+                { label: 'Có', value: true },
+                { label: 'Không', value: false },
+              ]}
+              readonly={readonly}
+              rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+            />
+          </Col>
+          <Col span={12}>
+            <ProFormRadio.Group
+              radioType="button"
+              label="Dị tật tim"
+              name="heart_defect"
+              options={[
+                { label: 'Có', value: true },
+                { label: 'Không', value: false },
+              ]}
+              readonly={readonly}
+              rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <ProFormRadio.Group
+              radioType="button"
+              label="Nang bạch huyết vùng cổ"
+              name="cervical_lymph_node"
+              options={[
+                { label: 'Có', value: true },
+                { label: 'Không', value: false },
+              ]}
+              readonly={readonly}
+              rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+            />
+          </Col>
+        </Row>
       </StyledFormUltraSound>
     </BaseModal>
   );
@@ -1119,9 +1234,9 @@ export const ModalInputSecondUltrasoundTestResult = ({
 
   const handleOk = () => {
     form
-    .validateFields()
-    .then((values) => {
-      form.resetFields();
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
         console.log(values);
         const payload = {};
         // Convert to number type
@@ -1181,8 +1296,8 @@ export const ModalInputSecondUltrasoundTestResult = ({
       range: '${label} must be between ${min} and ${max}',
     },
   };
-  // Hide or show nose_bone_length 
-  const [ isShow, setShow ]=useState(false) 
+  // Hide or show nose_bone_length
+  const [isHasNoseBone, setIsHasNoseBone] = useState(false);
 
   return (
     <BaseModal
@@ -1220,31 +1335,35 @@ export const ModalInputSecondUltrasoundTestResult = ({
             className={`${readonly ? 'readonly' : ''}`}
           />
         </Form.Item>
-        
+
         <ProFormRadio.Group
           radioType="button"
           label="Xương mũi"
           name="nose_bone"
           options={[
-            { label: 'Có', value: true, onChange: () => setShow (true)},
-            { label: 'Không', value: false, onChange: () => setShow (false)},
+            { label: 'Có', value: true, onChange: () => setIsHasNoseBone(true) },
+            { label: 'Không', value: false, onChange: () => setIsHasNoseBone(false) },
           ]}
           readonly={readonly}
-          rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
         />
-        { isShow ?<Form.Item 
-          name={'nose_bone_length'}
-          label="Chiều dài xương mũi"
-          rules={[{ required: true, message: 'Vui lòng nhập thông tin chiều dài xương mũi' }]}
-          extra={readonly ? '' : 'Đơn vị mm'}
-        >
-          <Input type="number" onWheel={ event => event.currentTarget.blur() }  className={`${readonly ? 'readonly' : ''}`} />
-        </Form.Item> : 
-          <Input name={'nose_bone_length'} type="hidden" value = "0"/>
-        }
-        
+        {isHasNoseBone && (
+          <Form.Item
+            name={'nose_bone_length'}
+            label="Chiều dài xương mũi"
+            rules={[{ required: true, message: 'Vui lòng nhập thông tin chiều dài xương mũi' }]}
+            extra={readonly ? '' : 'Đơn vị mm'}
+          >
+            <Input
+              type="number"
+              onWheel={(event) => event.currentTarget.blur()}
+              className={`${readonly ? 'readonly' : ''}`}
+            />
+          </Form.Item>
+        )}
+
         <Row>
-        <Col span={12}>
+          <Col span={12}>
             <ProFormRadio.Group
               radioType="button"
               label="Dị tật tim"
@@ -1254,7 +1373,7 @@ export const ModalInputSecondUltrasoundTestResult = ({
                 { label: 'Không', value: false },
               ]}
               readonly={readonly}
-              rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+              rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
             />
           </Col>
           <Col span={12}>
@@ -1267,7 +1386,7 @@ export const ModalInputSecondUltrasoundTestResult = ({
                 { label: 'Không', value: false },
               ]}
               readonly={readonly}
-              rules={[{required: true, message: "Vui lòng chọn đầy đủ thông tin"}]}
+              rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
             />
           </Col>
         </Row>
