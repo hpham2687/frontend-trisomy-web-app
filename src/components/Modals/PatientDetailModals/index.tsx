@@ -1293,8 +1293,7 @@ export const ModalInputSecondUltrasoundTestResult = ({
     },
   };
   // Hide or show nose_bone_length
-  const [isHasNoseBone, setIsHasNoseBone] = useState(false);
-
+  const [isHasNoseBone, setIsHasNoseBone] = useState(editingData?.nose_bone);
   return (
     <BaseModal
       title="Siêu âm kỳ 2"
