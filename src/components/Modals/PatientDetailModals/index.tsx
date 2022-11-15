@@ -3,7 +3,7 @@ import BaseModal from '@/components/Common/Modal';
 import { TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
 import { ProFormRadio } from '@ant-design/pro-form';
-import { Button, Col, Row, DatePicker, Form, Input, message } from 'antd';
+import { Button, Col, Row, DatePicker, Form, Input, message, InputNumber } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'umi';
@@ -1001,11 +1001,7 @@ export const ModalInputTripleTestResult = ({
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị MoM'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <InputNumber style={{ width: '100%' }} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
           name={'hcg'}

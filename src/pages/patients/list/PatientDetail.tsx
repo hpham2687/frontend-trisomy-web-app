@@ -119,7 +119,15 @@ function PatientDetail() {
         (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
       )?.action;
 
-      return !!(bloodTest && serumIronTest && hemoglobinTest);
+      if (
+        bloodTest ||
+        (bloodTest && serumIronTest) ||
+        (bloodTest && serumIronTest && hemoglobinTest)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
     return false;
   }, [patientDetail]);
@@ -352,7 +360,8 @@ function PatientDetail() {
     const hemoglobinTest = tests.find(
       (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
     )?.action;
-    const data2Send = {
+
+    let data2Send: any = {
       ctm_rbc: bloodTest.ctm_rbc,
       ctm_hgb: bloodTest.ctm_hgb,
       ctm_hct: bloodTest.ctm_hct,
@@ -360,17 +369,26 @@ function PatientDetail() {
       ctm_mch: bloodTest.ctm_mch,
       ctm_mchc: bloodTest.ctm_mchc,
       ctm_rdw: bloodTest.ctm_rdw,
-      ctm_sathuyetthanh: serumIronTest.ctm_sathuyetthanh,
-      ctm_ferritinehuyetthanh: serumIronTest.ctm_ferritinehuyetthanh,
-
-      dd_hba1: hemoglobinTest.dd_hba1,
-      dd_hba2: hemoglobinTest.dd_hba2,
-      dd_hbe: hemoglobinTest.dd_hbe,
-      dd_hbh: hemoglobinTest.dd_hbh,
-      dd_hbbar: hemoglobinTest.dd_hbbar,
-      dd_hbkhac: hemoglobinTest.dd_hbkhac,
-      dd_hbf: hemoglobinTest.dd_hbf,
     };
+    if (serumIronTest) {
+      data2Send = {
+        ...data2Send,
+        ctm_sathuyetthanh: serumIronTest.ctm_sathuyetthanh,
+        ctm_ferritinehuyetthanh: serumIronTest.ctm_ferritinehuyetthanh,
+      };
+    }
+    if (hemoglobinTest) {
+      data2Send = {
+        ...data2Send,
+        dd_hba1: hemoglobinTest.dd_hba1,
+        dd_hba2: hemoglobinTest.dd_hba2,
+        dd_hbe: hemoglobinTest.dd_hbe,
+        dd_hbh: hemoglobinTest.dd_hbh,
+        dd_hbbar: hemoglobinTest.dd_hbbar,
+        dd_hbkhac: hemoglobinTest.dd_hbkhac,
+        dd_hbf: hemoglobinTest.dd_hbf,
+      };
+    }
 
     // check if blood, serrum , hemoglobin inputed
     runPredictThalassemia(
