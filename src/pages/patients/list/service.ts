@@ -61,8 +61,19 @@ export async function deletePatient(patientId: string) {
     },
   });
 }
+
 export async function predictThalassemia(data: any) {
   return request('/patients/predict-thalassemia', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token.get().accessToken}`,
+    },
+    data,
+  });
+}
+
+export async function predictTrisomy(data: any) {
+  return request('/patients/predict-trisomy', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,

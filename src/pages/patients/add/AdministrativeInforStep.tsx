@@ -61,12 +61,16 @@ function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readon
             // rules={[{ required: true, message: '请选择审批员' }]}
             options={[
               {
-                label: '付晓晓',
+                label: 'Cao đẳng',
                 value: 'xiao',
               },
               {
-                label: '周毛毛',
+                label: 'Đại học',
                 value: 'mao',
+              },
+              {
+                label: 'Khác',
+                value: 'other',
               },
             ]}
             placeholder="Nhập nghề nghiệp"
@@ -209,12 +213,16 @@ function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readon
             // rules={[{ required: true, message: '请选择审批员' }]}
             options={[
               {
-                label: '付晓晓',
+                label: 'Cao đẳng',
                 value: 'xiao',
               },
               {
-                label: '周毛毛',
+                label: 'Đại học',
                 value: 'mao',
+              },
+              {
+                label: 'Khác',
+                value: 'other',
               },
             ]}
             placeholder="Nhập nghề nghiệp"

@@ -5,6 +5,7 @@ import useAsync from '@/hooks/useAsync';
 import {
   deleteTestResult,
   predictThalassemia,
+  predictTrisomy,
   queryPatientDetail,
 } from '@/pages/patients/list/service';
 import {
@@ -13,7 +14,8 @@ import {
   FundOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import ProForm, { ProFormInstance, ProFormTextArea } from '@ant-design/pro-form';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import ProForm, { ProFormTextArea } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import {
   Button,
@@ -21,6 +23,7 @@ import {
   Checkbox,
   Col,
   Descriptions,
+  Divider,
   Form,
   message,
   Modal,
@@ -42,7 +45,6 @@ import {
   testDateColumn,
   testNameColumn,
 } from '@/constants/patientDetail';
-const { Option } = Select;
 
 const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
@@ -52,19 +54,6 @@ const convertResponseToTableData = (tests: any) => {
     testDate: test.test_date,
     action: test,
   }));
-};
-
-const convertResponseToDateObj = (tests: any) => {
-  const dateOptions: any = [];
-  const obj = {};
-  tests?.forEach((test: any) => {
-    const date = test.testDate;
-    if (!obj[date]) {
-      obj[date] = test;
-      dateOptions.push(<Option key={date}>{moment(Number(date)).format('DD-MM-YYYY')}</Option>);
-    }
-  });
-  return dateOptions;
 };
 
 const operationTabList = [
@@ -99,6 +88,7 @@ function PatientDetail() {
   const [patientDetail, setPatientDetail] = useState<any>(null);
   const { run, isLoading } = useAsync();
   const { run: runPredictThalassemia, isLoading: isLoadingPredictThalassemia } = useAsync();
+  const { run: runPredictTrisomy, isLoading: isLoadingPredictTrisomy } = useAsync();
   const { run: runDeleteTest, isLoading: isLoadingDelete } = useAsync();
   const dispatch = useDispatch();
   const formRef = useRef<ProFormInstance>();
@@ -107,6 +97,25 @@ function PatientDetail() {
   const onOperationTabChange = (key: string) => {
     seTabStatus({ ...tabStatus, operationKey: key });
   };
+
+  const shouldEnablePredictTrisomy = useMemo(() => {
+    if (patientDetail) {
+      const { tests } = patientDetail;
+      const firstUltrasoundTest = tests.find(
+        (test: any) => test.testName === TEST_NAME.FIRST_ULTRASOUND_TEST,
+      )?.action;
+      const secondUltrasoundTest = tests.find(
+        (test: any) => test.testName === TEST_NAME.SECOND_ULTRASOUND_TEST,
+      )?.action;
+      const doubleTest = tests.find((test: any) => test.testName === TEST_NAME.DOUBLE_TEST)?.action;
+      const tripleTest = tests.find((test: any) => test.testName === TEST_NAME.TRIPLE_TEST)?.action;
+
+      const hasFirstPeriodData = firstUltrasoundTest && doubleTest;
+      const hasSecondPeriodData = secondUltrasoundTest && tripleTest;
+
+      return hasFirstPeriodData || hasSecondPeriodData;
+    }
+  }, [patientDetail]);
 
   const shouldEnablePredictThalassemia = useMemo(() => {
     if (patientDetail) {
@@ -232,7 +241,7 @@ function PatientDetail() {
       icon: <ExclamationCircleOutlined />,
       content: `Bạn có chắc là muốn xóa kết quả ${getVietnameseTestName(
         removeTest.test_name,
-      )} ngày chứ?`,
+      )} chứ?`,
       okText: 'Có',
       cancelText: 'Không',
 
@@ -401,6 +410,132 @@ function PatientDetail() {
     // Post API request
   };
 
+  const handleShowTrisomyResult = (result: any) => {
+    dispatch({
+      type: 'modal/showModal',
+      payload: {
+        modalKey: ModalKey.GENERAL_INFO,
+        customProps: {
+          body: (
+            <>
+              <ProForm
+                readonly={false}
+                name="validate_other"
+                initialValues={{
+                  doctor_selection: 'trisomy21',
+                }}
+                // onValuesChange={(_, values) => {
+                //   console.log(values);
+                // }}
+                formRef={formRef}
+                onFinish={async (value) => console.log(value)}
+                submitter={{
+                  render: () => null,
+                }}
+              >
+                {/* step 2 */}
+                <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
+                  <Descriptions.Item label="Trisomy 21">
+                    {result.Trisomy21.toFixed(2)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Trisomy 18">
+                    {result.Trisomy18.toFixed(2)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Trisomy 13">
+                    {result.Trisomy13.toFixed(2)}
+                  </Descriptions.Item>
+                </Descriptions>
+                <div style={{ marginBottom: 16 }}>
+                  <p>Kết luận của bác sĩ</p>
+                  <Form.Item name="diseaseName">
+                    <Checkbox.Group>
+                      <Row>
+                        <Col span={8}>
+                          <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
+                            Trisomy 21
+                          </Checkbox>
+                        </Col>
+                        <Col span={8}>
+                          <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
+                            Trisomy 18
+                          </Checkbox>
+                        </Col>
+                        <Col span={8}>
+                          <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
+                            Trisomy 13
+                          </Checkbox>
+                        </Col>
+                      </Row>
+                    </Checkbox.Group>
+                  </Form.Item>
+                </div>
+                <ProFormTextArea
+                  label="Chẩn đoán của bác sỹ"
+                  name="invoiceType"
+                  placeholder="Nhập chẩn đoán của bác sỹ"
+                />
+              </ProForm>
+            </>
+          ),
+        },
+      },
+    });
+  };
+  const handlePredictTrisomy = () => {
+    if (!shouldEnablePredictTrisomy) {
+      return alert('Not enough data');
+    }
+    const { tests } = patientDetail;
+    const firstUltrasoundTest = tests.find(
+      (test: any) => test.testName === TEST_NAME.FIRST_ULTRASOUND_TEST,
+    )?.action;
+    const secondUltrasoundTest = tests.find(
+      (test: any) => test.testName === TEST_NAME.SECOND_ULTRASOUND_TEST,
+    )?.action;
+    const doubleTest = tests.find((test: any) => test.testName === TEST_NAME.DOUBLE_TEST)?.action;
+    const tripleTest = tests.find((test: any) => test.testName === TEST_NAME.TRIPLE_TEST)?.action;
+
+    const hasFirstPeriodData = firstUltrasoundTest && doubleTest;
+    const hasSecondPeriodData = secondUltrasoundTest && tripleTest;
+    let data2Send: any;
+    if (hasFirstPeriodData) {
+      data2Send = {
+        co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency,
+        co_nangbachhuyetvungco_1: firstUltrasoundTest.cervical_lymph_node ? 1 : 0,
+        mat_xuongmui_1: firstUltrasoundTest.nose_bone,
+        nguc_ditattim_1: firstUltrasoundTest.heart_defect ? 1 : 0,
+
+        d_mom_hcgb: doubleTest.bhcg,
+        d_mom_papa: doubleTest.pappa,
+        d_mom_nt: doubleTest.nt,
+      };
+      console.log({ data2Send });
+    }
+    if (hasSecondPeriodData) {
+      data2Send = {
+        ...data2Send,
+        co_nangbachhuyetvungco_2: secondUltrasoundTest.cervical_lymph_node ? 1 : 0,
+        mat_xuongmui_2: secondUltrasoundTest.nose_bone,
+        nguc_ditattim_1: secondUltrasoundTest.heart_defect ? 1 : 0,
+        mat_xuongsongmui_2: secondUltrasoundTest.nose_bone
+          ? secondUltrasoundTest.nose_bone_length
+          : null,
+        t_mom_ue3: tripleTest.ue3,
+        t_mom_afp: tripleTest.afp,
+        t_mom_hcg: tripleTest.hcg,
+      };
+    }
+
+    // fetch
+    runPredictTrisomy(
+      predictTrisomy(data2Send)
+        .then((response: any) => {
+          handleShowTrisomyResult(response);
+        })
+        .catch((error) => console.log(error)),
+    );
+  };
+
   const contentList = {
     tab1: (
       <>
@@ -434,80 +569,18 @@ function PatientDetail() {
             disabled={!shouldEnablePredictThalassemia}
           >
             <FundOutlined />
-            AI chẩn đoán Thalassemia
+            AI sàng lọc Thalassemia
           </Button>
           <Button
             className="ai-diagnosis-button"
             type="primary"
             style={{ marginBottom: 24, marginLeft: 8 }}
-            onClick={() => {
-              dispatch({
-                type: 'modal/showModal',
-                payload: {
-                  modalKey: ModalKey.GENERAL_INFO,
-                  customProps: {
-                    body: (
-                      <>
-                        <ProForm
-                          readonly={false}
-                          name="validate_other"
-                          initialValues={{
-                            doctor_selection: 'trisomy21',
-                          }}
-                          // onValuesChange={(_, values) => {
-                          //   console.log(values);
-                          // }}
-                          formRef={formRef}
-                          onFinish={async (value) => console.log(value)}
-                          submitter={{
-                            render: () => null,
-                          }}
-                        >
-                          {/* step 2 */}
-                          <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
-                            <Descriptions.Item label="Trisomy 21">0.32</Descriptions.Item>
-                            <Descriptions.Item label="Trisomy 18">0.44</Descriptions.Item>
-                            <Descriptions.Item label="Trisomy 13">0.2</Descriptions.Item>
-                          </Descriptions>
-                          <div style={{ marginBottom: 16 }}>
-                            <p>Kết luận của bác sĩ</p>
-                            <Form.Item name="diseaseName">
-                              <Checkbox.Group>
-                                <Row>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
-                                      Trisomy 21
-                                    </Checkbox>
-                                  </Col>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
-                                      Trisomy 18
-                                    </Checkbox>
-                                  </Col>
-                                  <Col span={8}>
-                                    <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
-                                      Trisomy 13
-                                    </Checkbox>
-                                  </Col>
-                                </Row>
-                              </Checkbox.Group>
-                            </Form.Item>
-                          </div>
-                          <ProFormTextArea
-                            label="Chẩn đoán của bác sỹ"
-                            name="invoiceType"
-                            placeholder="Nhập chẩn đoán của bác sỹ"
-                          />
-                        </ProForm>
-                      </>
-                    ),
-                  },
-                },
-              });
-            }}
+            onClick={handlePredictTrisomy}
+            loading={isLoadingPredictTrisomy}
+            disabled={!shouldEnablePredictTrisomy}
           >
             <FundOutlined />
-            AI chẩn đoán Trisomy
+            AI sàng lọc Trisomy
           </Button>
         </ActionButtonWrapper>
         <Table
@@ -517,6 +590,33 @@ function PatientDetail() {
           rowKey={(obj) => obj.id}
           pagination={{ position: ['bottomRight'] }}
         />
+        <Divider style={{ margin: '40px 0 24px' }} />
+        <div className={styles.desc}>
+          <h3>Hướng dẫn</h3>
+          <Row>
+            <Col xs={24} md={12}>
+              <h4>AI sàng lọc Thalassemia</h4>
+              <p>
+                Hỗ trợ sàng lọc khi nhập đủ một trong các trường hợp sau:
+                <ul>
+                  <li>Xét nghiệm máu</li>
+                  <li>Xét nghiệm máu, Xét nghiệm sắt</li>
+                  <li>Xét nghiệm máu, Xét nghiệm sắt, Xét nghiệm điện di</li>
+                </ul>
+              </p>
+            </Col>
+            <Col xs={24} md={12}>
+              <h4>AI sàng lọc Trisomy</h4>
+              <p>
+                Hỗ trợ sàng lọc khi nhập đủ một trong các trường hợp sau:
+                <ul>
+                  <li>Siêu âm kì 1, xét nghiệm Double Test</li>
+                  <li>Siêu âm kì 2, xét nghiệm Triple Test</li>
+                </ul>
+              </p>
+            </Col>
+          </Row>
+        </div>
       </>
     ),
     tab2: (
