@@ -299,13 +299,13 @@ function PatientDetail() {
                 {/* step 2 */}
                 <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
                   <Descriptions.Item label="Thalassemia alpha">
-                    {result.alpha_gen.toFixed(2)}
+                    {result.alphaGen.toFixed(2)}
                   </Descriptions.Item>
                   <Descriptions.Item label="Thalassemia beta">
-                    {result.beta_gen.toFixed(2)}
+                    {result.betaGen.toFixed(2)}
                   </Descriptions.Item>
                   <Descriptions.Item label="Không mang bệnh">
-                    {result.no_gen.toFixed(2)}
+                    {result.noGen.toFixed(2)}
                   </Descriptions.Item>
                 </Descriptions>
 
