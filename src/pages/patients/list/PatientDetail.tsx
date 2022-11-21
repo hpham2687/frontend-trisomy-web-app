@@ -500,9 +500,9 @@ function PatientDetail() {
     let data2Send: any;
     if (hasFirstPeriodData) {
       data2Send = {
-        co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency,
+        co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency ? 1 : 0,
         co_nangbachhuyetvungco_1: firstUltrasoundTest.cervical_lymph_node ? 1 : 0,
-        mat_xuongmui_1: firstUltrasoundTest.nose_bone,
+        mat_xuongmui_1: firstUltrasoundTest.nose_bone ? 1 : 0,
         nguc_ditattim_1: firstUltrasoundTest.heart_defect ? 1 : 0,
 
         d_mom_hcgb: doubleTest.bhcg,
@@ -515,9 +515,9 @@ function PatientDetail() {
       data2Send = {
         ...data2Send,
         co_nangbachhuyetvungco_2: secondUltrasoundTest.cervical_lymph_node ? 1 : 0,
-        mat_xuongmui_2: secondUltrasoundTest.nose_bone,
-        nguc_ditattim_1: secondUltrasoundTest.heart_defect ? 1 : 0,
-        mat_xuongsongmui_2: secondUltrasoundTest.nose_bone
+        mat_xuongmui_2: secondUltrasoundTest.nose_bone ? 1 : 0,
+        nguc_ditattim_2: secondUltrasoundTest.heart_defect ? 1 : 0,
+        mat_xuongsongmui: secondUltrasoundTest.nose_bone
           ? secondUltrasoundTest.nose_bone_length
           : null,
         t_mom_ue3: tripleTest.ue3,

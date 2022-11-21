@@ -13,7 +13,10 @@ export const testNameColumn = ({ handleViewTest }: any) => ({
   key: 'testName',
   render: (testName: string, record: any, index) => {
     return (
-      <span style={{ cursor: 'pointer' }} onClick={() => handleViewTest(record.action)}>
+      <span
+        style={{ cursor: 'pointer', color: '#1890ff' }}
+        onClick={() => handleViewTest(record.action)}
+      >
         {getVietnameseTestName(testName)}{' '}
       </span>
     );
