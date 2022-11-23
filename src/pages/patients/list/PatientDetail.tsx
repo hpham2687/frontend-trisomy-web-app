@@ -519,7 +519,7 @@ function PatientDetail() {
         nguc_ditattim_2: secondUltrasoundTest.heart_defect ? 1 : 0,
         mat_xuongsongmui: secondUltrasoundTest.nose_bone
           ? secondUltrasoundTest.nose_bone_length
-          : null,
+          : 0,
         t_mom_ue3: tripleTest.ue3,
         t_mom_afp: tripleTest.afp,
         t_mom_hcg: tripleTest.hcg,
