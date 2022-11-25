@@ -6,6 +6,7 @@ export const TEST_NAME = {
   DOUBLE_TEST: 'DOUBLE_TEST',
   FIRST_ULTRASOUND_TEST: 'FIRST_ULTRASOUND_TEST',
   SECOND_ULTRASOUND_TEST: 'SECOND_ULTRASOUND_TEST',
+  CHILD_INFORMATION: 'CHILD_INFORMATION',
 };
 
 export const getEditRemoveTestEndpoint = (testName: string, testId: number, patientId: string) => {
@@ -17,6 +18,7 @@ export const getEditRemoveTestEndpoint = (testName: string, testId: number, pati
     DOUBLE_TEST: 'double-test',
     FIRST_ULTRASOUND_TEST: 'first-ultrasound-test',
     SECOND_ULTRASOUND_TEST: 'second-ultrasound-test',
+    CHILD_INFORMATION: 'child-information',
   };
   return `/patients/${patientId}/${map[testName]}/${testId}`;
 };
@@ -29,6 +31,7 @@ export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: s
     DOUBLE_TEST: 'double-test',
     FIRST_ULTRASOUND_TEST: 'first-ultrasound-test',
     SECOND_ULTRASOUND_TEST: 'second-ultrasound-test',
+    CHILD_INFORMATION: 'child-information',
   };
   return '/patients/' + patientId + '/' + map[testName];
 };

@@ -76,6 +76,7 @@ const getModalKey = (testName: string) => {
     [TEST_NAME.TRIPLE_TEST]: 'INPUT_TRIPLE_TEST_RESULT',
     [TEST_NAME.FIRST_ULTRASOUND_TEST]: 'INPUT_FIRST_ULTRASOUND_TEST_RESULT',
     [TEST_NAME.SECOND_ULTRASOUND_TEST]: 'INPUT_SECOND_ULTRASOUND_TEST_RESULT',
+    [TEST_NAME.CHILD_INFORMATION]: 'INPUT_CHILD_INFORMATION_RESULT',
   };
   return map[testName];
 };
@@ -298,14 +299,17 @@ function PatientDetail() {
               >
                 {/* step 2 */}
                 <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
+                  <Descriptions.Item label="Tỉ lệ bị bệnh">
+                    {1 - result.noGen.toFixed(2)}
+                  </Descriptions.Item>
+                  <Descriptions.Item span={2} label="Tỉ lệ không bị bệnh">
+                    {result.noGen.toFixed(2)}
+                  </Descriptions.Item>
                   <Descriptions.Item label="Thalassemia alpha">
                     {result.alphaGen.toFixed(2)}
                   </Descriptions.Item>
                   <Descriptions.Item label="Thalassemia beta">
                     {result.betaGen.toFixed(2)}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Không mang bệnh">
-                    {result.noGen.toFixed(2)}
                   </Descriptions.Item>
                 </Descriptions>
 
@@ -620,8 +624,28 @@ function PatientDetail() {
       </>
     ),
     tab2: (
-      <>sdf</>
-      // <Table pagination={false} loading={loading} dataSource={patientTests} columns={columns} />
+      <Button
+            className="child-information"
+            type="primary"
+            style={{ marginBottom: 24 }}
+            onClick={() => {
+              dispatch({
+                type: 'modal/showModal',
+                payload: {
+                  modalKey: ModalKey.INPUT_CHILD_INFORMATION,
+                  customProps: {
+                    patientDetail,
+                    getPatientDetail: () => {
+                      getPatientDetail();
+                    },
+                  },
+                },
+              });
+            }}
+          >
+            <PlusOutlined />
+            Thêm thông tin thai nhi
+          </Button>
     ),
     tab3: (
       <>sdf</>
