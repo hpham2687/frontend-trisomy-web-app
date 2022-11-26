@@ -20,6 +20,7 @@ export const getEditRemoveTestEndpoint = (testName: string, testId: number, pati
   };
   return `/patients/${patientId}/${map[testName]}/${testId}`;
 };
+
 export const getCreateDeleteTestResultEndpoint = (testName: string, patientId: string) => {
   const map = {
     BLOOD_TEST: 'blood-test',

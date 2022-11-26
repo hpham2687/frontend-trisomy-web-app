@@ -1,13 +1,14 @@
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
+import { CHILD_INFORMATION } from '@/constants/childInformation';
 import useAsync from '@/hooks/useAsync';
 import { Button, Form, Input, message } from 'antd';
-import { addTestResult, editTestResult } from './service';
-import './style/index.css';
+import { addChildInformationResult,editChildInformationResult } from './servivce';
+
 
 export const ModalInputChildInformation = ({
   patientDetail,
+  patientId,
   editingData,
   getPatientDetail,
   readonly,
@@ -27,14 +28,13 @@ export const ModalInputChildInformation = ({
         Object.keys(values).forEach(function (key: string) {
           payload[key] = Number(values[key]);
         });
-
         if (editingData) {
           run(
-            editTestResult({
+            editChildInformationResult({
               patientId: patientDetail.id,
-              testId: editingData.id,
+              childId: editingData.id,
               payload,
-              testName: TEST_NAME.TRIPLE_TEST,
+              inforType: CHILD_INFORMATION.CHILD_BASIC_INFORMATION,
             }),
           )
             .then(() => {
@@ -48,14 +48,14 @@ export const ModalInputChildInformation = ({
             });
         } else {
           run(
-            addTestResult({
+            addChildInformationResult({
               patientId: patientDetail.id,
-              testName: TEST_NAME.TRIPLE_TEST,
+              inforType: CHILD_INFORMATION.CHILD_BASIC_INFORMATION,
               payload,
             }),
           )
             .then(() => {
-              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              message.success(`Thêm thông tin thành công!`);
               getPatientDetail();
               onCancel();
             })
@@ -69,7 +69,7 @@ export const ModalInputChildInformation = ({
         console.log('Validate Failed:', info);
       });
   };
-
+  console.log(editingData);
   const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -80,10 +80,10 @@ export const ModalInputChildInformation = ({
       range: '${label} must be between ${min} and ${max}',
     },
   };
-
+  
   return (
     <BaseModal
-      title="Xét nghiệm Triple Test"
+      title="Thông tin thai nhi"
       onOk={handleOk}
       isLoading={isLoading}
       loading={true}
@@ -109,7 +109,7 @@ export const ModalInputChildInformation = ({
           name={'weeks_old'}
           label="Số tuần"
           rules={[{ required: true }]}
-          extra={readonly ? '' : 'Đơn vị MoM'}
+          extra={readonly ? '' : 'Đơn vị Tuần'}
         >
           <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
@@ -117,7 +117,7 @@ export const ModalInputChildInformation = ({
           name={'days_old'}
           label="Số ngày"
           rules={[{ required: true }]}
-          extra={readonly ? '' : 'Đơn vị MoM'}
+          extra={readonly ? '' : 'Đơn vị Ngày'}
         >
           <Input
             type="text"
@@ -129,7 +129,7 @@ export const ModalInputChildInformation = ({
           name={'heart_beat'}
           label="Nhịp tim thai"
           rules={[{ required: true }]}
-          extra={readonly ? '' : 'Đơn vị MoM'}
+          extra={readonly ? '' : 'Đơn vị Lần/Phút'}
         >
           <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
