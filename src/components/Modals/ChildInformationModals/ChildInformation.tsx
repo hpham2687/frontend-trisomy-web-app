@@ -1,10 +1,10 @@
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
+import { CHILD_INFORMATION } from '@/constants/childInformation';
 import useAsync from '@/hooks/useAsync';
 import { Button, Form, Input, message } from 'antd';
-import { addTestResult, editTestResult } from './service';
-import './style/index.css';
+import { addChildInformationResult,editChildInformationResult } from './servivce';
+
 
 export const ModalInputChildInformation = ({
   patientDetail,
@@ -30,11 +30,11 @@ export const ModalInputChildInformation = ({
         });
         if (editingData) {
           run(
-            editTestResult({
+            editChildInformationResult({
               patientId: patientDetail.id,
-              testId: editingData.id,
+              childId: editingData.id,
               payload,
-              testName: TEST_NAME.CHILD_INFORMATION,
+              inforType: CHILD_INFORMATION.CHILD_BASIC_INFORMATION,
             }),
           )
             .then(() => {
@@ -48,9 +48,9 @@ export const ModalInputChildInformation = ({
             });
         } else {
           run(
-            addTestResult({
+            addChildInformationResult({
               patientId: patientDetail.id,
-              testName: TEST_NAME.CHILD_INFORMATION,
+              inforType: CHILD_INFORMATION.CHILD_BASIC_INFORMATION,
               payload,
             }),
           )
@@ -69,7 +69,7 @@ export const ModalInputChildInformation = ({
         console.log('Validate Failed:', info);
       });
   };
-
+  console.log(editingData);
   const validateMessages = {
     required: '${label} is required!',
     types: {

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'umi';
 import GeneralInfo from './GeneralInfo';
 import { ModalSelectTestType } from './PatientDetailModals';
 import { ModalInputBloodTestResult } from './PatientDetailModals/BloodTest';
-import { ModalInputChildInformation } from './PatientDetailModals/ChildInformation';
+import { ModalInputChildInformation } from './ChildInformationModals/ChildInformation';
 import { ModalInputDoubleTestResult } from './PatientDetailModals/DoubleTest';
 import { ModalInputFirstUltrasoundTestResult } from './PatientDetailModals/FirstUltrasoundTest';
 import { ModalInputHemoglobinTestResult } from './PatientDetailModals/HemoglobinTest';
