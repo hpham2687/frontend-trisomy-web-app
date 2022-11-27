@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   const intl = useIntl();
   const defaultMessage = intl.formatMessage({
     id: 'app.copyright.produced',
-    defaultMessage: '蚂蚁集团体验技术部出品',
+    defaultMessage: 'Produced by Đại học Bách Khoa Hà Nội và Đại học Y Hà Nội',
   });
 
   const currentYear = new Date().getFullYear();

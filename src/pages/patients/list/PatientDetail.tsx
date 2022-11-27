@@ -297,16 +297,19 @@ function PatientDetail() {
                 submitter={{ render: () => null }}
               >
                 {/* step 2 */}
-                <Descriptions layout="vertical" style={{ marginBottom: 16 }}>
-                  <Descriptions.Item label="Thalassemia alpha">
-                    {result.alphaGen.toFixed(2)}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Thalassemia beta">
-                    {result.betaGen.toFixed(2)}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Không mang bệnh">
+                <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
+                  <DescriptionsItem label="Tỉ lệ bị bệnh" style={{ width: '50%' }}>
+                    {1 - result.noGen.toFixed(2)}
+                  </DescriptionsItem>
+                  <DescriptionsItem span={2} label="Tỉ lệ không bị bệnh">
                     {result.noGen.toFixed(2)}
-                  </Descriptions.Item>
+                  </DescriptionsItem>
+                  <DescriptionsItem label="Thalassemia alpha">
+                    {result.alphaGen.toFixed(2)}
+                  </DescriptionsItem>
+                  <DescriptionsItem label="Thalassemia beta">
+                    {result.betaGen.toFixed(2)}
+                  </DescriptionsItem>
                 </Descriptions>
 
                 <div style={{ marginBottom: 16 }}>
@@ -485,21 +488,23 @@ function PatientDetail() {
     if (!shouldEnablePredictTrisomy) {
       return alert('Not enough data');
     }
-    const { tests } = patientDetail;
+    const { dateOfBirth, tests } = patientDetail;
     const firstUltrasoundTest = tests.find(
       (test: any) => test.testName === TEST_NAME.FIRST_ULTRASOUND_TEST,
     )?.action;
     const secondUltrasoundTest = tests.find(
       (test: any) => test.testName === TEST_NAME.SECOND_ULTRASOUND_TEST,
     )?.action;
+    const yearBorn = moment(dateOfBirth).format('YYYY');
     const doubleTest = tests.find((test: any) => test.testName === TEST_NAME.DOUBLE_TEST)?.action;
     const tripleTest = tests.find((test: any) => test.testName === TEST_NAME.TRIPLE_TEST)?.action;
 
     const hasFirstPeriodData = firstUltrasoundTest && doubleTest;
     const hasSecondPeriodData = secondUltrasoundTest && tripleTest;
-    let data2Send: any;
+    let data2Send: any = { tuoi: Number(yearBorn) };
     if (hasFirstPeriodData) {
       data2Send = {
+        ...data2Send,
         co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency ? 1 : 0,
         co_nangbachhuyetvungco_1: firstUltrasoundTest.cervical_lymph_node ? 1 : 0,
         mat_xuongmui_1: firstUltrasoundTest.nose_bone ? 1 : 0,
@@ -509,7 +514,6 @@ function PatientDetail() {
         d_mom_papa: doubleTest.pappa,
         d_mom_nt: doubleTest.nt,
       };
-      console.log({ data2Send });
     }
     if (hasSecondPeriodData) {
       data2Send = {
@@ -680,4 +684,8 @@ const ActionButtonWrapper = styled.div`
       margin-left: 0 !important;
     }
   }
+`;
+
+const DescriptionsItem = styled(Descriptions.Item)`
+  width: 50%;
 `;
