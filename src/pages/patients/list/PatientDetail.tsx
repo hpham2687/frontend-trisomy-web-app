@@ -495,14 +495,15 @@ function PatientDetail() {
     const secondUltrasoundTest = tests.find(
       (test: any) => test.testName === TEST_NAME.SECOND_ULTRASOUND_TEST,
     )?.action;
-    const yearBorn = moment(dateOfBirth).format('YYYY');
+    const yearBorn = Number(moment(dateOfBirth).format('YYYY'));
     const doubleTest = tests.find((test: any) => test.testName === TEST_NAME.DOUBLE_TEST)?.action;
     const tripleTest = tests.find((test: any) => test.testName === TEST_NAME.TRIPLE_TEST)?.action;
 
     const hasFirstPeriodData = firstUltrasoundTest && doubleTest;
     const hasSecondPeriodData = secondUltrasoundTest && tripleTest;
-    let data2Send: any = { tuoi: Number(yearBorn) };
+    let data2Send: any = {};
     if (hasFirstPeriodData) {
+      const yearTest = Number(moment(Number(firstUltrasoundTest.test_date)).format('YYYY'));
       data2Send = {
         ...data2Send,
         co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency ? 1 : 0,
@@ -513,9 +514,11 @@ function PatientDetail() {
         d_mom_hcgb: doubleTest.bhcg,
         d_mom_papa: doubleTest.pappa,
         d_mom_nt: doubleTest.nt,
+        tuoi: yearTest - yearBorn,
       };
     }
     if (hasSecondPeriodData) {
+      const yearTest = Number(moment(Number(secondUltrasoundTest.test_date)).format('YYYY'));
       data2Send = {
         ...data2Send,
         co_nangbachhuyetvungco_2: secondUltrasoundTest.cervical_lymph_node ? 1 : 0,
@@ -527,6 +530,7 @@ function PatientDetail() {
         t_mom_ue3: tripleTest.ue3,
         t_mom_afp: tripleTest.afp,
         t_mom_hcg: tripleTest.hcg,
+        tuoi: yearTest - yearBorn,
       };
     }
 
