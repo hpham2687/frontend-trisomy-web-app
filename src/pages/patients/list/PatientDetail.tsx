@@ -536,7 +536,7 @@ function PatientDetail() {
         .then((response: any) => {
           handleShowTrisomyResult(response);
         })
-        .catch((error) => console.log(error)),
+        .catch((error) => message.error(error.message)),
     );
   };
 
