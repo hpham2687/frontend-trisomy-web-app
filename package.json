@@ -50,6 +50,7 @@
     "bizcharts": "^3.5.3-beta.0",
     "bizcharts-plugin-slider": "^2.1.1-beta.1",
     "classnames": "^2.3.0",
+    "dayjs": "^1.11.6",
     "eslint-plugin-react-hooks": "^4.6.0",
     "gg-editor": "^2.0.2",
     "jwt-decode": "^3.1.2",

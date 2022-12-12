@@ -39,6 +39,14 @@ export default defineConfig({
       component: './introduction',
     },
     {
+      name: 'Trisomy sàng lọc',
+      layout: false,
+      icon: 'smile',
+      path: '/trisomy',
+      hideInMenu: true,
+      component: './unauthenticated/TrisomyForm',
+    },
+    {
       path: '/user',
       layout: false,
       routes: [

@@ -11,7 +11,7 @@ import { message } from 'antd';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-
+const staticPaths = ['/trisomy'];
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
@@ -37,7 +37,8 @@ export async function getInitialState(): Promise<{
     return undefined;
   };
 
-  if (history.location.pathname !== loginPath) {
+  const { pathname } = history.location;
+  if (pathname !== loginPath && !staticPaths.includes(pathname)) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
