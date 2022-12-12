@@ -7,6 +7,9 @@ import jwt_decode from 'jwt-decode';
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
   const accessToken = token.get().accessToken || '';
+  if (!accessToken) {
+    return;
+  }
   const decoded: any = jwt_decode(accessToken);
   const { isAdmin = false } = decoded;
   return request<{

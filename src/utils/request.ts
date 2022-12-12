@@ -4,10 +4,11 @@ import token from '@/utils/token';
  * request 网络请求工具
  * 更详细的api文档: https://bigfish.alipay.com/doc/api#request
  */
-import { request as requestUmi } from 'umi';
+import { history, request as requestUmi } from 'umi';
 
 import { cloneDeep, merge } from 'lodash';
-import { extend, RequestInterceptor, RequestOptionsInit, ResponseError } from 'umi-request';
+import type { RequestInterceptor, RequestOptionsInit } from 'umi-request';
+import { extend, ResponseError } from 'umi-request';
 // import router from 'umi/router';
 import Reqs from 'umi-request';
 
@@ -55,6 +56,7 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
       );
     } catch (err) {
       cancel('Session time out.');
+      history.push('/user/login');
       throw err;
     } finally {
       refreshTokenRequest = null;

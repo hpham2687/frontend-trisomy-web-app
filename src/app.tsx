@@ -30,7 +30,7 @@ export async function getInitialState(): Promise<{
       const msg = await queryCurrentUser();
       return msg;
     } catch (error) {
-      console.log('error', error);
+      console.log('error22', error);
       message.error('Vui lòng đăng nhập lại!');
       history.push(loginPath);
     }
@@ -39,6 +39,8 @@ export async function getInitialState(): Promise<{
 
   const { pathname } = history.location;
   if (pathname !== loginPath && !staticPaths.includes(pathname)) {
+    console.log('in herre');
+
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,

@@ -1,11 +1,11 @@
 import useAsync from '@/hooks/useAsync';
-import PatientDetail from '@/pages/patients/list/PatientDetail';
 import { ExclamationCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Card, Form, message, Modal, Table } from 'antd';
 import moment from 'moment';
-import { FC, useCallback, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { history, Link } from 'umi';
