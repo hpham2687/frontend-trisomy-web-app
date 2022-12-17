@@ -45,7 +45,7 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
       }
       // multiple requests but "await"ing for only 1 refreshTokenRequest, because of closure
       const res = await refreshTokenRequest;
-      if (!res) throw new Error();
+      if (!res.ok) throw new Error();
       if (res.accessToken) token.save(res.accessToken);
       // if (res.refreshToken) token.save(res.refresh); // for ROTATE REFRESH TOKENS
       return requestUmi(
@@ -55,8 +55,10 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
         }),
       );
     } catch (err) {
+      console.log(' loi roi', err);
+
       cancel('Session time out.');
-      history.push('/user/login');
+      // history.push('/user/login');
       throw err;
     } finally {
       refreshTokenRequest = null;

@@ -8,7 +8,7 @@ import jwt_decode from 'jwt-decode';
 export async function currentUser(options?: { [key: string]: any }) {
   const accessToken = token.get().accessToken || '';
   if (!accessToken) {
-    return;
+    throw Error();
   }
   const decoded: any = jwt_decode(accessToken);
   const { isAdmin = false } = decoded;
