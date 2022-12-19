@@ -84,7 +84,7 @@ const TrisomyForm: React.FC = () => {
                           label="β-hCG tự do"
                           rules={[{ required: true }]}
                         >
-                          <Input type="text" suffix="ng/mL" />
+                          <Input type="text" suffix="MoM" />
                         </Form.Item>
                         <Form.Item
                           labelCol={{
@@ -95,7 +95,7 @@ const TrisomyForm: React.FC = () => {
                           label="PAPP-A"
                           rules={[{ required: true }]}
                         >
-                          <Input type="text" suffix="mU/L" />
+                          <Input type="text" suffix="MoM" />
                         </Form.Item>
                         <Form.Item
                           labelCol={{ span: 6 }}
@@ -103,7 +103,7 @@ const TrisomyForm: React.FC = () => {
                           label="NT"
                           rules={[{ required: true }]}
                         >
-                          <Input type="text" suffix="mm" />
+                          <Input type="text" suffix="MoM" />
                         </Form.Item>
                         <Form.Item labelCol={{ span: 6 }} name={'week_old'} label="Số tuần thai">
                           <Input type="text" suffix="tuần" />
@@ -120,7 +120,7 @@ const TrisomyForm: React.FC = () => {
                           rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
-                          <Input type="text" suffix="nmol/L" />
+                          <Input type="text" suffix="MoM" />
                         </Form.Item>
                         <Form.Item
                           name={'afp'}
@@ -128,7 +128,7 @@ const TrisomyForm: React.FC = () => {
                           rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
-                          <Input suffix="U/mL" />
+                          <Input suffix="MoM" />
                         </Form.Item>
                         <Form.Item
                           name={'hcg'}
@@ -136,12 +136,20 @@ const TrisomyForm: React.FC = () => {
                           rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
-                          <Input type="text" suffix="U/L" />
+                          <Input type="text" suffix="MoM" />
                         </Form.Item>
-                        <Form.Item labelCol={{ span: 6 }} name={'week_old'} label="Số tuần thai">
+                        <Form.Item
+                          labelCol={{ span: 6 }}
+                          name={'week_old_triple_test'}
+                          label="Số tuần thai"
+                        >
                           <Input type="text" suffix="tuần" />
                         </Form.Item>
-                        <Form.Item labelCol={{ span: 6 }} name={'day_old'} label="Số ngày thai">
+                        <Form.Item
+                          labelCol={{ span: 6 }}
+                          name={'day_old_triple_test'}
+                          label="Số ngày thai"
+                        >
                           <Input type="text" suffix="ngày" />
                         </Form.Item>
                       </Col>
@@ -152,7 +160,7 @@ const TrisomyForm: React.FC = () => {
                       <Col span={12}>
                         <h4>Siêu âm kỳ 1</h4>
                         <Form.Item
-                          name={'test_date_ultrasound_1'}
+                          name={'test_date_first_ultrasound'}
                           label="Ngày XN"
                           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
                           labelCol={{ span: 6 }}
@@ -167,7 +175,7 @@ const TrisomyForm: React.FC = () => {
                             { required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' },
                           ]}
                         >
-                          <Input type="number" suffix="mm" />
+                          <Input suffix="mm" />
                         </Form.Item>
                         <Form.Item
                           labelCol={{ span: 6 }}
@@ -181,10 +189,10 @@ const TrisomyForm: React.FC = () => {
                             },
                           ]}
                         >
-                          <Input type="number" suffix="mm" />
+                          <Input suffix="mm" />
                         </Form.Item>
                         <Form.Item labelCol={{ span: 6 }} name={'heartbeat'} label="Nhịp tim thai">
-                          <Input type="number" suffix="lần/phút" />
+                          <Input suffix="lần/phút" />
                         </Form.Item>
 
                         <ProFormRadio.Group
@@ -225,7 +233,7 @@ const TrisomyForm: React.FC = () => {
                       <Col span={12}>
                         <h4>Siêu âm kỳ 2</h4>
                         <Form.Item
-                          name={'test_date_ultrasound_1'}
+                          name={'test_date_second_ultrasound'}
                           label="Ngày XN"
                           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
                           labelCol={{ span: 6 }}
@@ -236,7 +244,7 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           radioType="button"
                           label="Xương mũi"
-                          name="nose_bone"
+                          name="nose_bone_second_ultrasound"
                           options={[
                             { label: 'Có', value: true, onChange: () => setIsHasNoseBone(true) },
                             {
@@ -259,14 +267,14 @@ const TrisomyForm: React.FC = () => {
                               },
                             ]}
                           >
-                            <Input type="number" />
+                            <Input suffix="mm" />
                           </Form.Item>
                         )}
 
                         <ProFormRadio.Group
                           radioType="button"
                           label="Dị tật tim"
-                          name="heart_defect"
+                          name="heart_defect_second_ultrasound"
                           labelCol={{ span: 6 }}
                           options={[
                             { label: 'Có', value: true },
@@ -279,7 +287,7 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           radioType="button"
                           label="Nang bạch huyết ở vùng cổ"
-                          name="cervical_lymph_node"
+                          name="cervical_lymph_node_second_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
