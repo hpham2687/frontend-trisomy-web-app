@@ -1,12 +1,75 @@
 import React, { useState } from 'react';
 import { Breadcrumb, DatePicker, Input, Layout, Form, Card, Row, Col, Button, Divider } from 'antd';
 import { ProFormRadio } from '@ant-design/pro-form';
+import styled from 'styled-components';
+import { postTrisomies } from './service';
 const { Header, Content, Footer } = Layout;
 
 const TrisomyForm: React.FC = () => {
   const [isHasNoseBone, setIsHasNoseBone] = useState(false);
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const [result, setResult] = useState(null);
+
+  const onFinish = async (values: any) => {
+    const {
+      bhcg,
+      nt,
+      pappa,
+
+      afp,
+      hcg,
+      ue3,
+
+      cervical_lymph_node_first_ultrasound,
+      crown_rump_length,
+      heart_defect_first_ultrasound,
+      heartbeat,
+      nose_bone_first_ultrasound,
+      nuchal_translucency,
+
+      cervical_lymph_node_second_ultrasound,
+      heart_defect_second_ultrasound,
+      nose_bone_second_ultrasound,
+      nose_bone_length,
+
+      dateOfBirth,
+      test_date_first_ultrasound,
+    } = values;
+    const doubleTest = { bhcg: Number(bhcg), nt: Number(nt), pappa: Number(pappa) };
+    const tripleTest = {
+      afp: Number(afp),
+      hcg: Number(hcg),
+      ue3: Number(ue3),
+    };
+    const firstUltrasound = {
+      test_date: test_date_first_ultrasound,
+      cervical_lymph_node: cervical_lymph_node_first_ultrasound,
+      crown_rump_length: Number(crown_rump_length),
+      heart_defect: heart_defect_first_ultrasound,
+      heartbeat: Number(heartbeat),
+      nose_bone: nose_bone_first_ultrasound,
+      nuchal_translucency: Number(nuchal_translucency),
+    };
+
+    const secondUltrasound = {
+      cervical_lymph_node: cervical_lymph_node_second_ultrasound,
+      heart_defect: heart_defect_second_ultrasound,
+      nose_bone: nose_bone_second_ultrasound,
+      nose_bone_length: Number(nose_bone_length),
+    };
+    try {
+      const response = await postTrisomies({
+        doubleTest,
+        tripleTest,
+        firstUltrasound,
+        secondUltrasound,
+        dateOfBirth,
+      });
+      setResult(response);
+    } catch (error) {
+      console.log(error);
+      // message.error(JSON.stringify(error));
+      return false;
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -44,7 +107,7 @@ const TrisomyForm: React.FC = () => {
               labelAlign={'left'}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
-              autoComplete="off"
+              // autoComplete="off"
             >
               <h3>Thông tin thai phụ</h3>
 
@@ -53,7 +116,7 @@ const TrisomyForm: React.FC = () => {
                   labelCol={{ span: 3 }}
                   label="Ngày sinh"
                   name="dateOfBirth"
-                  rules={[{ required: true, message: 'Please input your date of birth!' }]}
+                  // rules={[{ required: true, message: 'Please input your date of birth!' }]}
                 >
                   <DatePicker style={{ width: '50%' }} placeholder="Nhập ngày sinh" />
                 </Form.Item>
@@ -82,7 +145,7 @@ const TrisomyForm: React.FC = () => {
                           }}
                           name={'bhcg'}
                           label="β-hCG tự do"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                         >
                           <Input type="text" suffix="MoM" />
                         </Form.Item>
@@ -93,7 +156,7 @@ const TrisomyForm: React.FC = () => {
                           }}
                           name={'pappa'}
                           label="PAPP-A"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                         >
                           <Input type="text" suffix="MoM" />
                         </Form.Item>
@@ -101,7 +164,7 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           name={'nt'}
                           label="NT"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                         >
                           <Input type="text" suffix="MoM" />
                         </Form.Item>
@@ -117,7 +180,7 @@ const TrisomyForm: React.FC = () => {
                         <Form.Item
                           name={'ue3'}
                           label="uE3"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
                           <Input type="text" suffix="MoM" />
@@ -125,7 +188,7 @@ const TrisomyForm: React.FC = () => {
                         <Form.Item
                           name={'afp'}
                           label="AFP"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
                           <Input suffix="MoM" />
@@ -133,7 +196,7 @@ const TrisomyForm: React.FC = () => {
                         <Form.Item
                           name={'hcg'}
                           label="hCG"
-                          rules={[{ required: true }]}
+                          // rules={[{ required: true }]}
                           labelCol={{ span: 6 }}
                         >
                           <Input type="text" suffix="MoM" />
@@ -162,7 +225,7 @@ const TrisomyForm: React.FC = () => {
                         <Form.Item
                           name={'test_date_first_ultrasound'}
                           label="Ngày XN"
-                          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
+                          // rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
                           labelCol={{ span: 6 }}
                         >
                           <DatePicker placeholder="Nhập ngày xét nghiệm" format="DD-MM-YYYY" />
@@ -171,9 +234,9 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           name={'nuchal_translucency'}
                           label="Độ mờ da gáy NT"
-                          rules={[
-                            { required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' },
-                          ]}
+                          // rules={[
+                          //   { required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' },
+                          // ]}
                         >
                           <Input suffix="mm" />
                         </Form.Item>
@@ -182,12 +245,12 @@ const TrisomyForm: React.FC = () => {
                           name={'crown_rump_length'}
                           // Crown Rump Length
                           label="Chiều dài đầu mông"
-                          rules={[
-                            {
-                              required: false,
-                              message: 'Vui lòng nhập thông tin chiều dài đầu mông',
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: false,
+                          //     message: 'Vui lòng nhập thông tin chiều dài đầu mông',
+                          //   },
+                          // ]}
                         >
                           <Input suffix="mm" />
                         </Form.Item>
@@ -199,47 +262,39 @@ const TrisomyForm: React.FC = () => {
                           radioType="button"
                           labelCol={{ span: 6 }}
                           label="Xương mũi"
-                          name="nose_bone"
+                          name="nose_bone_first_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
                         <ProFormRadio.Group
                           radioType="button"
                           label="Dị tật tim"
                           labelCol={{ span: 6 }}
-                          name="heart_defect"
+                          name="heart_defect_first_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
 
                         <ProFormRadio.Group
                           radioType="button"
                           label="Nang bạch huyết vùng cổ"
-                          name="cervical_lymph_node"
+                          name="cervical_lymph_node_first_ultrasound"
                           labelCol={{ span: 6 }}
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
                       </Col>
                       <Col span={12}>
                         <h4>Siêu âm kỳ 2</h4>
-                        <Form.Item
-                          name={'test_date_second_ultrasound'}
-                          label="Ngày XN"
-                          rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
-                          labelCol={{ span: 6 }}
-                        >
-                          <DatePicker placeholder="Nhập ngày xét nghiệm" format="DD-MM-YYYY" />
-                        </Form.Item>
                         <ProFormRadio.Group
                           labelCol={{ span: 6 }}
                           radioType="button"
@@ -253,7 +308,7 @@ const TrisomyForm: React.FC = () => {
                               onChange: () => setIsHasNoseBone(false),
                             },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
                         {isHasNoseBone && (
                           <Form.Item
@@ -280,7 +335,7 @@ const TrisomyForm: React.FC = () => {
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
 
                         <ProFormRadio.Group
@@ -292,15 +347,26 @@ const TrisomyForm: React.FC = () => {
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
                           ]}
-                          rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
+                          // rules={[{ required: true, message: 'Vui lòng chọn đầy đủ thông tin' }]}
                         />
                       </Col>
                     </Row>
                   </Col>
                 </Row>
               </div>
-              <Button type="primary">Chẩn đoán</Button>
+              <Button type="primary" htmlType="submit">
+                Chẩn đoán
+              </Button>
             </Form>
+
+            {result && (
+              <Result>
+                <p>Kết quả</p>
+                <p>Trisomy13: {result.Trisomy13.toFixed(2)}</p>
+                <p>Trisomy18: {result.Trisomy18.toFixed(2)}</p>
+                <p>Trisomy21: {result.Trisomy21.toFixed(2)}</p>
+              </Result>
+            )}
           </Card>
         </div>
       </Content>
@@ -310,5 +376,9 @@ const TrisomyForm: React.FC = () => {
     </Layout>
   );
 };
+
+const Result = styled.div`
+  text-align: center;
+`;
 
 export default TrisomyForm;

@@ -39,8 +39,6 @@ export async function getInitialState(): Promise<{
 
   const { pathname } = history.location;
   if (pathname !== loginPath && !staticPaths.includes(pathname)) {
-    console.log('in herre');
-
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
