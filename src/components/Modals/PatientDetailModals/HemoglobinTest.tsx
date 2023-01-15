@@ -50,33 +50,22 @@ export const ModalInputHemoglobinTestResult = ({
               patientId: patientDetail.id,
               testName: TEST_NAME.HEMOGLOBIN_TEST,
               payload,
-            }),
-          )
-            .then(() => {
-              message.success(`Thêm kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
             })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
+              .then(() => {
+                message.success(`Thêm kết quả xét nghiệm thành công!`);
+                getPatientDetail();
+                onCancel();
+              })
+              .catch((error: any) => {
+                console.log(error);
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
         }
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
       });
-  };
-
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
   };
 
   return (
@@ -100,12 +89,7 @@ export const ModalInputHemoglobinTestResult = ({
       }
       {...rest}
     >
-      <StyledForm
-        name="nest-messages"
-        form={form}
-        validateMessages={validateMessages}
-        initialValues={editingData}
-      >
+      <StyledForm name="nest-messages" form={form} initialValues={editingData}>
         <Form.Item
           name={'test_date'}
           label="Ngày XN"

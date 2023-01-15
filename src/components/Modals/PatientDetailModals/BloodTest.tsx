@@ -1,10 +1,11 @@
+import { Button, DatePicker, Form, Input, message } from 'antd';
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
 import { TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
-import { Button, DatePicker, Form, Input, message } from 'antd';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
+import { convertObjectValuesToNumber } from '@/utils/object';
 
 export const ModalInputBloodTestResult = ({
   patientDetail,
@@ -22,11 +23,7 @@ export const ModalInputBloodTestResult = ({
       .validateFields()
       .then((values) => {
         form.resetFields();
-        const payload = {};
-        // Convert to number type
-        Object.keys(values).forEach(function (key: string) {
-          payload[key] = Number(values[key]);
-        });
+        const payload = convertObjectValuesToNumber(values);
 
         if (editingData) {
           run(
@@ -35,50 +32,39 @@ export const ModalInputBloodTestResult = ({
               testId: editingData.id,
               payload,
               testName: TEST_NAME.BLOOD_TEST,
-            }),
-          )
-            .then(() => {
-              message.success(`Sửa kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
             })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
+              .then(() => {
+                message.success(`Sửa kết quả xét nghiệm thành công!`);
+                getPatientDetail();
+                onCancel();
+              })
+              .catch((error: any) => {
+                console.log(error);
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
         } else {
           run(
             addTestResult({
               patientId: patientDetail.id,
               testName: TEST_NAME.BLOOD_TEST,
               payload,
-            }),
-          )
-            .then(() => {
-              message.success(`Thêm kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
             })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
+              .then(() => {
+                message.success(`Thêm kết quả xét nghiệm thành công!`);
+                getPatientDetail();
+                onCancel();
+              })
+              .catch((error: any) => {
+                console.log(error);
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
         }
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
       });
-  };
-
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
   };
 
   return (
@@ -103,12 +89,7 @@ export const ModalInputBloodTestResult = ({
       }
       {...rest}
     >
-      <StyledForm
-        name="nest-messages"
-        form={form}
-        validateMessages={validateMessages}
-        initialValues={editingData}
-      >
+      <StyledForm name="nest-messages" form={form} initialValues={editingData}>
         <Form.Item
           name={'test_date'}
           label="Ngày XN"

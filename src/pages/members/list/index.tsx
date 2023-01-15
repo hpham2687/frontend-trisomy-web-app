@@ -1,11 +1,11 @@
 import useAsync from '@/hooks/useAsync';
-import PatientDetail from '@/pages/patients/list/PatientDetail';
 import { ExclamationCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Card, Form, message, Modal, Table } from 'antd';
 import moment from 'moment';
-import { FC, useCallback, useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { history, Link } from 'umi';
@@ -69,7 +69,6 @@ const MembersList: FC = () => {
   const [patients, setPatients] = useState([]);
   const [totals, setTotals] = useState(0);
   const [page, setPage] = useState(0);
-  const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [form] = Form.useForm();
 
   const handleQueryPatients = useCallback(() => {
@@ -144,14 +143,7 @@ const MembersList: FC = () => {
         return (
           <>
             <div className="action-cell">
-              <span
-                style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-                onClick={() => {
-                  setSelectedPatient(patient.id);
-                }}
-              >
-                Chi tiết
-              </span>
+              <span style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}>Chi tiết</span>
               <Link
                 to={`/patients/${patient.id}/edit`}
                 style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
@@ -171,10 +163,6 @@ const MembersList: FC = () => {
     },
   ];
 
-  if (selectedPatient) {
-    return <PatientDetail patientId={selectedPatient} setSelectedPatient={setSelectedPatient} />;
-  }
-
   const handleFilter = () => {
     form
       .validateFields()
@@ -185,11 +173,11 @@ const MembersList: FC = () => {
             startDate: values.dateRange[0],
             endDate: values.dateRange[1],
             fullName: values.fullName,
+          }).then((response: any) => {
+            setPatients(convertResponseToTableData(response.results));
+            setTotals(response.total);
           }),
-        ).then((response: any) => {
-          setPatients(convertResponseToTableData(response.results));
-          setTotals(response.total);
-        });
+        );
       })
       .catch((info) => {
         console.log('Validate Failed:', info);

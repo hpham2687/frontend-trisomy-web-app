@@ -30,47 +30,35 @@ export const ModalInputSerumIronTestResult = ({
             testId: editingData.id,
             payload,
             testName: TEST_NAME.SERUM_IRON_TEST,
-          }),
-        )
-          .then(() => {
-            message.success(`Sửa kết quả xét nghiệm thành công!`);
-            getPatientDetail();
-            onCancel();
           })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
+            .then(() => {
+              message.success(`Sửa kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              console.log(error);
+              message.error(error.error || 'Có lỗi xảy ra!');
+            }),
+        );
       } else {
         run(
           addTestResult({
             patientId: patientDetail.id,
             testName: TEST_NAME.SERUM_IRON_TEST,
             payload,
-          }),
-        )
-          .then(() => {
-            message.success(`Thêm kết quả xét nghiệm thành công!`);
-            getPatientDetail();
-            onCancel();
           })
-          .catch((error: any) => {
-            console.log(error);
-            message.error(error.error || 'Có lỗi xảy ra!');
-          });
+            .then(() => {
+              message.success(`Thêm kết quả xét nghiệm thành công!`);
+              getPatientDetail();
+              onCancel();
+            })
+            .catch((error: any) => {
+              message.error(error.error || 'Có lỗi xảy ra!');
+            }),
+        );
       }
     });
-  };
-
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
   };
 
   return (
@@ -98,7 +86,6 @@ export const ModalInputSerumIronTestResult = ({
       <Form
         name="nest-messages"
         form={form}
-        validateMessages={validateMessages}
         initialValues={editingData}
         wrapperCol={{ span: 24 }}
         layout="vertical"

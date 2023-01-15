@@ -101,13 +101,11 @@ const TrisomyForm: React.FC = () => {
           <Card>
             <Form
               name="basic"
-              // labelCol={{ span: 3 }}
               wrapperCol={{ span: 4 }}
               initialValues={{ remember: true }}
               labelAlign={'left'}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
-              // autoComplete="off"
             >
               <h3>Thông tin thai phụ</h3>
 

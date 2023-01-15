@@ -1,7 +1,8 @@
 import { getCreateDeleteTestResultEndpoint } from '@/constants/tests';
 import request from '@/utils/request';
 import token from '@/utils/token';
-import { getEditRemoveTestEndpoint } from './../../../constants/tests';
+import { getEditRemoveTestEndpoint } from '@/constants/tests';
+
 export async function addTestResult({
   patientId,
   payload,

@@ -72,17 +72,17 @@ const DeveloperList = ({ orientation }: { orientation?: 'horizontal' | 'vertical
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} md={isVerticalDisplay ? 24 : 12}>
-        {' '}
-        <h2>Đại học Y Hà Nội</h2>
-        <p>PGS. TS. Nguyễn Thị Trang</p>
-        <p> Giảng viên cao cấp Trường Đại học Y Hà Nội </p>
-        <p> Số điện thoại: 0338788736</p>
-        <p> Email: trangnguyen@hmu.edu.vn </p>
-        <p>
-          {' '}
-          Địa chỉ liên hệ: P210, nhà A3, Trường Đại học Y Hà Nội, số 1, Tôn Thất Tùng, Đống Đa, Hà
-          Nội
-        </p>
+        <div style={{ minHeight: 300 }}>
+          <h2>Đại học Y Hà Nội</h2>
+          <p>PGS. TS. Nguyễn Thị Trang</p>
+          <p> Giảng viên cao cấp Trường Đại học Y Hà Nội </p>
+          <p> Số điện thoại: 0338788736</p>
+          <p> Email: trangnguyen@hmu.edu.vn </p>
+          <p>
+            Địa chỉ liên hệ: P210, nhà A3, Trường Đại học Y Hà Nội, số 1, Tôn Thất Tùng, Đống Đa, Hà
+            Nội
+          </p>
+        </div>
         <h2>Thành viên</h2>
         <List
           itemLayout="horizontal"
@@ -99,16 +99,18 @@ const DeveloperList = ({ orientation }: { orientation?: 'horizontal' | 'vertical
         />
       </Col>
       <Col xs={24} md={isVerticalDisplay ? 24 : 12}>
-        <h2>Đại học Bách Khoa Hà Nội </h2>
-        <p>TS. Nguyễn Hồng Quang </p>
-        <p>Giảng viên Khoa Kỹ thuật máy tính </p>
-        <p>Trường Công nghệ thông tin và Truyền thông</p>
-        <p>Trường Đại học Bách Khoa Hà Nội </p>
-        <p>Email: quangnh@soict.hust.edu.vn, quang.nguyenhong@hust.edu.vn </p>
-        <p>
-          Địa chỉ liên hệ: Phòng 801, nhà B1, trường Đại học Bách Khoa Hà Nội, số 1, Đại Cổ Việt, Hà
-          Nội{' '}
-        </p>
+        <div style={{ minHeight: 300 }}>
+          <h2>Đại học Bách Khoa Hà Nội </h2>
+          <p>TS. Nguyễn Hồng Quang </p>
+          <p>Giảng viên Khoa Kỹ thuật máy tính </p>
+          <p>Trường Công nghệ thông tin và Truyền thông</p>
+          <p>Trường Đại học Bách Khoa Hà Nội </p>
+          <p>Email: quangnh@soict.hust.edu.vn, quang.nguyenhong@hust.edu.vn </p>
+          <p>
+            Địa chỉ liên hệ: Phòng 801, nhà B1, trường Đại học Bách Khoa Hà Nội, số 1, Đại Cổ Việt,
+            Hà Nội
+          </p>
+        </div>
         <h2>Thành viên</h2>
         <List
           itemLayout="horizontal"

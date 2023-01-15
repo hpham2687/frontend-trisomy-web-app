@@ -70,17 +70,6 @@ export const ModalInputTripleTestResult = ({
       });
   };
 
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
-  };
-
   return (
     <BaseModal
       title="Xét nghiệm Triple Test"
@@ -99,12 +88,7 @@ export const ModalInputTripleTestResult = ({
       ]}
       {...rest}
     >
-      <StyledForm
-        name="nest-messages"
-        form={form}
-        validateMessages={validateMessages}
-        initialValues={editingData}
-      >
+      <StyledForm name="nest-messages" form={form} initialValues={editingData}>
         <Form.Item
           name={'test_date'}
           label="Ngày XN"

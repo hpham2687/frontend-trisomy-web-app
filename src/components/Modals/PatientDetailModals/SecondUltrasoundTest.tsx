@@ -38,34 +38,34 @@ export const ModalInputSecondUltrasoundTestResult = ({
               testId: editingData.id,
               payload,
               testName: TEST_NAME.SECOND_ULTRASOUND_TEST,
-            }),
-          )
-            .then(() => {
-              message.success(`Sửa kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
             })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
+              .then(() => {
+                message.success(`Sửa kết quả xét nghiệm thành công!`);
+                getPatientDetail();
+                onCancel();
+              })
+              .catch((error: any) => {
+                console.log(error);
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
         } else {
           run(
             addTestResult({
               patientId: patientDetail.id,
               testName: TEST_NAME.SECOND_ULTRASOUND_TEST,
               payload,
-            }),
-          )
-            .then(() => {
-              message.success(`Thêm kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
             })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
+              .then(() => {
+                message.success(`Thêm kết quả xét nghiệm thành công!`);
+                getPatientDetail();
+                onCancel();
+              })
+              .catch((error: any) => {
+                console.log(error);
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
         }
       })
       .catch((info) => {
@@ -73,16 +73,6 @@ export const ModalInputSecondUltrasoundTestResult = ({
       });
   };
 
-  const validateMessages = {
-    required: '${label} is required!',
-    types: {
-      email: '${label} is not a valid email!',
-      number: '${label} is not a valid number!',
-    },
-    number: {
-      range: '${label} must be between ${min} and ${max}',
-    },
-  };
   // Hide or show nose_bone_length
   const [isHasNoseBone, setIsHasNoseBone] = useState(editingData?.nose_bone);
   return (
@@ -103,12 +93,7 @@ export const ModalInputSecondUltrasoundTestResult = ({
       ]}
       {...rest}
     >
-      <StyledFormUltraSound
-        name="second-ultrasound-form"
-        form={form}
-        validateMessages={validateMessages}
-        initialValues={editingData}
-      >
+      <StyledFormUltraSound name="second-ultrasound-form" form={form} initialValues={editingData}>
         <Form.Item
           name={'test_date'}
           label="Ngày XN"

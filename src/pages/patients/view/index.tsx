@@ -1,47 +1,21 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
+import React, { useEffect, useRef, useState } from 'react';
+import type { FormInstance } from 'antd';
+import { Button, Card, message } from 'antd';
+import { RollbackOutlined } from '@ant-design/icons';
+import ProForm from '@ant-design/pro-form';
+import { history } from 'umi';
+import { PageContainer, PageLoading } from '@ant-design/pro-layout';
+import { useParams } from 'react-router';
 import useAsync from '@/hooks/useAsync';
 import AdministrativeInforStep from '@/pages/patients/add/AdministrativeInforStep';
 import PrehistoricStep from '@/pages/patients/add/PrehistoricStep';
-import { RollbackOutlined } from '@ant-design/icons';
-import ProForm, { StepsForm } from '@ant-design/pro-form';
-import { PageContainer, PageLoading } from '@ant-design/pro-layout';
-import { Button, Card, FormInstance, message, Result, Statistic } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
-import { history } from 'umi';
 import type { StepDataType } from './data';
-import { postEditPatient, queryPatientDetail } from './service';
+import { queryPatientDetail } from './service';
 import './style/index.css';
-import styles from './style/index.less';
-
-const StepResult: React.FC<{
-  onFinish: () => Promise<void>;
-}> = (props) => {
-  return (
-    <Result
-      status="success"
-      title="Thành công"
-      subTitle="Sửa bệnh nhân thành công"
-      extra={
-        <>
-          <Button type="primary" onClick={props.onFinish}>
-            Xem tất cả bệnh nhân
-          </Button>
-        </>
-      }
-      className={styles.result}
-    >
-      {props.children}
-    </Result>
-  );
-};
 
 const EditPatient: React.FC<Record<string, any>> = () => {
-  const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType>(null);
-  const [prehistoric, setPrehistoric] = useState<any>();
-  const [current, setCurrent] = useState(0);
+  const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType | null>(null);
   const formRefAdministrativeInforStep = useRef<FormInstance>();
-  const formRefPrehistoricStep = useRef<FormInstance>();
   const { run, isLoading } = useAsync();
   const { patientId } = useParams<any>();
   const [tabStatus, seTabStatus] = useState({
@@ -52,8 +26,6 @@ const EditPatient: React.FC<Record<string, any>> = () => {
     run(queryPatientDetail(patientId))
       .then((response: any) => {
         setAdministrativeInforStep(response);
-        console.log(response);
-        // console.log(formRef.current);
         formRefAdministrativeInforStep.current?.setFieldsValue({
           ...response,
         });
@@ -65,12 +37,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
   }, [patientId, formRefAdministrativeInforStep]);
 
   if (isLoading || !administrativeInforStep) {
-    return (
-      <>
-        {' '}
-        <PageLoading />
-      </>
-    );
+    return <PageLoading />;
   }
   const contentList = {
     tab1: <AdministrativeInforStep readonly={true} />,
