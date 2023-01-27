@@ -1,12 +1,14 @@
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
+import { SUCCESS_ADD_TEST_MESSAGE, TEST_NAME } from '@/constants/tests';
 import useAsync from '@/hooks/useAsync';
+import { convertObjectValuesToNumber } from '@/utils/object';
 import { Button, Form, Input, message } from 'antd';
 import { addTestResult, editTestResult } from './service';
 import './style/index.css';
 
 export const ModalInputChildInformation = ({
+  testType,
   patientDetail,
   editingData,
   getPatientDetail,
@@ -22,11 +24,7 @@ export const ModalInputChildInformation = ({
       .validateFields()
       .then((values) => {
         form.resetFields();
-        const payload = {};
-        // Convert to number type
-        Object.keys(values).forEach(function (key: string) {
-          payload[key] = Number(values[key]);
-        });
+        const payload = convertObjectValuesToNumber(values);
 
         if (editingData) {
           run(
@@ -34,10 +32,10 @@ export const ModalInputChildInformation = ({
               patientId: patientDetail.id,
               testId: editingData.id,
               payload,
-              testName: TEST_NAME.TRIPLE_TEST,
+              testType,
             })
               .then(() => {
-                message.success(`Sửa kết quả xét nghiệm thành công!`);
+                message.success(SUCCESS_ADD_TEST_MESSAGE);
                 getPatientDetail();
                 onCancel();
               })

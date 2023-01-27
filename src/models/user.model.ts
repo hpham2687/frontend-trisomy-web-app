@@ -1,4 +1,4 @@
-import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
+import type { Effect, Reducer, Subscription } from 'umi';
 
 export interface IndexModelState {
   name: string;

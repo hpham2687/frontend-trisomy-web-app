@@ -11,6 +11,7 @@ import type { RequestInterceptor, RequestOptionsInit, ResponseError } from 'umi-
 import { extend } from 'umi-request';
 // import router from 'umi/router';
 import Reqs from 'umi-request';
+import CaseConverter from './caseConverter';
 
 // Part 2: Request Interceptors, (use this instead of "headers" directly in request config)
 const requestInterceptor: RequestInterceptor = (url, options) => {
@@ -42,7 +43,6 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
     cancel('Something errors');
     throw new Error('Something errors');
   }
-  //@ts-ignore
   const accessTokenExpired = response.status === 401;
   if (accessTokenExpired) {
     try {
@@ -53,7 +53,6 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
       const res = await refreshTokenRequest;
       if (!res.ok) throw new Error();
       if (res.accessToken) token.save(res.accessToken);
-      // if (res.refreshToken) token.save(res.refresh); // for ROTATE REFRESH TOKENS
       return requestUmi(
         response.url,
         merge(cloneDeep(options), {
@@ -61,8 +60,7 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
         }),
       );
     } catch (err) {
-      console.log(' loi roi', err);
-
+      console.log('loi roi', err);
       cancel('Session time out.');
       throw err;
     } finally {
@@ -70,7 +68,8 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
     }
   }
 
-  return response;
+  const json = CaseConverter.snakeCaseToCamelCase(await response.clone().json());
+  return json;
 };
 
 const errorHandler = (error: ResponseError) => {

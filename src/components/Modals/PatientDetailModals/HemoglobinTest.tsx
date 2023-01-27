@@ -1,12 +1,11 @@
+import { Button, DatePicker, Form, Input } from 'antd';
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
-import useAsync from '@/hooks/useAsync';
-import { Button, DatePicker, Form, Input, message } from 'antd';
-import { addTestResult, editTestResult } from './service';
+import useCURDTest from '@/hooks/useCURDTest';
 import './style/index.css';
 
 export const ModalInputHemoglobinTestResult = ({
+  testType: testTypeProps,
   patientDetail,
   editingData,
   getPatientDetail,
@@ -15,57 +14,16 @@ export const ModalInputHemoglobinTestResult = ({
   ...rest
 }: any) => {
   const [form] = Form.useForm();
-  const { run, isLoading } = useAsync();
+  const { isLoading, handleSubmit } = useCURDTest({ form, onCancel });
+  const testType = editingData?.testType?.id ? editingData?.testType?.id : testTypeProps;
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        form.resetFields();
-        const payload = {};
-        Object.keys(values).forEach(function (key: string) {
-          payload[key] = Number(values[key]);
-        });
-        if (editingData) {
-          run(
-            editTestResult({
-              patientId: patientDetail.id,
-              testId: editingData.id,
-              payload,
-              testName: TEST_NAME.HEMOGLOBIN_TEST,
-            }),
-          )
-            .then(() => {
-              message.success(`Sửa kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
-            })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            });
-        } else {
-          run(
-            addTestResult({
-              patientId: patientDetail.id,
-              testName: TEST_NAME.HEMOGLOBIN_TEST,
-              payload,
-            })
-              .then(() => {
-                message.success(`Thêm kết quả xét nghiệm thành công!`);
-                getPatientDetail();
-                onCancel();
-              })
-              .catch((error: any) => {
-                console.log(error);
-                message.error(error.error || 'Có lỗi xảy ra!');
-              }),
-          );
-        }
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+    handleSubmit({
+      testType,
+      editingData,
+      patientDetail,
+      getPatientDetail,
+    });
   };
 
   return (
@@ -91,7 +49,7 @@ export const ModalInputHemoglobinTestResult = ({
     >
       <StyledForm name="nest-messages" form={form} initialValues={editingData}>
         <Form.Item
-          name={'test_date'}
+          name={'testDate'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -103,88 +61,60 @@ export const ModalInputHemoglobinTestResult = ({
           />
         </Form.Item>
         <Form.Item
-          name={'dd_hba1'}
+          name={'ddHba1'}
           label="HbA1"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hba2'}
+          name={'ddHba2'}
           label="HbA2"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hbe'}
+          name={'ddHbe'}
           label="HbE"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hbh'}
+          name={'ddHbh'}
           label="Hb H"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hbbar'}
+          name={'ddHbbar'}
           label="Hb Bar"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hbf'}
+          name={'ddHbf'}
           label="HbF"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'dd_hbkhac'}
+          name={'ddHbkhac'}
           label="Hb khác"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </StyledForm>
     </BaseModal>

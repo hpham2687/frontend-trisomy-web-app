@@ -1,4 +1,4 @@
-import { Effect, Reducer, Subscription } from 'umi';
+import type { Effect, Reducer, Subscription } from 'umi';
 
 interface ModalModelState {
   displayModal: string | null;
@@ -43,6 +43,8 @@ const ModalModel: ModalModelType = {
   reducers: {
     showModal: (state, action) => {
       const modalCustomProps = action.payload?.customProps || {};
+      console.log({ modalCustomProps });
+
       if (!action.payload) {
         return {
           displayModal: null,
@@ -61,12 +63,6 @@ const ModalModel: ModalModelType = {
       }
       return state;
     },
-
-    // hideModal: (state, action: PayloadAction<any>) => {
-    //   if (action.payload === state.displayModal) {
-    //     state.displayModal = null;
-    //   }
-    // },
     save(state, action) {
       return {
         ...state,

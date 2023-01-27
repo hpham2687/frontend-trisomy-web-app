@@ -3,16 +3,22 @@ import { ExclamationCircleOutlined, PlusCircleOutlined, SearchOutlined } from '@
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Card, Form, message, Modal, Table } from 'antd';
-import moment from 'moment';
 import type { FC } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-import { history, Link } from 'umi';
+import { history } from 'umi';
 import { defaultDateRange, deletePatient, queryPatients } from './service';
 import styles from './style/index.less';
 import './style/index.css';
 import { BreakPoints } from '@/constants/common';
+import {
+  addressColumn,
+  dateOfBirthColumn,
+  fullNameColumn,
+  numericalOrderColumn,
+  patientIdColumn,
+  patientListActionColumn,
+} from '@/constants/patientDetail';
 
 const FilterWrapper = styled.div`
   margin-bottom: 24px;
@@ -63,6 +69,7 @@ const convertResponseToTableData = (patients: any) => {
     action: patient,
   }));
 };
+
 const PatientList: FC = () => {
   const { run, isLoading } = useAsync();
   const { run: runDeletePatient, isLoading: isLoadingDeletePatient } = useAsync();
@@ -77,6 +84,8 @@ const PatientList: FC = () => {
     const startDate = dateRange[0];
     const endDate = dateRange[1];
     run(queryPatients({ page, startDate, endDate, fullName })).then((response: any) => {
+      console.log(response);
+
       setPatients(convertResponseToTableData(response.results));
       setTotals(response.total);
     });
@@ -104,70 +113,16 @@ const PatientList: FC = () => {
   };
 
   const columns = [
-    {
-      title: 'STT',
-      dataIndex: 'key',
-      key: 'key',
+    numericalOrderColumn({
       width: 60,
-      render: (item, record, index) => index + 1,
-    },
-    {
-      key: 'patientId',
-      title: 'Mã bệnh nhân',
-      width: 150,
-      dataIndex: 'patientId',
-    },
-    {
-      title: 'Họ và tên',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      key: 'dateOfBirth',
-      title: 'Ngày sinh',
-      dataIndex: 'dateOfBirth',
-      render: (dateOfBirth: string) => {
-        return moment(dateOfBirth).format('DD-MM-YYYY');
-      },
-    },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      key: 'action',
-      render: (patient: any) => {
-        return (
-          <>
-            <div className="action-cell">
-              <span
-                style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-                onClick={() => {
-                  history.push(`/patients/${patient.id}`);
-                }}
-              >
-                Phân tích
-              </span>
-              <Link
-                to={`/patients/${patient.id}/edit`}
-                style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
-              >
-                Sửa
-              </Link>
-              <span
-                onClick={() => handleShowConfirmDelete(patient)}
-                style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}
-              >
-                Xóa
-              </span>{' '}
-            </div>
-          </>
-        );
-      },
-    },
+    }),
+    patientIdColumn({ width: 150 }),
+    fullNameColumn(),
+    addressColumn(),
+    dateOfBirthColumn(),
+    patientListActionColumn({
+      onClickDelete: handleShowConfirmDelete,
+    }),
   ];
 
   const handleFilter = () => {

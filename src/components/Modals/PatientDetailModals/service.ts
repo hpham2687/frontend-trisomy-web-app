@@ -6,13 +6,13 @@ import { getEditRemoveTestEndpoint } from '@/constants/tests';
 export async function addTestResult({
   patientId,
   payload,
-  testName,
+  testType,
 }: {
   patientId: string;
   payload: any;
-  testName: string;
+  testType: string;
 }) {
-  return request(getCreateDeleteTestResultEndpoint(testName, patientId), {
+  return request(getCreateDeleteTestResultEndpoint(testType, patientId), {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },
@@ -25,14 +25,14 @@ export async function editTestResult({
   patientId,
   payload,
   testId,
-  testName,
+  testType,
 }: {
   patientId: string;
   payload: any;
   testId: number;
-  testName: string;
+  testType: string;
 }) {
-  return request(getEditRemoveTestEndpoint(testName, testId, patientId), {
+  return request(getEditRemoveTestEndpoint(testType, testId, patientId), {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },

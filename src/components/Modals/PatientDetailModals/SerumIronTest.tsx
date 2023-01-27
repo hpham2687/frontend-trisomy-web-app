@@ -1,11 +1,10 @@
+import { Button, DatePicker, Form, Input } from 'antd';
 import BaseModal from '@/components/Common/Modal';
-import { TEST_NAME } from '@/constants/tests';
-import useAsync from '@/hooks/useAsync';
-import { Button, DatePicker, Form, Input, message } from 'antd';
-import { addTestResult, editTestResult } from './service';
+import useCURDTest from '@/hooks/useCURDTest';
 import './style/index.css';
 
 export const ModalInputSerumIronTestResult = ({
+  testType: testTypeProps,
   patientDetail,
   editingData,
   getPatientDetail,
@@ -14,50 +13,15 @@ export const ModalInputSerumIronTestResult = ({
   ...rest
 }: any) => {
   const [form] = Form.useForm();
-  const { run, isLoading } = useAsync();
-  //TODO: handle route edit test
+  const { isLoading, handleSubmit } = useCURDTest({ form, onCancel });
+  const testType = editingData?.testType?.id ? editingData?.testType?.id : testTypeProps;
+
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      form.resetFields();
-      const payload = {};
-      Object.keys(values).forEach(function (key: string) {
-        payload[key] = Number(values[key]);
-      });
-      if (editingData) {
-        run(
-          editTestResult({
-            patientId: patientDetail.id,
-            testId: editingData.id,
-            payload,
-            testName: TEST_NAME.SERUM_IRON_TEST,
-          })
-            .then(() => {
-              message.success(`Sửa kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
-            })
-            .catch((error: any) => {
-              console.log(error);
-              message.error(error.error || 'Có lỗi xảy ra!');
-            }),
-        );
-      } else {
-        run(
-          addTestResult({
-            patientId: patientDetail.id,
-            testName: TEST_NAME.SERUM_IRON_TEST,
-            payload,
-          })
-            .then(() => {
-              message.success(`Thêm kết quả xét nghiệm thành công!`);
-              getPatientDetail();
-              onCancel();
-            })
-            .catch((error: any) => {
-              message.error(error.error || 'Có lỗi xảy ra!');
-            }),
-        );
-      }
+    handleSubmit({
+      testType,
+      editingData,
+      patientDetail,
+      getPatientDetail,
     });
   };
 
@@ -91,7 +55,7 @@ export const ModalInputSerumIronTestResult = ({
         layout="vertical"
       >
         <Form.Item
-          name={'test_date'}
+          name={'testDate'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -104,7 +68,7 @@ export const ModalInputSerumIronTestResult = ({
         </Form.Item>
         <Form.Item
           labelCol={{ span: 24 }}
-          name={'ctm_sathuyetthanh'}
+          name={'ctmSathuyetthanh'}
           label="Định lượng sắt huyết thanh"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị umol/l'}
@@ -118,7 +82,7 @@ export const ModalInputSerumIronTestResult = ({
         </Form.Item>
         <Form.Item
           labelCol={{ span: 12 }}
-          name={'ctm_ferritinehuyetthanh'}
+          name={'ctmFerritinehuyetthanh'}
           label="Định lượng Ferritine huyết thanh"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị ug/l'}

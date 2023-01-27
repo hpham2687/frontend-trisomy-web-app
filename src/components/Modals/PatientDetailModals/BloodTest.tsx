@@ -1,70 +1,38 @@
-import { Button, DatePicker, Form, Input, message } from 'antd';
 import BaseModal from '@/components/Common/Modal';
 import { StyledForm } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
-import useAsync from '@/hooks/useAsync';
-import { addTestResult, editTestResult } from './service';
+import useCURDTest from '@/hooks/useCURDTest';
+import { Button, DatePicker, Form, Input } from 'antd';
 import './style/index.css';
-import { convertObjectValuesToNumber } from '@/utils/object';
+
+interface ModalBloodTestProps {
+  testType?: string;
+  patientDetail: any;
+  editingData: any;
+  getPatientDetail: any;
+  readonly: any;
+  [key: string]: any;
+}
 
 export const ModalInputBloodTestResult = ({
+  testType: testTypeProps,
   patientDetail,
   editingData,
   getPatientDetail,
   readonly,
   onCancel,
   ...rest
-}: any) => {
+}: ModalBloodTestProps) => {
   const [form] = Form.useForm();
-  const { run, isLoading } = useAsync();
+  const { isLoading, handleSubmit } = useCURDTest({ form, onCancel });
+  const testType = editingData?.testType?.id ? editingData?.testType?.id : testTypeProps;
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        form.resetFields();
-        const payload = convertObjectValuesToNumber(values);
-
-        if (editingData) {
-          run(
-            editTestResult({
-              patientId: patientDetail.id,
-              testId: editingData.id,
-              payload,
-              testName: TEST_NAME.BLOOD_TEST,
-            })
-              .then(() => {
-                message.success(`Sửa kết quả xét nghiệm thành công!`);
-                getPatientDetail();
-                onCancel();
-              })
-              .catch((error: any) => {
-                console.log(error);
-                message.error(error.error || 'Có lỗi xảy ra!');
-              }),
-          );
-        } else {
-          run(
-            addTestResult({
-              patientId: patientDetail.id,
-              testName: TEST_NAME.BLOOD_TEST,
-              payload,
-            })
-              .then(() => {
-                message.success(`Thêm kết quả xét nghiệm thành công!`);
-                getPatientDetail();
-                onCancel();
-              })
-              .catch((error: any) => {
-                console.log(error);
-                message.error(error.error || 'Có lỗi xảy ra!');
-              }),
-          );
-        }
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+    handleSubmit({
+      testType,
+      editingData,
+      patientDetail,
+      getPatientDetail,
+    });
   };
 
   return (
@@ -91,7 +59,7 @@ export const ModalInputBloodTestResult = ({
     >
       <StyledForm name="nest-messages" form={form} initialValues={editingData}>
         <Form.Item
-          name={'test_date'}
+          name={'testDate'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -103,95 +71,60 @@ export const ModalInputBloodTestResult = ({
           />
         </Form.Item>
         <Form.Item
-          name={'ctm_rbc'}
+          name={'ctmRbc'}
           label="RBC"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị G/l'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_hgb'}
+          name={'ctmHgb'}
           label="HGB"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị g/l'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_hct'}
+          name={'ctmHct'}
           label="HCT"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị l/l'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_mcv'}
+          name={'ctmMcv'}
           label="MCV"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị fl'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_mch'}
+          name={'ctmMch'}
           label="MCH"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị pg'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_mchc'}
+          name={'ctmMchc'}
           label="MCHC"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị g/l'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
         <Form.Item
-          name={'ctm_rdw'}
+          name={'ctmRdw'}
           label="RDW"
           rules={[{ required: true }]}
           extra={readonly ? '' : 'Đơn vị %'}
         >
-          <Input
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            readOnly={readonly}
-            className={`${readonly ? 'readonly' : ''}`}
-          />
+          <Input type="text" readOnly={readonly} className={`${readonly ? 'readonly' : ''}`} />
         </Form.Item>
       </StyledForm>
     </BaseModal>

@@ -28,7 +28,6 @@ import {
   message,
   Modal,
   Row,
-  Select,
   Table,
 } from 'antd';
 import moment from 'moment';
@@ -50,8 +49,8 @@ const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
     key: test.id,
     testId: test.id,
-    testName: test.test_name,
-    testDate: test.test_date,
+    testName: test.testName,
+    testDate: test.testDate,
     action: test,
   }));
 };
@@ -144,37 +143,37 @@ function PatientDetail() {
   const getPatientDetail = useCallback(() => {
     run(queryPatientDetail(patientId)).then((response: any) => {
       const {
-        blood_tests,
-        hemoglobin_tests,
-        serum_iron_tests,
-        double_tests,
-        triple_tests,
-        first_ultrasound_tests,
-        second_ultrasound_tests,
+        bloodTests,
+        hemoglobinTests,
+        serumIronTests,
+        doubleTests,
+        tripleTests,
+        firstUltrasoundTests,
+        secondUltrasoundTests,
         ...rest
       } = response;
       let tests: any = [];
 
-      if (blood_tests) {
-        tests = [...tests, ...blood_tests];
+      if (bloodTests) {
+        tests = [...tests, ...bloodTests];
       }
-      if (hemoglobin_tests) {
-        tests = [...tests, ...hemoglobin_tests];
+      if (hemoglobinTests) {
+        tests = [...tests, ...hemoglobinTests];
       }
-      if (serum_iron_tests) {
-        tests = [...tests, ...serum_iron_tests];
+      if (serumIronTests) {
+        tests = [...tests, ...serumIronTests];
       }
-      if (double_tests) {
-        tests = [...tests, ...double_tests];
+      if (doubleTests) {
+        tests = [...tests, ...doubleTests];
       }
-      if (triple_tests) {
-        tests = [...tests, ...triple_tests];
+      if (tripleTests) {
+        tests = [...tests, ...tripleTests];
       }
-      if (first_ultrasound_tests) {
-        tests = [...tests, ...first_ultrasound_tests];
+      if (firstUltrasoundTests) {
+        tests = [...tests, ...firstUltrasoundTests];
       }
-      if (second_ultrasound_tests) {
-        tests = [...tests, ...second_ultrasound_tests];
+      if (secondUltrasoundTests) {
+        tests = [...tests, ...secondUltrasoundTests];
       }
 
       setPatientDetail({ ...rest, tests: convertResponseToTableData(tests) });
@@ -189,11 +188,11 @@ function PatientDetail() {
 
   const handleViewTest = (data: any) => {
     const editingData = data;
-    editingData.test_date = moment(Number(editingData.test_date));
+    editingData.testDate = moment(Number(editingData.testDate));
     dispatch({
       type: 'modal/showModal',
       payload: {
-        modalKey: getModalKey(data.test_name),
+        modalKey: getModalKey(data.testName),
         customProps: {
           patientDetail,
           editingData,
@@ -208,11 +207,13 @@ function PatientDetail() {
 
   const handleEditTest = (data: any) => {
     const editingData = data;
-    editingData.test_date = moment(Number(editingData.test_date));
+    console.log({ data });
+
+    editingData.testDate = moment(Number(editingData.testDate));
     dispatch({
       type: 'modal/showModal',
       payload: {
-        modalKey: getModalKey(data.test_name),
+        modalKey: getModalKey(data.testName),
         customProps: {
           patientDetail,
           editingData,
@@ -229,7 +230,7 @@ function PatientDetail() {
   };
 
   const columns: any = [
-    numericalOrderColumn,
+    numericalOrderColumn(),
     testNameColumn({ handleViewTest }),
     testDateColumn,
     testActionColumn({ handleEditTest, handleDeleteTest }),
@@ -239,38 +240,35 @@ function PatientDetail() {
     Modal.confirm({
       title: 'Xác nhận',
       icon: <ExclamationCircleOutlined />,
-      content: `Bạn có chắc là muốn xóa kết quả ${getVietnameseTestName(
-        removeTest.test_name,
-      )} chứ?`,
+      content: `Bạn có chắc là muốn xóa kết quả ${getVietnameseTestName(removeTest.testName)} chứ?`,
       okText: 'Có',
       cancelText: 'Không',
 
       onOk: () => {
-        const removeTestName = removeTest.test_name;
+        const testType = removeTest.testType.id;
         const testId = removeTest.id;
-        runDeleteTest(deleteTestResult({ patientId, testName: removeTestName, testId })).then(
-          () => {
-            message.success(`Xóa kết quả ${removeTestName} thành công!`);
+        runDeleteTest(deleteTestResult({ patientId, testType, testId })).then(() => {
+          message.success(`Xóa kết quả ${testType} thành công!`);
 
-            // Remove test from state list
-            setPatientDetail((prev: any) => {
-              let tests = prev.tests;
-              if (tests?.length > 0) {
-                tests = tests.filter((test: any) => {
-                  if (test.testName !== removeTestName) {
+          // Remove test from state list
+          setPatientDetail((prev: any) => {
+            let tests = prev.tests;
+            console.log({ testType, tests });
+            if (tests?.length > 0) {
+              tests = tests.filter((test: any) => {
+                if (test.action?.testType?.id !== testType) {
+                  return true;
+                } else {
+                  if (test.testId !== testId) {
                     return true;
-                  } else {
-                    if (test.testId !== testId) {
-                      return true;
-                    }
-                    return false;
                   }
-                });
-              }
-              return { ...prev, tests };
-            });
-          },
-        );
+                  return false;
+                }
+              });
+            }
+            return { ...prev, tests };
+          });
+        });
       },
     });
   };
@@ -374,31 +372,31 @@ function PatientDetail() {
     )?.action;
 
     let data2Send: any = {
-      ctm_rbc: bloodTest.ctm_rbc,
-      ctm_hgb: bloodTest.ctm_hgb,
-      ctm_hct: bloodTest.ctm_hct,
-      ctm_mcv: bloodTest.ctm_mcv,
-      ctm_mch: bloodTest.ctm_mch,
-      ctm_mchc: bloodTest.ctm_mchc,
-      ctm_rdw: bloodTest.ctm_rdw,
+      ctm_rbc: bloodTest.ctmRbc,
+      ctm_hgb: bloodTest.ctmHgb,
+      ctm_hct: bloodTest.ctmHct,
+      ctm_mcv: bloodTest.ctmMcv,
+      ctm_mch: bloodTest.ctmMch,
+      ctm_mchc: bloodTest.ctmMchc,
+      ctm_rdw: bloodTest.ctmRdw,
     };
     if (serumIronTest) {
       data2Send = {
         ...data2Send,
-        ctm_sathuyetthanh: serumIronTest.ctm_sathuyetthanh,
-        ctm_ferritinehuyetthanh: serumIronTest.ctm_ferritinehuyetthanh,
+        ctm_sathuyetthanh: serumIronTest.ctmSathuyetthanh,
+        ctm_ferritinehuyetthanh: serumIronTest.ctmFerritinehuyetthanh,
       };
     }
     if (hemoglobinTest) {
       data2Send = {
         ...data2Send,
-        dd_hba1: hemoglobinTest.dd_hba1,
-        dd_hba2: hemoglobinTest.dd_hba2,
-        dd_hbe: hemoglobinTest.dd_hbe,
-        dd_hbh: hemoglobinTest.dd_hbh,
-        dd_hbbar: hemoglobinTest.dd_hbbar,
-        dd_hbkhac: hemoglobinTest.dd_hbkhac,
-        dd_hbf: hemoglobinTest.dd_hbf,
+        dd_hba1: hemoglobinTest.ddHba1,
+        dd_hba2: hemoglobinTest.ddHba2,
+        dd_hbe: hemoglobinTest.ddHbe,
+        dd_hbh: hemoglobinTest.ddHbh,
+        dd_hbbar: hemoglobinTest.ddHbbar,
+        dd_hbkhac: hemoglobinTest.ddHbkhac,
+        dd_hbf: hemoglobinTest.ddHbf,
       };
     }
 
@@ -484,6 +482,7 @@ function PatientDetail() {
       },
     });
   };
+
   const handlePredictTrisomy = () => {
     if (!shouldEnablePredictTrisomy) {
       return alert('Not enough data');
@@ -503,13 +502,13 @@ function PatientDetail() {
     const hasSecondPeriodData = secondUltrasoundTest && tripleTest;
     let data2Send: any = {};
     if (hasFirstPeriodData) {
-      const yearTest = Number(moment(Number(firstUltrasoundTest.test_date)).format('YYYY'));
+      const yearTest = Number(moment(Number(firstUltrasoundTest.testDate)).format('YYYY'));
       data2Send = {
         ...data2Send,
-        co_khoangsangsaugay: firstUltrasoundTest.nuchal_translucency ? 1 : 0,
-        co_nangbachhuyetvungco_1: firstUltrasoundTest.cervical_lymph_node ? 1 : 0,
-        mat_xuongmui_1: firstUltrasoundTest.nose_bone ? 1 : 0,
-        nguc_ditattim_1: firstUltrasoundTest.heart_defect ? 1 : 0,
+        co_khoangsangsaugay: firstUltrasoundTest.nuchalTranslucency ? 1 : 0,
+        co_nangbachhuyetvungco_1: firstUltrasoundTest.cervicalLymphNode ? 1 : 0,
+        mat_xuongmui_1: firstUltrasoundTest.noseBone ? 1 : 0,
+        nguc_ditattim_1: firstUltrasoundTest.heartDefect ? 1 : 0,
 
         d_mom_hcgb: doubleTest.bhcg,
         d_mom_papa: doubleTest.pappa,
@@ -518,15 +517,13 @@ function PatientDetail() {
       };
     }
     if (hasSecondPeriodData) {
-      const yearTest = Number(moment(Number(secondUltrasoundTest.test_date)).format('YYYY'));
+      const yearTest = Number(moment(Number(secondUltrasoundTest.testDate)).format('YYYY'));
       data2Send = {
         ...data2Send,
-        co_nangbachhuyetvungco_2: secondUltrasoundTest.cervical_lymph_node ? 1 : 0,
-        mat_xuongmui_2: secondUltrasoundTest.nose_bone ? 1 : 0,
-        nguc_ditattim_2: secondUltrasoundTest.heart_defect ? 1 : 0,
-        mat_xuongsongmui: secondUltrasoundTest.nose_bone
-          ? secondUltrasoundTest.nose_bone_length
-          : 0,
+        co_nangbachhuyetvungco_2: secondUltrasoundTest.cervicalLymphNode ? 1 : 0,
+        mat_xuongmui_2: secondUltrasoundTest.noseBone ? 1 : 0,
+        nguc_ditattim_2: secondUltrasoundTest.heartDefect ? 1 : 0,
+        mat_xuongsongmui: secondUltrasoundTest.noseBone ? secondUltrasoundTest.noseBoneLength : 0,
         t_mom_ue3: tripleTest.ue3,
         t_mom_afp: tripleTest.afp,
         t_mom_hcg: tripleTest.hcg,
@@ -604,24 +601,24 @@ function PatientDetail() {
           <Row>
             <Col xs={24} md={12}>
               <h4>AI sàng lọc Thalassemia</h4>
-              <p>
+              <div>
                 Hỗ trợ sàng lọc khi nhập đủ một trong các trường hợp sau:
                 <ul>
                   <li>Xét nghiệm máu</li>
                   <li>Xét nghiệm máu, Xét nghiệm sắt</li>
                   <li>Xét nghiệm máu, Xét nghiệm sắt, Xét nghiệm điện di</li>
                 </ul>
-              </p>
+              </div>
             </Col>
             <Col xs={24} md={12}>
               <h4>AI sàng lọc Trisomy</h4>
-              <p>
+              <div>
                 Hỗ trợ sàng lọc khi nhập đủ một trong các trường hợp sau:
                 <ul>
                   <li>Siêu âm kì 1, xét nghiệm Double Test</li>
                   <li>Siêu âm kì 2, xét nghiệm Triple Test</li>
                 </ul>
-              </p>
+              </div>
             </Col>
           </Row>
         </div>
@@ -636,6 +633,16 @@ function PatientDetail() {
       // <Table pagination={false} loading={loading} dataSource={patientTests} columns={columns} />
     ),
   };
+
+  useEffect(() => {
+    // TODO: Get test config
+    run(
+      dispatch({
+        type: 'tests/fetch', // if in model outside, need to add namespace
+        payload: {},
+      }),
+    );
+  }, []);
 
   if (isLoading || !patientDetail) {
     return <>Loading...</>;

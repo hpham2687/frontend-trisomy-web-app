@@ -1,13 +1,12 @@
+import { ProFormRadio } from '@ant-design/pro-form';
+import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
 import BaseModal from '@/components/Common/Modal';
 import { StyledFormUltraSound } from '@/components/Common/TestResult';
-import { TEST_NAME } from '@/constants/tests';
-import useAsync from '@/hooks/useAsync';
-import { ProFormRadio } from '@ant-design/pro-form';
-import { Button, Col, DatePicker, Form, Input, message, Row } from 'antd';
-import { addTestResult, editTestResult } from './service';
+import useCURDTest from '@/hooks/useCURDTest';
 import './style/index.css';
 
 export const ModalInputFirstUltrasoundTestResult = ({
+  testType: testTypeProps,
   patientDetail,
   editingData,
   getPatientDetail,
@@ -16,60 +15,16 @@ export const ModalInputFirstUltrasoundTestResult = ({
   ...rest
 }: any) => {
   const [form] = Form.useForm();
-  const { run, isLoading } = useAsync();
+  const { isLoading, handleSubmit } = useCURDTest({ form, onCancel });
+  const testType = editingData?.testType?.id ? editingData?.testType?.id : testTypeProps;
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        form.resetFields();
-        console.log(values);
-        const payload = {};
-        // Convert to number type
-        Object.keys(values).forEach(function (key: string) {
-          payload[key] = Number(values[key]);
-        });
-
-        if (editingData) {
-          run(
-            editTestResult({
-              patientId: patientDetail.id,
-              testId: editingData.id,
-              payload,
-              testName: TEST_NAME.FIRST_ULTRASOUND_TEST,
-            })
-              .then(() => {
-                message.success(`Sửa kết quả xét nghiệm thành công!`);
-                getPatientDetail();
-                onCancel();
-              })
-              .catch((error: any) => {
-                console.log(error);
-                message.error(error.error || 'Có lỗi xảy ra!');
-              }),
-          );
-        } else {
-          run(
-            addTestResult({
-              patientId: patientDetail.id,
-              testName: TEST_NAME.FIRST_ULTRASOUND_TEST,
-              payload,
-            })
-              .then(() => {
-                message.success(`Thêm kết quả xét nghiệm thành công!`);
-                getPatientDetail();
-                onCancel();
-              })
-              .catch((error: any) => {
-                console.log(error);
-                message.error(error.error || 'Có lỗi xảy ra!');
-              }),
-          );
-        }
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+    handleSubmit({
+      testType,
+      editingData,
+      patientDetail,
+      getPatientDetail,
+    });
   };
 
   return (
@@ -92,7 +47,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
     >
       <StyledFormUltraSound name="first-ultrasound-form" form={form} initialValues={editingData}>
         <Form.Item
-          name={'test_date'}
+          name={'testDate'}
           label="Ngày XN"
           rules={[{ required: true, message: 'Vui lòng nhập ngày xét nghiệm' }]}
         >
@@ -104,7 +59,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
           />
         </Form.Item>
         <Form.Item
-          name={'nuchal_translucency'}
+          name={'nuchalTranslucency'}
           label="Độ mờ da gáy NT"
           rules={[{ required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' }]}
           extra={readonly ? '' : 'Đơn vị mm'}
@@ -116,7 +71,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
           />
         </Form.Item>
         <Form.Item
-          name={'crown_rump_length'}
+          name={'crownRumpLength'}
           // Crown Rump Length
           label="Chiều dài đầu mông"
           rules={[{ required: false, message: 'Vui lòng nhập thông tin chiều dài đầu mông' }]}
@@ -145,7 +100,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
             <ProFormRadio.Group
               radioType="button"
               label="Xương mũi"
-              name="nose_bone"
+              name="noseBone"
               options={[
                 { label: 'Có', value: true },
                 { label: 'Không', value: false },
@@ -158,7 +113,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
             <ProFormRadio.Group
               radioType="button"
               label="Dị tật tim"
-              name="heart_defect"
+              name="heartDefect"
               options={[
                 { label: 'Có', value: true },
                 { label: 'Không', value: false },
@@ -173,7 +128,7 @@ export const ModalInputFirstUltrasoundTestResult = ({
             <ProFormRadio.Group
               radioType="button"
               label="Nang bạch huyết vùng cổ"
-              name="cervical_lymph_node"
+              name="cervicalLymphNode"
               options={[
                 { label: 'Có', value: true },
                 { label: 'Không', value: false },

@@ -22,6 +22,7 @@ export const ModalKey = {
   ADD_TEST_RESULT: 'ADD_TEST_RESULT',
   GENERAL_INFO: 'GENERAL_INFO',
 };
+
 const modalMap: Record<string, any> = {};
 
 modalMap[ModalKey.INPUT_BLOOD_TEST_RESULT] = ModalInputBloodTestResult;

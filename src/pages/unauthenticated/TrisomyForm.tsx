@@ -19,17 +19,17 @@ const TrisomyForm: React.FC = () => {
       hcg,
       ue3,
 
-      cervical_lymph_node_first_ultrasound,
+      cervicalLymphNode_first_ultrasound,
       crown_rump_length,
-      heart_defect_first_ultrasound,
+      heartDefect_first_ultrasound,
       heartbeat,
-      nose_bone_first_ultrasound,
-      nuchal_translucency,
+      noseBone_first_ultrasound,
+      nuchalTranslucency,
 
-      cervical_lymph_node_second_ultrasound,
-      heart_defect_second_ultrasound,
-      nose_bone_second_ultrasound,
-      nose_bone_length,
+      cervicalLymphNode_second_ultrasound,
+      heartDefect_second_ultrasound,
+      noseBone_second_ultrasound,
+      noseBoneLength,
 
       dateOfBirth,
       test_date_first_ultrasound,
@@ -42,19 +42,19 @@ const TrisomyForm: React.FC = () => {
     };
     const firstUltrasound = {
       test_date: test_date_first_ultrasound,
-      cervical_lymph_node: cervical_lymph_node_first_ultrasound,
+      cervicalLymphNode: cervicalLymphNode_first_ultrasound,
       crown_rump_length: Number(crown_rump_length),
-      heart_defect: heart_defect_first_ultrasound,
+      heartDefect: heartDefect_first_ultrasound,
       heartbeat: Number(heartbeat),
-      nose_bone: nose_bone_first_ultrasound,
-      nuchal_translucency: Number(nuchal_translucency),
+      noseBone: noseBone_first_ultrasound,
+      nuchalTranslucency: Number(nuchalTranslucency),
     };
 
     const secondUltrasound = {
-      cervical_lymph_node: cervical_lymph_node_second_ultrasound,
-      heart_defect: heart_defect_second_ultrasound,
-      nose_bone: nose_bone_second_ultrasound,
-      nose_bone_length: Number(nose_bone_length),
+      cervicalLymphNode: cervicalLymphNode_second_ultrasound,
+      heartDefect: heartDefect_second_ultrasound,
+      noseBone: noseBone_second_ultrasound,
+      noseBoneLength: Number(noseBoneLength),
     };
     try {
       const response = await postTrisomies({
@@ -230,7 +230,7 @@ const TrisomyForm: React.FC = () => {
                         </Form.Item>
                         <Form.Item
                           labelCol={{ span: 6 }}
-                          name={'nuchal_translucency'}
+                          name={'nuchalTranslucency'}
                           label="Độ mờ da gáy NT"
                           // rules={[
                           //   { required: true, message: 'Vui lòng nhập thông tin độ mờ da gáy' },
@@ -260,7 +260,7 @@ const TrisomyForm: React.FC = () => {
                           radioType="button"
                           labelCol={{ span: 6 }}
                           label="Xương mũi"
-                          name="nose_bone_first_ultrasound"
+                          name="noseBone_first_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
@@ -271,7 +271,7 @@ const TrisomyForm: React.FC = () => {
                           radioType="button"
                           label="Dị tật tim"
                           labelCol={{ span: 6 }}
-                          name="heart_defect_first_ultrasound"
+                          name="heartDefect_first_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },
@@ -282,7 +282,7 @@ const TrisomyForm: React.FC = () => {
                         <ProFormRadio.Group
                           radioType="button"
                           label="Nang bạch huyết vùng cổ"
-                          name="cervical_lymph_node_first_ultrasound"
+                          name="cervicalLymphNode_first_ultrasound"
                           labelCol={{ span: 6 }}
                           options={[
                             { label: 'Có', value: true },
@@ -297,7 +297,7 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           radioType="button"
                           label="Xương mũi"
-                          name="nose_bone_second_ultrasound"
+                          name="noseBone_second_ultrasound"
                           options={[
                             { label: 'Có', value: true, onChange: () => setIsHasNoseBone(true) },
                             {
@@ -310,7 +310,7 @@ const TrisomyForm: React.FC = () => {
                         />
                         {isHasNoseBone && (
                           <Form.Item
-                            name={'nose_bone_length'}
+                            name={'noseBoneLength'}
                             label="Chiều dài xương mũi"
                             labelCol={{ span: 6 }}
                             rules={[
@@ -327,7 +327,7 @@ const TrisomyForm: React.FC = () => {
                         <ProFormRadio.Group
                           radioType="button"
                           label="Dị tật tim"
-                          name="heart_defect_second_ultrasound"
+                          name="heartDefect_second_ultrasound"
                           labelCol={{ span: 6 }}
                           options={[
                             { label: 'Có', value: true },
@@ -340,7 +340,7 @@ const TrisomyForm: React.FC = () => {
                           labelCol={{ span: 6 }}
                           radioType="button"
                           label="Nang bạch huyết ở vùng cổ"
-                          name="cervical_lymph_node_second_ultrasound"
+                          name="cervicalLymphNode_second_ultrasound"
                           options={[
                             { label: 'Có', value: true },
                             { label: 'Không', value: false },

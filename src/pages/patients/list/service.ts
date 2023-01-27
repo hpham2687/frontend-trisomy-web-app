@@ -42,9 +42,9 @@ export async function queryPatientDetail(patientId: string) {
 export async function deleteTestResult(data: {
   patientId: string;
   testId: number;
-  testName: string;
+  testType: string;
 }) {
-  return request(getEditRemoveTestEndpoint(data.testName, data.testId, data.patientId), {
+  return request(getEditRemoveTestEndpoint(data.testType, data.testId, data.patientId), {
     data,
     method: 'DELETE',
     headers: {
@@ -79,5 +79,13 @@ export async function predictTrisomy(data: any) {
       Authorization: `Bearer ${token.get().accessToken}`,
     },
     data,
+  });
+}
+export async function getTestsConfig() {
+  return request('/tests', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.get().accessToken}`,
+    },
   });
 }
