@@ -3,7 +3,8 @@ import AdministrativeInforStep from '@/pages/patients/add/AdministrativeInforSte
 import PrehistoricStep from '@/pages/patients/add/PrehistoricStep';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, FormInstance, message, Result } from 'antd';
+import type { FormInstance } from 'antd';
+import { Button, Card, message, Result } from 'antd';
 import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'umi';
 import type { AdministrativeStepDataType } from './data';
@@ -30,7 +31,7 @@ const StepResult: React.FC<{
         </>
       }
       className={styles.result}
-    ></Result>
+    />
   );
 };
 
@@ -48,7 +49,6 @@ const AddPatient: React.FC<Record<string, any>> = () => {
   const formRefPrehistoricStep = useRef<FormInstance>();
 
   const onSubmitAdministrativeInforStep = async (values: any) => {
-    console.log(values);
     setAdministrativeInforStep(values);
     return true;
   };
@@ -56,10 +56,11 @@ const AddPatient: React.FC<Record<string, any>> = () => {
   const onSubmitPrehistoricStep = useCallback(
     async (values: any) => {
       setPrehistoric(values);
+
       // Submit value here
       const payload = {
         ...administrativeInforStep,
-        ...values,
+        prehistoric: JSON.stringify(values),
       };
       try {
         const addPatient = await postAddPatient(payload);
@@ -95,10 +96,6 @@ const AddPatient: React.FC<Record<string, any>> = () => {
               return null;
             },
           }}
-          // stepsFormRender={(steps, dom) => {
-
-          //   return dom;
-          // }}
         >
           <StepsForm.StepForm<any>
             formRef={formRefAdministrativeInforStep}
@@ -126,7 +123,7 @@ const AddPatient: React.FC<Record<string, any>> = () => {
                 setCurrent(0);
                 formRefAdministrativeInforStep.current?.resetFields();
               }}
-            ></StepResult>
+            />
           </StepsForm.StepForm>
         </StepsForm>
 

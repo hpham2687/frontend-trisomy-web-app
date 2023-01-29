@@ -1,5 +1,6 @@
 export interface PersonalDiseaseDataType {
   key: string;
+  label: string;
   diseaseName: string;
   status: boolean;
   detail: string;

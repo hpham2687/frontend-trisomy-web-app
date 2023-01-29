@@ -5,7 +5,8 @@ import PrehistoricStep from '@/pages/patients/add/PrehistoricStep';
 import { RollbackOutlined } from '@ant-design/icons';
 import { StepsForm } from '@ant-design/pro-form';
 import { PageContainer, PageLoading } from '@ant-design/pro-layout';
-import { Button, Card, FormInstance, message, Result, Statistic } from 'antd';
+import type { FormInstance } from 'antd';
+import { Button, Card, message, Result } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { history } from 'umi';
@@ -37,7 +38,7 @@ const StepResult: React.FC<{
 };
 
 const EditPatient: React.FC<Record<string, any>> = () => {
-  const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType>(null);
+  const [administrativeInforStep, setAdministrativeInforStep] = useState<StepDataType | null>(null);
   const [prehistoric, setPrehistoric] = useState<any>();
   const [current, setCurrent] = useState(0);
   const formRefAdministrativeInforStep = useRef<FormInstance>();
@@ -49,10 +50,11 @@ const EditPatient: React.FC<Record<string, any>> = () => {
     run(queryPatientDetail(patientId))
       .then((response: any) => {
         setAdministrativeInforStep(response);
-        console.log(response);
-        // console.log(formRef.current);
         formRefAdministrativeInforStep.current?.setFieldsValue({
           ...response,
+        });
+        formRefPrehistoricStep.current?.setFieldsValue({
+          ...JSON.parse(response.prehistoric),
         });
       })
       .catch((error: any) => {
@@ -73,7 +75,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
     // Submit value here
     const payload = {
       ...administrativeInforStep,
-      ...prehistoric,
+      prehistoric: JSON.stringify(values),
     };
     try {
       const editPatient = await postEditPatient(patientId, payload);
@@ -154,7 +156,7 @@ const EditPatient: React.FC<Record<string, any>> = () => {
               onFinish={async () => {
                 history.push('/patients/');
               }}
-            ></StepResult>
+            />
           </StepsForm.StepForm>
         </StepsForm>
         <div className="steps-action">

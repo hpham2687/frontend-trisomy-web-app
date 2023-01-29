@@ -20,7 +20,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
           <SubSection>
             <h4 style={{ marginRight: 16 }}>Nội ngoại khoa</h4>
             <ProFormRadio.Group
-              name="noi-ngoai-khoa"
+              name="goodPrehistoricSelfInternalMedicine"
               options={['Khoẻ mạnh', 'Có bệnh lý']}
               readonly={readonly}
             />
@@ -39,7 +39,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
           <SubSection>
             <h4 style={{ marginRight: 16 }}>Phụ khoa</h4>
             <ProFormRadio.Group
-              name="checkbox-group"
+              name="goodPrehistoricSelfGynecology"
               options={['Khoẻ mạnh', 'Có bệnh lý']}
               readonly={readonly}
             />
@@ -48,7 +48,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
             <Col lg={12} md={12} sm={24}>
               <ProFormText
                 label="Tuổi bắt đầu có kinh"
-                name="tuoi_bat_dau_co_kinh"
+                name="menstruationAge"
                 // rules={[
                 //   { required: true, message: 'Vui lòng nhập địa chỉ' },
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
@@ -61,7 +61,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
             <Col lg={12} md={12} sm={24}>
               <ProFormText
                 label="Chu kỳ kinh nguyệt"
-                name="chu_ky_kinh_nguyet"
+                name="menstruationCycle"
                 // rules={[
                 //   { required: true, message: 'Vui lòng nhập địa chỉ' },
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
@@ -74,7 +74,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
             <Col lg={12} md={12} sm={24}>
               <ProFormText
                 label="Số ngày thấy kinh"
-                name="tuoi_thay_kinh"
+                name="daysOfMenstruation"
                 // rules={[
                 //   { required: true, message: 'Vui lòng nhập địa chỉ' },
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
@@ -86,7 +86,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
             <Col lg={12} md={12} sm={24}>
               <ProFormText
                 label="Tuổi lấy chồng"
-                name="tuoi_lay_chong"
+                name="marriageAge"
                 // rules={[
                 //   { required: true, message: 'Vui lòng nhập địa chỉ' },
                 //   // { type: 'email', message: '账户名应为邮箱格式' },
@@ -100,7 +100,7 @@ function PrehistoricStep({ readonly }: { readonly?: boolean } = { readonly: fals
             <Col lg={24} md={12} sm={24}>
               <ProFormTextArea
                 label="Bệnh phụ khoa đã mắc và điều trị"
-                name="invoiceType"
+                name="gynecologyComment"
                 placeholder="Nhập bệnh phụ khoa đã mắc và điều trị"
                 readonly={readonly}
               />

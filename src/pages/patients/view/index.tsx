@@ -22,12 +22,14 @@ const EditPatient: React.FC<Record<string, any>> = () => {
     operationKey: 'tab1',
     tabActiveKey: 'detail',
   });
+
   useEffect(() => {
     run(queryPatientDetail(patientId))
       .then((response: any) => {
         setAdministrativeInforStep(response);
         formRefAdministrativeInforStep.current?.setFieldsValue({
           ...response,
+          ...JSON.parse(response.prehistoric),
         });
       })
       .catch((error: any) => {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import { ProFormDatePicker, ProFormRadio, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { Col, Divider, Row } from 'antd';
 
@@ -107,7 +106,7 @@ function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readon
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Dân tộc"
-            name="folk"
+            name="region"
             // rules={[
             //   { required: true, message: 'Vui lòng nhập địa chỉ' },
             //   // { type: 'email', message: '账户名应为邮箱格式' },
@@ -157,7 +156,7 @@ function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readon
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
             label="Huyết áp"
-            name="blood_pressure"
+            name="bloodPressure"
             // rules={[
             //   { required: true, message: 'Vui lòng nhập địa chỉ' },
             //   // { type: 'email', message: '账户名应为邮箱格式' },

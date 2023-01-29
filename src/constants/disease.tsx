@@ -1,7 +1,7 @@
-import { FamilyDiseaseDataType } from '../types/disease';
-import { PersonalDiseaseDataType } from '@/types/disease';
+import type { FamilyDiseaseDataType } from '../types/disease';
+import type { PersonalDiseaseDataType } from '@/types/disease';
 import { ProFormRadio, ProFormText } from '@ant-design/pro-form';
-import { ColumnsType } from 'antd/lib/table';
+import type { ColumnsType } from 'antd/lib/table';
 import styled from 'styled-components';
 
 const DiseaseDetailInput = styled(ProFormText)`
@@ -15,47 +15,56 @@ export const personalDiseaseData: PersonalDiseaseDataType[] = [
   {
     key: '1',
     diseaseName: 'Cao huyết áp',
+    label: 'highBloodPressure',
     status: true,
     detail: 'abcd',
   },
   {
     key: '2',
     diseaseName: 'Tim mạch',
+    label: 'cardiovascularDisease',
     status: true,
     detail: 'abcd',
   },
   {
     key: '3',
     diseaseName: 'Hô hấp',
+    label: 'respiratoryDisease',
     status: true,
     detail: 'abcd',
   },
   {
     key: '4',
     diseaseName: 'Thận',
+    label: 'nephroptosis',
+
     status: true,
     detail: 'abcd',
   },
   {
     key: '5',
     diseaseName: 'Nội tiết',
+    label: 'hormoneDisease',
     status: true,
     detail: 'abcd',
   },
   {
     key: '6',
     diseaseName: 'Động kinh',
+    label: 'epilepsy',
     status: true,
     detail: 'abcd',
   },
   {
     key: '7',
     diseaseName: 'Dị ứng',
+    label: 'allergy',
     status: true,
     detail: 'abcd',
   },
   {
     key: '8',
+    label: 'surgery',
     diseaseName: 'Phẫu thuật',
     status: true,
     detail: 'abcd',
@@ -182,9 +191,9 @@ export const personalDiseaseColumns: ({ readonly }: any) => ColumnsType<Personal
     dataIndex: 'personalDisease',
     key: 'personalDisease',
     width: 180,
-    render: (value, _, index) => (
+    render: (value, record, index) => (
       <ProFormRadio.Group
-        name={`personalDisease-${index}`}
+        name={record.label}
         initialValue={value ? 'Có' : 'Không'}
         options={['Có', 'Không']}
         readonly={readonly}
@@ -200,7 +209,7 @@ export const personalDiseaseColumns: ({ readonly }: any) => ColumnsType<Personal
         <DiseaseDetailInput
           className="diseaseDetail"
           width="md"
-          name={`name2-${index}`}
+          name={`${record.label}Detail`}
           placeholder="Nhập cụ thể"
           readonly={readonly}
         />
