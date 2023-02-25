@@ -9,7 +9,6 @@ import { request as requestUmi } from 'umi';
 import { cloneDeep, merge } from 'lodash';
 import type { RequestInterceptor, RequestOptionsInit, ResponseError } from 'umi-request';
 import { extend } from 'umi-request';
-// import router from 'umi/router';
 import Reqs from 'umi-request';
 import CaseConverter from './caseConverter';
 
@@ -84,8 +83,6 @@ const request = extend({
   //@ts-ignore
   errorHandler,
   prefix: configs.apiUrl,
-
-  // credentials: 'include', // 默认请求是否带上cookie
 });
 // request拦截器
 request.interceptors.request.use(requestInterceptor);

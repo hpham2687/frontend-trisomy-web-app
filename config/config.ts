@@ -106,7 +106,23 @@ export default defineConfig({
         },
       ],
     },
-
+    {
+      name: 'Tài khoản',
+      icon: 'user',
+      path: '/account',
+      routes: [
+        {
+          path: '/account',
+          redirect: '/account/settings',
+        },
+        {
+          name: 'Thông tin cá nhân',
+          icon: 'smile',
+          path: '/account/settings',
+          component: './account/settings',
+        },
+      ],
+    },
     {
       name: 'exception',
       icon: 'warning',

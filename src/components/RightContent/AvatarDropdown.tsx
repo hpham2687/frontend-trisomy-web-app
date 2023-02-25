@@ -53,13 +53,13 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       {menu && (
-        <Menu.Item key="center">
+        <Menu.Item key="settings">
           <UserOutlined />
           Thông tin cá nhân
         </Menu.Item>
       )}
       {menu && (
-        <Menu.Item key="settings">
+        <Menu.Item key="settings?tab=password">
           <SettingOutlined />
           Đổi mật khẩu
         </Menu.Item>
