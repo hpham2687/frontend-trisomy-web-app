@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
+import { history, NavLink, useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 import token from '@/utils/token';
+import { getAvatarURL } from '@/utils/avatar';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -54,14 +55,18 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       {menu && (
         <Menu.Item key="settings">
-          <UserOutlined />
-          Thông tin cá nhân
+          <NavLink to={`/account/settings?tab=information`}>
+            <UserOutlined />
+            Thông tin cá nhân
+          </NavLink>
         </Menu.Item>
       )}
       {menu && (
         <Menu.Item key="settings?tab=password">
-          <SettingOutlined />
-          Đổi mật khẩu
+          <NavLink to={`/account/settings?tab=password`}>
+            <SettingOutlined />
+            Đổi mật khẩu
+          </NavLink>
         </Menu.Item>
       )}
       {menu && <Menu.Divider />}
@@ -75,7 +80,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+        <Avatar
+          size="small"
+          className={styles.avatar}
+          src={getAvatarURL(currentUser.avatarPath)}
+          alt="avatar"
+        />
         <span className={`${styles.name} anticon`}>Xin chào, {currentUser.email}</span>
       </span>
     </HeaderDropdown>

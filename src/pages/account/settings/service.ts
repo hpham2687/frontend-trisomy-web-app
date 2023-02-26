@@ -1,4 +1,4 @@
-import { request } from 'umi';
+import request from '@/utils/request';
 import type { CurrentUser, GeographicItemType } from './data';
 
 export async function queryCurrent(): Promise<{ data: CurrentUser }> {
@@ -15,4 +15,24 @@ export async function queryCity(province: string): Promise<{ data: GeographicIte
 
 export async function query() {
   return request('/api/users');
+}
+
+export async function updateUser({
+  name,
+  uid,
+}: {
+  name: string;
+  uid: string;
+}): Promise<{ data: CurrentUser }> {
+  return request(`/users/${uid}`, {
+    method: 'PUT',
+    data: { name },
+  });
+}
+
+export async function uploadAvatar(formData: any): Promise<{ data: CurrentUser }> {
+  return request(`/users/avatar`, {
+    method: 'PUT',
+    data: formData,
+  });
 }
