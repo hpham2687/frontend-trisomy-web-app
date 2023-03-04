@@ -81,11 +81,32 @@ export async function predictTrisomy(data: any) {
     data,
   });
 }
+
 export async function getTestsConfig() {
   return request('/tests', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,
     },
+  });
+}
+
+export async function updateThalassemiaResult({ childrenId, payload }: any) {
+  return request(`/children/${childrenId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token.get().accessToken}`,
+    },
+    data: { thalassemiaDisease: payload },
+  });
+}
+
+export async function updateTrisomyResult({ childrenId, payload }: any) {
+  return request(`/children/${childrenId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token.get().accessToken}`,
+    },
+    data: { trisomyDisease: payload },
   });
 }

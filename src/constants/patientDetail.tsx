@@ -15,6 +15,17 @@ export const patientIdColumn = (options = {}) => ({
   title: 'Mã bệnh nhân',
   width: 150,
   dataIndex: 'patientId',
+  render: (patientId: string) => {
+    return (
+      <Link
+        to={`/patients/${patientId}/view`}
+        style={{ cursor: 'pointer', color: 'var(--ant-primary-color)' }}
+      >
+        {patientId}
+      </Link>
+    );
+  },
+
   ...options,
 });
 

@@ -155,13 +155,13 @@ function AdministrativeInforStep({ readonly }: { readonly?: boolean } = { readon
         </Col>
         <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
           <ProFormText
-            label="Huyết áp"
-            name="bloodPressure"
-            // rules={[
-            //   { required: true, message: 'Vui lòng nhập địa chỉ' },
-            //   // { type: 'email', message: '账户名应为邮箱格式' },
-            // ]}
-            placeholder="Nhập huyết áp bệnh nhân"
+            label="CMND/CCCD"
+            name="identificationId"
+            rules={[
+              { required: true, message: 'Vui lòng nhập CMND/CCCD' },
+              { min: 6, message: 'Vui lòng nhập tối thiểu 6 kí tự.' },
+            ]}
+            placeholder="Nhập CMND/CCCD"
             readonly={readonly}
           />
         </Col>

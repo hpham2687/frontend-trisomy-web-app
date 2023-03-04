@@ -64,7 +64,7 @@ export default defineConfig({
     {
       path: '/patients',
       icon: 'DotChartOutlined',
-      name: 'Thai phụ',
+      name: 'Chuẩn đoán',
       routes: [
         {
           name: 'Thêm thai phụ',
@@ -119,6 +119,29 @@ export default defineConfig({
           name: 'Thông tin cá nhân',
           icon: 'smile',
           path: '/account/settings',
+          component: './account/settings',
+        },
+      ],
+    },
+    {
+      name: 'Đánh giá nguy cơ',
+      icon: 'user',
+      path: '/prediction',
+      routes: [
+        {
+          path: '/prediction',
+          redirect: '/prediction',
+        },
+        {
+          name: 'Trisomy',
+          icon: 'smile',
+          path: '/prediction/trisomies',
+          component: './account/settings',
+        },
+        {
+          name: 'Thalassemia',
+          icon: 'smile',
+          path: '/prediction/thalassemia',
           component: './account/settings',
         },
       ],

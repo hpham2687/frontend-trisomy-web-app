@@ -50,7 +50,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => {
     message.error('Cập nhật ảnh đại diện không thành công!');
   };
 
-  const handleUploadSuccess = () => {
+  const handleUploadSuccess = (file: RcFile) => {
     getBase64(file as RcFile, (url) => {
       setImageUrl(url);
     });
@@ -62,8 +62,8 @@ const AvatarView = ({ avatar }: { avatar: string }) => {
     const formData = new FormData();
     formData.append('avatar', file);
     uploadAvatar(formData)
-      .then((response) => {
-        handleUploadSuccess(response, file);
+      .then(() => {
+        handleUploadSuccess(file);
       })
       .catch(() => {
         handleUploadError();

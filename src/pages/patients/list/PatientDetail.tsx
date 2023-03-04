@@ -7,6 +7,8 @@ import {
   predictThalassemia,
   predictTrisomy,
   queryPatientDetail,
+  updateThalassemiaResult,
+  updateTrisomyResult,
 } from '@/pages/patients/list/service';
 import {
   ExclamationCircleOutlined,
@@ -44,6 +46,7 @@ import {
   testDateColumn,
   testNameColumn,
 } from '@/constants/patientDetail';
+import ChildrenDetail from './components/ChildrenDetail';
 
 const convertResponseToTableData = (tests: any) => {
   return tests.map((test: any) => ({
@@ -92,6 +95,7 @@ function PatientDetail() {
   const dispatch = useDispatch();
   const formRef = useRef<ProFormInstance>();
   const { patientId } = useParams<any>();
+  const childrenId = patientDetail?.children[0]?.id || 0;
 
   const onOperationTabChange = (key: string) => {
     seTabStatus({ ...tabStatus, operationKey: key });
@@ -207,7 +211,6 @@ function PatientDetail() {
 
   const handleEditTest = (data: any) => {
     const editingData = data;
-    console.log({ data });
 
     editingData.testDate = moment(Number(editingData.testDate));
     dispatch({
@@ -253,7 +256,6 @@ function PatientDetail() {
           // Remove test from state list
           setPatientDetail((prev: any) => {
             let tests = prev.tests;
-            console.log({ testType, tests });
             if (tests?.length > 0) {
               tests = tests.filter((test: any) => {
                 if (test.action?.testType?.id !== testType) {
@@ -287,12 +289,11 @@ function PatientDetail() {
                 initialValues={{
                   doctor_selection: 'trisomy21',
                 }}
-                onValuesChange={(_, values) => {
-                  console.log(values);
-                }}
                 formRef={formRef}
-                onFinish={async (value) => console.log(value)}
                 submitter={{ render: () => null }}
+                onFinish={async (values) => {
+                  handleSaveThalassemiaResult({ ...values, ...result });
+                }}
               >
                 {/* step 2 */}
                 <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
@@ -312,21 +313,34 @@ function PatientDetail() {
 
                 <div style={{ marginBottom: 16 }}>
                   <p>Kết luận của bác sĩ</p>
-                  <Form.Item name="diseaseName">
+                  <Form.Item
+                    name="diseases"
+                    rules={[
+                      {
+                        validator: (rule: any, value: any, callback: any) => {
+                          if (!value || value.length === 0) {
+                            callback('Vui lòng chọn ít nhất một lựa chọn!');
+                          } else {
+                            callback();
+                          }
+                        },
+                      },
+                    ]}
+                  >
                     <Checkbox.Group style={{ width: '100%' }}>
                       <Row>
                         <Col span={8}>
-                          <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
+                          <Checkbox value="alpha" style={{ lineHeight: '32px' }}>
                             Alpha
                           </Checkbox>
                         </Col>
                         <Col span={8}>
-                          <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
+                          <Checkbox value="beta" style={{ lineHeight: '32px' }}>
                             Beta
                           </Checkbox>
                         </Col>
                         <Col span={8}>
-                          <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
+                          <Checkbox value="none" style={{ lineHeight: '32px' }}>
                             Không mang bệnh
                           </Checkbox>
                         </Col>
@@ -339,14 +353,7 @@ function PatientDetail() {
                   name="doctorComment"
                   placeholder="Nhập chẩn đoán của bác sỹ"
                 />
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    formRef.current?.validateFields().then((values) => {
-                      console.log(values);
-                    });
-                  }}
-                >
+                <Button type="primary" htmlType="submit">
                   Lưu kết quả
                 </Button>
               </ProForm>
@@ -400,7 +407,6 @@ function PatientDetail() {
       };
     }
 
-    // check if blood, serrum , hemoglobin inputed
     runPredictThalassemia(
       predictThalassemia(data2Send)
         .then((response: any) => {
@@ -408,7 +414,36 @@ function PatientDetail() {
         })
         .catch((error) => console.log(error)),
     );
-    // Post API request
+  };
+
+  const handleSaveThalassemiaResult = (values: any) => {
+    const { diseases, doctorComment } = values;
+
+    const hasAlpha = !!diseases.find((i: any) => i === 'alpha');
+    const hasBeta = !!diseases.find((i: any) => i === 'beta');
+
+    const payload = {
+      conclusions: doctorComment,
+      hasDiseaseRatio: 1 - values.noGen.toFixed(2),
+      hasAlphaRatio: values.alphaGen.toFixed(2),
+      hasBetaRatio: values.betaGen.toFixed(2),
+      hasAlpha,
+      hasBeta,
+      hasDisease: hasBeta || hasAlpha,
+    };
+
+    updateThalassemiaResult({ childrenId, payload })
+      .then((children: any) => {
+        message.success('Lưu kết quả thành công!');
+        dispatch({
+          type: 'modal/showModal',
+          payload: null,
+        });
+        setPatientDetail((prev) => ({ ...prev, children: [children] }));
+      })
+      .catch(() => {
+        message.error('Có lỗi xảy ra!');
+      });
   };
 
   const handleShowTrisomyResult = (result: any) => {
@@ -425,11 +460,10 @@ function PatientDetail() {
                 initialValues={{
                   doctor_selection: 'trisomy21',
                 }}
-                // onValuesChange={(_, values) => {
-                //   console.log(values);
-                // }}
                 formRef={formRef}
-                onFinish={async (value) => console.log(value)}
+                onFinish={async (values) => {
+                  handleSaveTrisomyResult({ ...values, ...result });
+                }}
                 submitter={{
                   render: () => null,
                 }}
@@ -448,26 +482,36 @@ function PatientDetail() {
                 </Descriptions>
                 <div style={{ marginBottom: 16 }}>
                   <p>Kết luận của bác sĩ</p>
-                  <Form.Item name="diseaseName">
-                    <Checkbox.Group>
-                      <Row>
-                        <Col span={8}>
-                          <Checkbox value="trisomy21" style={{ lineHeight: '32px' }}>
-                            Trisomy 21
-                          </Checkbox>
-                        </Col>
-                        <Col span={8}>
-                          <Checkbox value="trisomy18" style={{ lineHeight: '32px' }}>
-                            Trisomy 18
-                          </Checkbox>
-                        </Col>
-                        <Col span={8}>
-                          <Checkbox value="trisomy13" style={{ lineHeight: '32px' }}>
-                            Trisomy 13
-                          </Checkbox>
-                        </Col>
-                      </Row>
-                    </Checkbox.Group>
+                  <Form.Item
+                    name="diseases"
+                    rules={[
+                      {
+                        validator: (rule: any, value: any, callback: any) => {
+                          if (!value || value.length === 0) {
+                            callback('Please select at least one option');
+                          } else {
+                            callback();
+                          }
+                        },
+                      },
+                    ]}
+                  >
+                    <Checkbox.Group
+                      options={[
+                        {
+                          value: 'trisomy13',
+                          label: 'Trisomy 13',
+                        },
+                        {
+                          value: 'trisomy18',
+                          label: 'Trisomy 18',
+                        },
+                        {
+                          value: 'trisomy21',
+                          label: 'Trisomy 21',
+                        },
+                      ]}
+                    />
                   </Form.Item>
                 </div>
                 <ProFormTextArea
@@ -475,6 +519,9 @@ function PatientDetail() {
                   name="invoiceType"
                   placeholder="Nhập chẩn đoán của bác sỹ"
                 />
+                <Button type="primary" htmlType="submit">
+                  Lưu kết quả
+                </Button>
               </ProForm>
             </>
           ),
@@ -539,6 +586,38 @@ function PatientDetail() {
         })
         .catch((error) => message.error(error.message)),
     );
+  };
+
+  const handleSaveTrisomyResult = (values: any) => {
+    const { diseases, doctorComment } = values;
+
+    const hasTrisomy13 = !!diseases.find((i: any) => i === 'trisomy13');
+    const hasTrisomy18 = !!diseases.find((i: any) => i === 'trisomy18');
+    const hasTrisomy21 = !!diseases.find((i: any) => i === 'trisomy21');
+
+    const payload = {
+      conclusions: doctorComment,
+      hasTrisomy13Ratio: values.Trisomy13.toFixed(2),
+      hasTrisomy18Ratio: values.Trisomy18.toFixed(2),
+      hasTrisomy21Ratio: values.Trisomy21.toFixed(2),
+      hasTrisomy13,
+      hasTrisomy18,
+      hasTrisomy21,
+      hasDisease: hasTrisomy13 || hasTrisomy18 || hasTrisomy21,
+    };
+
+    updateTrisomyResult({ childrenId, payload })
+      .then((children: any) => {
+        message.success('Lưu kết quả thành công!');
+        dispatch({
+          type: 'modal/showModal',
+          payload: null,
+        });
+        setPatientDetail((prev) => ({ ...prev, children: [children] }));
+      })
+      .catch(() => {
+        message.error('Có lỗi xảy ra!');
+      });
   };
 
   const contentList = {
@@ -624,21 +703,13 @@ function PatientDetail() {
         </div>
       </>
     ),
-    tab2: (
-      <>sdf</>
-      // <Table pagination={false} loading={loading} dataSource={patientTests} columns={columns} />
-    ),
-    tab3: (
-      <>sdf</>
-      // <Table pagination={false} loading={loading} dataSource={patientTests} columns={columns} />
-    ),
+    tab2: <ChildrenDetail thalassemiaData={patientDetail?.children[0]?.thalassemiaDisease} />,
   };
 
   useEffect(() => {
-    // TODO: Get test config
     run(
       dispatch({
-        type: 'tests/fetch', // if in model outside, need to add namespace
+        type: 'tests/fetch',
         payload: {},
       }),
     );
@@ -652,8 +723,6 @@ function PatientDetail() {
     <PageContainer
       title={`Bệnh nhân ：${patientDetail?.fullName}`}
       className={styles.pageHeader}
-      // content={headerDescription}
-      // extraContent={extra}
       extra={[
         <>
           <Button
