@@ -43,7 +43,6 @@ const ModalModel: ModalModelType = {
   reducers: {
     showModal: (state, action) => {
       const modalCustomProps = action.payload?.customProps || {};
-      console.log({ modalCustomProps });
 
       if (!action.payload) {
         return {
