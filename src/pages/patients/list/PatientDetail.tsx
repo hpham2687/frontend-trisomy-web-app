@@ -5,7 +5,6 @@ import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Button, Card } from 'antd';
 
 import { useEffect, useState } from 'react';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { history, useDispatch, useParams } from 'umi';
 
 import usePatientDetail from '@/hooks/usePatientDetail';
