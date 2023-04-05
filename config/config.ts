@@ -107,6 +107,29 @@ export default defineConfig({
       ],
     },
     {
+      name: 'Quản lý',
+      icon: 'ClusterOutlined',
+      path: '/manage',
+      routes: [
+        {
+          path: '/manage',
+          redirect: '/manage/doctor',
+        },
+        {
+          name: 'Bệnh viện',
+          icon: 'smile',
+          path: '/manage/hostpital',
+          component: './manage/doctor',
+        },
+        {
+          name: 'Bác sĩ',
+          icon: 'smile',
+          path: '/manage/doctor',
+          component: './account/settings',
+        },
+      ],
+    },
+    {
       name: 'Tài khoản',
       icon: 'user',
       path: '/account',
@@ -125,7 +148,7 @@ export default defineConfig({
     },
     {
       name: 'Đánh giá nguy cơ',
-      icon: 'user',
+      icon: 'InfoCircleOutlined',
       path: '/prediction',
       routes: [
         {
