@@ -113,19 +113,19 @@ export default defineConfig({
       routes: [
         {
           path: '/manage',
-          redirect: '/manage/doctor',
+          redirect: '/manage/hospital',
         },
         {
           name: 'Bệnh viện',
           icon: 'smile',
           path: '/manage/hostpital',
-          component: './manage/doctor',
+          component: './manage/hospital',
         },
         {
           name: 'Bác sĩ',
           icon: 'smile',
           path: '/manage/doctor',
-          component: './account/settings',
+          component: './manage/doctor',
         },
       ],
     },

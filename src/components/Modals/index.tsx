@@ -9,6 +9,7 @@ import { ModalInputHemoglobinTestResult } from './PatientDetailModals/Hemoglobin
 import { ModalInputSecondUltrasoundTestResult } from './PatientDetailModals/SecondUltrasoundTest';
 import { ModalInputSerumIronTestResult } from './PatientDetailModals/SerumIronTest';
 import { ModalInputTripleTestResult } from './PatientDetailModals/TripleTest';
+import AddHospital from './AddHospital';
 
 export const ModalKey = {
   INPUT_BLOOD_TEST_RESULT: 'INPUT_BLOOD_TEST_RESULT',
@@ -21,6 +22,7 @@ export const ModalKey = {
   INPUT_CHILD_INFORMATION: 'INPUT_CHILD_INFORMATION',
   ADD_TEST_RESULT: 'ADD_TEST_RESULT',
   GENERAL_INFO: 'GENERAL_INFO',
+  ADD_HOSPITAL: 'ADD_HOSPITAL',
 };
 
 const modalMap: Record<string, any> = {};
@@ -35,6 +37,7 @@ modalMap[ModalKey.INPUT_SECOND_ULTRASOUND_TEST_RESULT] = ModalInputSecondUltraso
 modalMap[ModalKey.INPUT_CHILD_INFORMATION] = ModalInputChildInformation;
 modalMap[ModalKey.ADD_TEST_RESULT] = ModalSelectTestType;
 modalMap[ModalKey.GENERAL_INFO] = GeneralInfo;
+modalMap[ModalKey.ADD_HOSPITAL] = AddHospital;
 
 export function ModalContainer(): JSX.Element | null {
   const dispatch = useDispatch();
