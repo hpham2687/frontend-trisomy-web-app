@@ -36,7 +36,7 @@ const Doctors: React.FC = () => {
     <PageContainer>
       <div className={styles.main}>
         <GridContent>
-          <Card className={styles.tabsCard} bordered={false}>
+          <div className={styles.tabsCard} style={{ paddingLeft: 24, paddingRight: 24 }}>
             <div style={{ display: 'flex' }}>
               <Button
                 type="primary"
@@ -70,7 +70,7 @@ const Doctors: React.FC = () => {
               dataSource={[]}
               columns={columns}
             />
-          </Card>
+          </div>
         </GridContent>
       </div>
     </PageContainer>
