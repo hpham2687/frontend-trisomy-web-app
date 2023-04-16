@@ -1,19 +1,19 @@
 import { Link } from 'umi';
 
-export const hospitalListActionColumn = ({ onClickDelete, options }: any) => ({
+export const hospitalListActionColumn = ({ onClickDelete, onClickEdit, options }: any) => ({
   title: 'Hành động',
   dataIndex: 'action',
   key: 'action',
-  render: (hospital: any) => {
+  render: (_, hospital: any) => {
     return (
       <>
         <div className="action-cell">
-          <Link
-            to={`/hospitals/${hospital.id}/edit`}
+          <span
+            onClick={() => onClickEdit(hospital)}
             style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
           >
             Sửa
-          </Link>
+          </span>
           <span
             onClick={() => onClickDelete(hospital)}
             style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}

@@ -115,19 +115,23 @@ const Doctors: React.FC = () => {
 
   return (
     <PageContainer
-      extra={[
-        <>
-          <Button
-            type="link"
-            style={{ padding: 0 }}
-            onClick={() => {
-              setView(ViewType.LIST);
-            }}
-          >
-            <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
-          </Button>
-        </>,
-      ]}
+      extra={
+        view === ViewType.ADD
+          ? [
+              <>
+                <Button
+                  type="link"
+                  style={{ padding: 0 }}
+                  onClick={() => {
+                    setView(ViewType.LIST);
+                  }}
+                >
+                  <RollbackOutlined style={{ fontSize: 36 }} /> Quay lại
+                </Button>
+              </>,
+            ]
+          : []
+      }
     >
       <div className={styles.main}>
         <GridContent>{renderContent()}</GridContent>

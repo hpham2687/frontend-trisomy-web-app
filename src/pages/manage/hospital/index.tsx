@@ -1,37 +1,93 @@
 import { GridContent, PageContainer } from '@ant-design/pro-layout';
-import React from 'react';
-import { Button, Card, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import useAsync from '@/hooks/useAsync';
+import { Button, Modal, Table, message } from 'antd';
 
 import styles from './style.less';
 import { hospitalListActionColumn } from '@/constants/manage';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'umi';
 import { ModalKey } from '@/components/Modals';
+import { deleteHospital, getHospitals } from './service';
+import type { Hospital } from '@/types/hospital';
 
-const Doctors: React.FC = () => {
+const HospitalList: React.FC = () => {
   const dispatch = useDispatch();
+  const { run, isLoading } = useAsync();
+  const [hospitals, setHospitals] = useState<Hospital[]>([]);
+
+  const fetchHospitals = async () => {
+    const response = await getHospitals();
+    setHospitals(response);
+  };
+
+  const handleOpenEditHospitalModal = (hospital: Hospital) => {
+    dispatch({
+      type: 'modal/showModal',
+      payload: {
+        modalKey: ModalKey.ADD_HOSPITAL,
+        customProps: {
+          editingData: hospital,
+          fetchHospitals: fetchHospitals,
+        },
+      },
+    });
+  };
+
+  const handleShowConfirmDelete = (hospital: Hospital) => {
+    Modal.confirm({
+      title: 'Xác nhận',
+      icon: <ExclamationCircleOutlined />,
+      content: `Bạn có chắc là muốn xóa bệnh vienej ${hospital.name} chứ?`,
+      okText: 'Có',
+      cancelText: 'Không',
+      onOk: () => {
+        deleteHospital(hospital.id).then((response: any) => {
+          message.success('Xóa bệnh viện thành công!');
+          console.log(response);
+          fetchHospitals();
+        });
+      },
+    });
+  };
 
   const columns = [
     {
-      key: 'hospitalId',
+      key: 'id',
       title: 'ID bệnh viện',
-      // width: 150,
-      dataIndex: 'hospitalId',
+      dataIndex: 'id',
     },
     {
-      key: 'hospitalName',
+      key: 'name',
       title: 'Tên bệnh viện',
-      // width: 150,
-      dataIndex: 'hospitalName',
+      dataIndex: 'name',
     },
     {
       key: 'isCentral',
       title: 'Cấp trung ương',
-      // width: 150,
       dataIndex: 'isCentral',
+      render: (isCentral: boolean) => (isCentral ? 'Có' : 'Không'),
     },
-    hospitalListActionColumn({ onClickDelete: () => {}, options: {} }),
+    hospitalListActionColumn({
+      onClickDelete: handleShowConfirmDelete,
+      onClickEdit: handleOpenEditHospitalModal,
+      options: {},
+    }),
   ];
+
+  useEffect(() => {
+    run(
+      getHospitals()
+        .then((response: Hospital[]) => {
+          setHospitals(response);
+        })
+        .catch((error: any) => {
+          console.log(error);
+          message.error(error.error || 'Có lỗi xảy ra!');
+        }),
+    );
+  }, []);
+
   return (
     <PageContainer>
       <div className={styles.main}>
@@ -48,7 +104,7 @@ const Doctors: React.FC = () => {
                     payload: {
                       modalKey: ModalKey.ADD_HOSPITAL,
                       customProps: {
-                        body: <>ứdfsf</>,
+                        fetchHospitals: fetchHospitals,
                       },
                     },
                   });
@@ -60,14 +116,14 @@ const Doctors: React.FC = () => {
             <Table
               pagination={{
                 position: ['bottomRight'],
-                total: 100,
+                total: hospitals.length,
                 pageSize: 10,
                 onChange: (targetPageNumber: number) => {
                   // setPage(targetPageNumber - 1);
                 },
               }}
-              loading={false}
-              dataSource={[]}
+              loading={isLoading}
+              dataSource={hospitals}
               columns={columns}
             />
           </div>
@@ -76,4 +132,5 @@ const Doctors: React.FC = () => {
     </PageContainer>
   );
 };
-export default Doctors;
+
+export default HospitalList;
