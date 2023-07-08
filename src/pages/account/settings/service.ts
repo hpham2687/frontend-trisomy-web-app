@@ -17,16 +17,10 @@ export async function query() {
   return request('/api/users');
 }
 
-export async function updateUser({
-  name,
-  uid,
-}: {
-  name: string;
-  uid: string;
-}): Promise<{ data: CurrentUser }> {
-  return request(`/users/${uid}`, {
+export async function updateUser(payload: any): Promise<{ data: CurrentUser }> {
+  return request(`/users/${payload.uid}`, {
     method: 'PUT',
-    data: { name },
+    data: payload,
   });
 }
 

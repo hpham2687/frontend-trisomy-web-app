@@ -27,11 +27,19 @@ export const hospitalListActionColumn = ({ onClickDelete, onClickEdit, options }
   ...options,
 });
 
-export const doctorListActionColumn = ({ onClickDelete, options }: any) => ({
+export const doctorListActionColumn = ({
+  onClickEdit,
+  onClickDelete,
+  options,
+  currentUserId,
+}: any) => ({
   title: 'Hành động',
   dataIndex: 'action',
   key: 'action',
   render: (doctor: any) => {
+    if (doctor.id === currentUserId) {
+      return null;
+    }
     return (
       <>
         <div className="action-cell">
@@ -48,7 +56,7 @@ export const doctorListActionColumn = ({ onClickDelete, options }: any) => ({
             Khoá
           </span>
           <span
-            to={`/manage/doctor/${doctor.id}/edit`}
+            onClick={() => onClickEdit(doctor)}
             style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
           >
             Sửa

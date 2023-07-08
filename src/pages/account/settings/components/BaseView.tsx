@@ -1,8 +1,8 @@
 import useAsync from '@/hooks/useAsync';
 import { getAvatarURL } from '@/utils/avatar';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { message, Upload } from 'antd';
+import ProForm, { ProFormDatePicker, ProFormText } from '@ant-design/pro-form';
+import { Form, message, Upload } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
@@ -93,12 +93,26 @@ const BaseView: React.FC = () => {
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const { run, isLoading } = useAsync();
+  const [form] = Form.useForm();
 
   const handleClickUpdate = (data: any) => {
     if (currentUser) {
-      run(updateUser({ uid: currentUser.id, name: data.name })).then(() => {
-        message.success('Cập nhật thông tin thành công');
-      });
+      form
+        .validateFields()
+        .then((values) => {
+          run(
+            updateUser({ ...values, uid: currentUser.id })
+              .then(() => {
+                message.success('Cập nhật thông tin thành công');
+              })
+              .catch((error: any) => {
+                message.error(error.error || 'Có lỗi xảy ra!');
+              }),
+          );
+        })
+        .catch((info) => {
+          console.log('Validate Failed:', info);
+        });
     }
   };
 
@@ -120,6 +134,7 @@ const BaseView: React.FC = () => {
                 ...currentUser,
               }}
               hideRequiredMark
+              form={form}
             >
               <ProFormText
                 width="md"
@@ -136,7 +151,7 @@ const BaseView: React.FC = () => {
               />
               <ProFormText
                 width="md"
-                name="name"
+                name="fullName"
                 label="Họ và tên"
                 allowClear={false}
                 placeholder="Nhập vào tên của bạn"
@@ -147,18 +162,45 @@ const BaseView: React.FC = () => {
                   },
                 ]}
               />
-
+              <ProFormDatePicker
+                label="Ngày sinh"
+                name="dob"
+                rules={[{ required: true, message: 'Vui lòng nhập ngày sinh' }]}
+                placeholder="Nhập ngày sinh"
+                fieldProps={{
+                  style: {
+                    width: '100%',
+                  },
+                }}
+              />
+              <ProFormText
+                width="md"
+                name="address"
+                label="Địa chỉ"
+                allowClear={false}
+                placeholder="Nhập vào địa chỉ của bạn"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập địa chỉ!',
+                  },
+                ]}
+              />
+              <ProFormText
+                label="Số điện thoại"
+                name="phoneNumber"
+                // rules={[
+                //   { required: true, message: 'Vui lòng nhập địa chỉ' },
+                //   // { type: 'email', message: '账户名应为邮箱格式' },
+                // ]}
+                placeholder="Nhập số điện thoại"
+              />
               <ProFormText
                 width="md"
                 readonly
                 name="hospitalId"
                 label="Bệnh viện"
-                rules={[
-                  {
-                    required: true,
-                    message: '请输入您的街道地址!',
-                  },
-                ]}
+                value={currentUser.hospital.name}
               />
             </ProForm>
           </div>

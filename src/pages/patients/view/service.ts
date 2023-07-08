@@ -9,8 +9,6 @@ export async function postEditPatient(patientId: number, payload: any) {
 }
 
 export async function queryPatientDetail(patientId: number) {
-  console.log('query detail');
-
   return request(`/patients/${patientId}`, {
     headers: {
       Authorization: `Bearer ${token.get().accessToken}`,

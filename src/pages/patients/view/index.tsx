@@ -33,7 +33,6 @@ const EditPatient: React.FC<Record<string, any>> = () => {
         });
       })
       .catch((error: any) => {
-        console.log(error);
         message.error(error.error || 'Có lỗi xảy ra!');
       });
   }, [patientId, formRefAdministrativeInforStep]);

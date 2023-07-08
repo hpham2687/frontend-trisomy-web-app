@@ -69,8 +69,6 @@ const EditPatient: React.FC<Record<string, any>> = () => {
   };
 
   const onSubmitPrehistoricStep = async (values: any) => {
-    console.log(values);
-    // setCurrent(1);
     setPrehistoric(values);
     // Submit value here
     const payload = {

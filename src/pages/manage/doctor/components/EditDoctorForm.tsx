@@ -1,11 +1,12 @@
 import useAsync from '@/hooks/useAsync';
 import ProForm, { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
 import { Col, Form, Row, message } from 'antd';
-import { createDoctor } from '../service';
+import { updateDoctor } from '../service';
 
-function AddDoctorForm({ hospitals, backToListView }: any) {
+function EditDoctorForm({ hospitals, backToListView, editingDoctor }: any) {
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
+
   const hospitalsSelectData = hospitals.map((hospital: any) => ({
     key: hospital.id,
     label: hospital.name,
@@ -17,9 +18,9 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
       .validateFields()
       .then((values) => {
         run(
-          createDoctor({ ...values, hospitalId: Number(values.hospitalId) })
+          updateDoctor({ ...values, id: editingDoctor.id, hospitalId: Number(values.hospitalId) })
             .then(() => {
-              message.success('Thêm mới bác sĩ thành công');
+              message.success('Cập nhật thông tin bác sĩ thành công');
               backToListView();
             })
             .catch((error: any) => {
@@ -36,7 +37,6 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
     <>
       <ProForm
         layout="vertical"
-        //   onFinish={handleClickUpdate}
         onFinish={handleSubmit}
         submitter={{
           searchConfig: {
@@ -44,11 +44,11 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
           },
           render: (_, dom) => dom[1],
         }}
-        initialValues={{}}
+        initialValues={{ ...editingDoctor, hospitalId: editingDoctor.hospital.id }}
         hideRequiredMark
         form={form}
       >
-        <h3 style={{ marginBottom: '24px' }}>Nhập thông tin bác sĩ</h3>
+        <h3 style={{ marginBottom: '24px' }}>Chỉnh sửa thông tin bác sĩ</h3>
         <Row gutter={16}>
           <Col md={6} xs={24}>
             <ProFormText
@@ -90,16 +90,17 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
                 { type: 'email', message: 'Địa chỉ email không đúng!' },
               ]}
               placeholder="Nhập địa chỉ email"
+              disabled
             />
           </Col>
-          <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
+          {/* <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
             <ProFormText
               label="Mật khẩu"
               name="password"
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
               placeholder="Nhập địa mật khẩu"
             />
-          </Col>
+          </Col> */}
           <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
             <ProFormText
               label="Số điện thoại"
@@ -108,7 +109,7 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
               //   { required: true, message: 'Vui lòng nhập địa chỉ' },
               //   // { type: 'email', message: '账户名应为邮箱格式' },
               // ]}
-              placeholder="Nhập địa chỉ bác sĩ"
+              placeholder="Nhập số điện thoại bác sĩ"
             />
           </Col>
           <Col lg={6} md={12} xs={24}>
@@ -126,4 +127,4 @@ function AddDoctorForm({ hospitals, backToListView }: any) {
   );
 }
 
-export default AddDoctorForm;
+export default EditDoctorForm;

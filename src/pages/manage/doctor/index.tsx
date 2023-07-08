@@ -9,9 +9,8 @@ import {
   RollbackOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import moment from 'moment';
 import { ProFormDateRangePicker, ProFormText } from '@ant-design/pro-form';
-import { useDispatch } from 'umi';
+import { useDispatch, useModel } from 'umi';
 import styled from 'styled-components';
 import useAsync from '@/hooks/useAsync';
 import { BreakPoints, defaultDateRangeFilter } from '@/constants/common';
@@ -21,10 +20,13 @@ import AvatarView from './components/UploadAvatar';
 import { deleteDoctor, getDoctors } from './service';
 import styles from './style.less';
 import { getHospitals } from '../hospital/service';
+import EditDoctorForm from './components/EditDoctorForm';
+import { getAvatarURL } from '@/utils/avatar';
 
 enum ViewType {
   LIST = 'list',
   ADD = 'add',
+  EDIT = 'EDIT',
 }
 
 const FilterWrapper = styled.div`
@@ -70,15 +72,18 @@ const convertToTableData = (doctors: any) =>
   doctors.map((doctor: any) => ({ ...doctor, key: doctor.id, action: doctor }));
 
 const Doctors: React.FC = () => {
-  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { run, isLoading } = useAsync();
   const [view, setView] = useState(ViewType.LIST);
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [totals, setTotals] = useState(0);
+  const [editingDoctor, setEditingDoctor] = useState<any | null>(null);
   const [page, setPage] = useState(0);
   const { run: runDeletePatient, isLoading: isLoadingDeletePatient } = useAsync();
   const [doctors, setDoctors] = useState([]);
+  const { initialState } = useModel('@@initialState');
+  const { currentUser } = initialState || {};
+  console.log({ currentUser });
 
   const fetchHospitals = async () => {
     getHospitals().then((response: any) => setHospitals(response));
@@ -120,6 +125,11 @@ const Doctors: React.FC = () => {
         );
       },
     });
+  };
+
+  const handleEditDoctor = (doctor) => {
+    setEditingDoctor(doctor);
+    setView(ViewType.EDIT);
   };
 
   const columns = [
@@ -168,8 +178,34 @@ const Doctors: React.FC = () => {
         }
       },
     },
-    doctorListActionColumn({ onClickDelete: handleShowConfirmDelete, options: {} }),
+    doctorListActionColumn({
+      onClickDelete: handleShowConfirmDelete,
+      onClickEdit: handleEditDoctor,
+      options: {},
+      currentUserId: currentUser?.id,
+    }),
   ];
+
+  const handleFilter = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        run(
+          getDoctors({
+            page,
+            startDate: values.dateRange[0],
+            endDate: values.dateRange[1],
+            fullName: values.fullName,
+          }),
+        ).then((response: any) => {
+          setDoctors(convertToTableData(response.results));
+          setTotals(response.total);
+        });
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
   const renderContent = () => {
     if (view === ViewType.ADD) {
@@ -180,37 +216,39 @@ const Doctors: React.FC = () => {
               <AddDoctorFormWrapper lg={16} sm={24}>
                 <AddDoctorForm hospitals={hospitals} backToListView={backToListView} />
               </AddDoctorFormWrapper>
-              <AvatarUploadWrapper lg={6} sm={24}>
+              {/* <AvatarUploadWrapper lg={6} sm={24}>
                 <div style={{ display: 'flex', flexDirection: 'column', placeContent: 'center' }}>
                   <AvatarView />
                 </div>
-              </AvatarUploadWrapper>
+              </AvatarUploadWrapper> */}
             </Row>
           </div>
         </div>
       );
     }
 
-    const handleFilter = () => {
-      form
-        .validateFields()
-        .then((values) => {
-          run(
-            getDoctors({
-              page,
-              startDate: values.dateRange[0],
-              endDate: values.dateRange[1],
-              fullName: values.fullName,
-            }),
-          ).then((response: any) => {
-            setDoctors(convertToTableData(response.results));
-            setTotals(response.total);
-          });
-        })
-        .catch((info) => {
-          console.log('Validate Failed:', info);
-        });
-    };
+    if (view === ViewType.EDIT && editingDoctor) {
+      return (
+        <div>
+          <div style={{ marginLeft: 24, marginRight: 24 }}>
+            <Row gutter={[32, 32]}>
+              <AddDoctorFormWrapper lg={16} sm={24}>
+                <EditDoctorForm
+                  hospitals={hospitals}
+                  editingDoctor={editingDoctor}
+                  backToListView={backToListView}
+                />
+              </AddDoctorFormWrapper>
+              {/* <AvatarUploadWrapper lg={6} sm={24}>
+                <div style={{ display: 'flex', flexDirection: 'column', placeContent: 'center' }}>
+                  <AvatarView avatar={getAvatarURL(editingDoctor?.avatarPath)} />
+                </div>
+              </AvatarUploadWrapper> */}
+            </Row>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className={styles.tabsCard} style={{ paddingLeft: 24, paddingRight: 24 }}>
@@ -282,7 +320,7 @@ const Doctors: React.FC = () => {
   return (
     <PageContainer
       extra={
-        view === ViewType.ADD
+        view === ViewType.ADD || view === ViewType.EDIT
           ? [
               <>
                 <Button

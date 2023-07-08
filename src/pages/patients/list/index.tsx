@@ -84,8 +84,6 @@ const PatientList: FC = () => {
     const startDate = dateRange[0];
     const endDate = dateRange[1];
     run(queryPatients({ page, startDate, endDate, fullName })).then((response: any) => {
-      console.log(response);
-
       setPatients(convertResponseToTableData(response.results));
       setTotals(response.total);
     });
@@ -105,7 +103,6 @@ const PatientList: FC = () => {
       onOk: () => {
         runDeletePatient(deletePatient(patient.id)).then((response: any) => {
           message.success('Xóa bệnh nhân thành công!');
-          console.log(response);
           handleQueryPatients();
         });
       },

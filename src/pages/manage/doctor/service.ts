@@ -49,6 +49,13 @@ export async function createDoctor(payload: {
   });
 }
 
+export async function updateDoctor({ id, ...payload }: any): Promise<any> {
+  return request(`/users/doctor/${id}`, {
+    method: 'PUT',
+    data: payload,
+  });
+}
+
 export async function uploadAvatar(formData: any): Promise<{ data: CurrentUser }> {
   return request(`/users/avatar`, {
     method: 'PUT',

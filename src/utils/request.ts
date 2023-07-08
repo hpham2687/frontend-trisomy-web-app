@@ -59,7 +59,6 @@ const responseInterceptor = async (response: Response, options: RequestOptionsIn
         }),
       );
     } catch (err) {
-      console.log('loi roi', err);
       cancel('Session time out.');
       throw err;
     } finally {
