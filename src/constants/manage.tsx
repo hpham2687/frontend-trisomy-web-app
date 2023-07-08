@@ -31,33 +31,30 @@ export const doctorListActionColumn = ({ onClickDelete, options }: any) => ({
   title: 'Hành động',
   dataIndex: 'action',
   key: 'action',
-  render: (hospital: any) => {
+  render: (doctor: any) => {
     return (
       <>
         <div className="action-cell">
           <Link
             to="/"
-            // to={`/hospitals/${hospital.id}/edit`}
             style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
           >
             Xem log
           </Link>
-          <Link
+          <span
             to="/"
-            // to={`/hospitals/${hospital.id}/edit`}
             style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
           >
             Khoá
-          </Link>
-          <Link
-            to="/"
-            // to={`/hospitals/${hospital.id}/edit`}
+          </span>
+          <span
+            to={`/manage/doctor/${doctor.id}/edit`}
             style={{ marginLeft: 8, cursor: 'pointer', color: 'var(--ant-primary-color)' }}
           >
             Sửa
-          </Link>
+          </span>
           <span
-            onClick={() => onClickDelete(hospital)}
+            onClick={() => onClickDelete(doctor)}
             style={{ marginLeft: 8, color: 'red', cursor: 'pointer' }}
           >
             Xóa

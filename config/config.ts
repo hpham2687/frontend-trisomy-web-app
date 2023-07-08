@@ -118,7 +118,7 @@ export default defineConfig({
         {
           name: 'Bệnh viện',
           icon: 'smile',
-          path: '/manage/hostpital',
+          path: '/manage/hospital',
           component: './manage/hospital',
         },
         {
@@ -199,40 +199,40 @@ export default defineConfig({
         },
       ],
     },
-    {
-      name: 'Nhóm phát triển',
-      icon: 'ApartmentOutlined',
-      path: '/developers',
-      component: './members/Developers',
-    },
+    // {
+    //   name: 'Nhóm phát triển',
+    //   icon: 'ApartmentOutlined',
+    //   path: '/developers',
+    //   component: './members/Developers',
+    // },
 
-    {
-      path: '/members',
-      name: 'Thành viên',
-      icon: 'crown',
-      access: 'canAdmin',
-      routes: [
-        {
-          path: '/members/add',
-          name: 'Thêm thành viên',
-          icon: 'smile',
-          component: './members/add',
-          exact: true,
-          access: 'canAdmin',
-        },
-        {
-          path: '/members/',
-          name: 'Danh sách',
-          icon: 'smile',
-          component: './members/list',
-          exact: true,
-          access: 'canAdmin',
-        },
-        // {
-        //   component: './404',
-        // },
-      ],
-    },
+    // {
+    //   path: '/members',
+    //   name: 'Thành viên',
+    //   icon: 'crown',
+    //   access: 'canAdmin',
+    //   routes: [
+    //     {
+    //       path: '/members/add',
+    //       name: 'Thêm thành viên',
+    //       icon: 'smile',
+    //       component: './members/add',
+    //       exact: true,
+    //       access: 'canAdmin',
+    //     },
+    //     {
+    //       path: '/members/',
+    //       name: 'Danh sách',
+    //       icon: 'smile',
+    //       component: './members/list',
+    //       exact: true,
+    //       access: 'canAdmin',
+    //     },
+    //     // {
+    //     //   component: './404',
+    //     // },
+    //   ],
+    // },
     {
       path: '/',
       redirect: '/patients/',

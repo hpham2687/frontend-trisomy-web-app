@@ -1,27 +1,52 @@
+import useAsync from '@/hooks/useAsync';
 import ProForm, { ProFormDatePicker, ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import { Col, Row } from 'antd';
-import { useRef } from 'react';
+import { Col, Form, Row, message } from 'antd';
+import { createDoctor } from '../service';
 
-function AddDoctorForm(props) {
-  const form = useRef<any>();
+function AddDoctorForm({ hospitals, backToListView }: any) {
+  const [form] = Form.useForm();
+  const { run, isLoading } = useAsync();
+  const hospitalsSelectData = hospitals.map((hospital: any) => ({
+    key: hospital.id,
+    label: hospital.name,
+    value: hospital.id,
+  }));
+
+  const handleSubmit = async (data: any) => {
+    form
+      .validateFields()
+      .then((values) => {
+        run(
+          createDoctor({ ...values, hospitalId: Number(values.hospitalId) })
+            .then(() => {
+              message.success('Thêm mới bác sĩ thành công');
+              backToListView();
+            })
+            .catch((error: any) => {
+              message.error(error.error || 'Có lỗi xảy ra!');
+            }),
+        );
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
   return (
     <>
       <ProForm
         layout="vertical"
         //   onFinish={handleClickUpdate}
+        onFinish={handleSubmit}
         submitter={{
           searchConfig: {
             submitText: 'Lưu',
           },
           render: (_, dom) => dom[1],
         }}
-        initialValues={
-          {
-            // ...currentUser,
-          }
-        }
+        initialValues={{}}
         hideRequiredMark
+        form={form}
       >
         <h3 style={{ marginBottom: '24px' }}>Nhập thông tin bác sĩ</h3>
         <Row gutter={16}>
@@ -58,6 +83,25 @@ function AddDoctorForm(props) {
         <Row gutter={16}>
           <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
             <ProFormText
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: 'Vui lòng nhập địa chỉ email' },
+                { type: 'email', message: 'Địa chỉ email không đúng!' },
+              ]}
+              placeholder="Nhập địa chỉ email"
+            />
+          </Col>
+          <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
+            <ProFormText
+              label="Mật khẩu"
+              name="password"
+              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+              placeholder="Nhập địa mật khẩu"
+            />
+          </Col>
+          <Col lg={{ span: 6 }} md={{ span: 12 }} xs={24}>
+            <ProFormText
               label="Số điện thoại"
               name="phoneNumber"
               // rules={[
@@ -70,23 +114,10 @@ function AddDoctorForm(props) {
           <Col lg={6} md={12} xs={24}>
             <ProFormSelect
               label="Bệnh viện"
-              name="hospital"
-              // rules={[{ required: true, message: '请选择审批员' }]}
-              options={[
-                {
-                  label: 'Y đa khoa HN',
-                  value: 'xiao',
-                },
-                {
-                  label: 'BV 108',
-                  value: 'mao',
-                },
-                {
-                  label: 'Khác',
-                  value: 'other',
-                },
-              ]}
+              name="hospitalId"
+              options={hospitalsSelectData}
               placeholder="Nhập bệnh viện của bác sĩ"
+              rules={[{ required: true, message: 'Vui lòng nhập bệnh viện' }]}
             />
           </Col>
         </Row>

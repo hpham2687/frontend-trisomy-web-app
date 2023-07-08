@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  frontend_reactjs_yt:
+  frontend_trisomy_app:
     build:
       context: .
       dockerfile: Dockerfile

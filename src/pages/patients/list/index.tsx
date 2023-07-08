@@ -7,10 +7,10 @@ import type { FC } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { history } from 'umi';
-import { defaultDateRange, deletePatient, queryPatients } from './service';
+import { deletePatient, queryPatients } from './service';
 import styles from './style/index.less';
 import './style/index.css';
-import { BreakPoints } from '@/constants/common';
+import { BreakPoints, defaultDateRangeFilter } from '@/constants/common';
 import {
   addressColumn,
   dateOfBirthColumn,
@@ -155,7 +155,7 @@ const PatientList: FC = () => {
               name="filter-form"
               form={form}
               initialValues={{
-                dateRange: defaultDateRange,
+                dateRange: defaultDateRangeFilter,
                 fullName: '',
               }}
             >

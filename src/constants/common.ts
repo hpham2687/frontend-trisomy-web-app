@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const BreakPoints = {
   PHONE: 576,
   LARGE_PHONE: 768,
@@ -13,3 +15,5 @@ export const Queries = {
   LARGE_TABLET_UP: `@media only screen and (min-width: ${BreakPoints.LARGE_TABLET}px)`,
   DESKTOP_UP: `@media only screen and (min-width: ${BreakPoints.DESKTOP}px)`,
 };
+
+export const defaultDateRangeFilter = [moment('2022-01-01'), moment()];

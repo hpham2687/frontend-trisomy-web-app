@@ -56,6 +56,7 @@ function AddHospital({ body, onCancel, fetchHospitals, editingData, ...rest }: a
         </Button>,
       ]}
       title={`${editingData ? 'Sửa' : 'Thêm'} thông tin bệnh viện`}
+      onCancel={onCancel}
       {...rest}
     >
       <Form form={form} initialValues={editingData}>
