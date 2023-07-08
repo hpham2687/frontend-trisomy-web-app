@@ -44,7 +44,7 @@ function TestDetailTab({
   isLoadingDelete,
   handleEditTest,
   handleViewTest,
-  shouldEnablePredictThalassemia,
+  // shouldEnablePredictThalassemia,
   shouldEnablePredictTrisomy,
   getPatientDetail,
   handleDeleteTest,
@@ -61,201 +61,198 @@ function TestDetailTab({
   const { run: runPredictTrisomy, isLoading: isLoadingPredictTrisomy } = useAsync();
   const { run: runPredictThalassemia, isLoading: isLoadingPredictThalassemia } = useAsync();
   const formRef = useRef<ProFormInstance>();
-  //   const [editorState, setEditorState] = useState(
-  //     EditorState.createWithContent(ContentState.createFromText('')),
-  //   );
   const childrenId = patientDetail?.children[0]?.id || 0;
 
-  const handleSaveThalassemiaResult = (values: any) => {
-    const { diseases, doctorComment } = values;
+  // const handleSaveThalassemiaResult = (values: any) => {
+  //   const { diseases, doctorComment } = values;
 
-    const hasAlpha = !!diseases.find((i: any) => i === 'alpha');
-    const hasBeta = !!diseases.find((i: any) => i === 'beta');
+  //   const hasAlpha = !!diseases.find((i: any) => i === 'alpha');
+  //   const hasBeta = !!diseases.find((i: any) => i === 'beta');
 
-    const payload = {
-      conclusions: doctorComment,
-      hasDiseaseRatio: 1 - values.noGen.toFixed(2),
-      hasAlphaRatio: values.alphaGen.toFixed(2),
-      hasBetaRatio: values.betaGen.toFixed(2),
-      hasAlpha,
-      hasBeta,
-      hasDisease: hasBeta || hasAlpha,
-    };
+  //   const payload = {
+  //     conclusions: doctorComment,
+  //     hasDiseaseRatio: 1 - values.noGen.toFixed(2),
+  //     hasAlphaRatio: values.alphaGen.toFixed(2),
+  //     hasBetaRatio: values.betaGen.toFixed(2),
+  //     hasAlpha,
+  //     hasBeta,
+  //     hasDisease: hasBeta || hasAlpha,
+  //   };
 
-    updateThalassemiaResult({ childrenId, payload })
-      .then((children: any) => {
-        message.success('Lưu kết quả thành công!');
-        dispatch({
-          type: 'modal/showModal',
-          payload: null,
-        });
-        setPatientDetail((prev: any) => ({ ...prev, children: [children] }));
-      })
-      .catch(() => {
-        message.error('Có lỗi xảy ra!');
-      });
-  };
+  //   updateThalassemiaResult({ childrenId, payload })
+  //     .then((children: any) => {
+  //       message.success('Lưu kết quả thành công!');
+  //       dispatch({
+  //         type: 'modal/showModal',
+  //         payload: null,
+  //       });
+  //       setPatientDetail((prev: any) => ({ ...prev, children: [children] }));
+  //     })
+  //     .catch(() => {
+  //       message.error('Có lỗi xảy ra!');
+  //     });
+  // };
 
-  const handleShowThalassemiaResult = (result: any) => {
-    dispatch({
-      type: 'modal/showModal',
-      payload: {
-        modalKey: ModalKey.GENERAL_INFO,
-        customProps: {
-          footer: null,
-          body: (
-            <>
-              <ProForm
-                initialValues={{
-                  doctor_selection: 'trisomy21',
-                }}
-                formRef={formRef}
-                submitter={{ render: () => null }}
-                onFinish={async (values) => {
-                  handleSaveThalassemiaResult({ ...values, ...result });
-                }}
-              >
-                {/* step 2 */}
-                <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
-                  <DescriptionsItem label="Tỉ lệ bị bệnh" style={{ width: '50%' }}>
-                    {1 - result.noGen.toFixed(2)}
-                  </DescriptionsItem>
-                  <DescriptionsItem span={2} label="Tỉ lệ không bị bệnh">
-                    {result.noGen.toFixed(2)}
-                  </DescriptionsItem>
-                  <DescriptionsItem label="Thalassemia alpha">
-                    {result.alphaGen.toFixed(2)}
-                  </DescriptionsItem>
-                  <DescriptionsItem label="Thalassemia beta">
-                    {result.betaGen.toFixed(2)}
-                  </DescriptionsItem>
-                </Descriptions>
+  // const handleShowThalassemiaResult = (result: any) => {
+  //   dispatch({
+  //     type: 'modal/showModal',
+  //     payload: {
+  //       modalKey: ModalKey.GENERAL_INFO,
+  //       customProps: {
+  //         footer: null,
+  //         body: (
+  //           <>
+  //             <ProForm
+  //               initialValues={{
+  //                 doctor_selection: 'trisomy21',
+  //               }}
+  //               formRef={formRef}
+  //               submitter={{ render: () => null }}
+  //               onFinish={async (values) => {
+  //                 handleSaveThalassemiaResult({ ...values, ...result });
+  //               }}
+  //             >
+  //               {/* step 2 */}
+  //               <Descriptions layout="horizontal" style={{ marginBottom: 16 }}>
+  //                 <DescriptionsItem label="Tỉ lệ bị bệnh" style={{ width: '50%' }}>
+  //                   {1 - result.noGen.toFixed(2)}
+  //                 </DescriptionsItem>
+  //                 <DescriptionsItem span={2} label="Tỉ lệ không bị bệnh">
+  //                   {result.noGen.toFixed(2)}
+  //                 </DescriptionsItem>
+  //                 <DescriptionsItem label="Thalassemia alpha">
+  //                   {result.alphaGen.toFixed(2)}
+  //                 </DescriptionsItem>
+  //                 <DescriptionsItem label="Thalassemia beta">
+  //                   {result.betaGen.toFixed(2)}
+  //                 </DescriptionsItem>
+  //               </Descriptions>
 
-                <div style={{ marginBottom: 16 }}>
-                  <p>Kết luận của bác sĩ</p>
-                  <Form.Item
-                    name="diseases"
-                    rules={[
-                      {
-                        validator: (rule: any, value: any, callback: any) => {
-                          if (!value || value.length === 0) {
-                            callback('Vui lòng chọn ít nhất một lựa chọn!');
-                          } else {
-                            callback();
-                          }
-                        },
-                      },
-                    ]}
-                  >
-                    <Checkbox.Group style={{ width: '100%' }}>
-                      <Row>
-                        <Col span={8}>
-                          <Checkbox value="alpha" style={{ lineHeight: '32px' }}>
-                            Alpha
-                          </Checkbox>
-                        </Col>
-                        <Col span={8}>
-                          <Checkbox value="beta" style={{ lineHeight: '32px' }}>
-                            Beta
-                          </Checkbox>
-                        </Col>
-                        <Col span={8}>
-                          <Checkbox value="none" style={{ lineHeight: '32px' }}>
-                            Không mang bệnh
-                          </Checkbox>
-                        </Col>
-                      </Row>
-                    </Checkbox.Group>
-                  </Form.Item>
-                </div>
-                <ProFormTextArea
-                  label="Chẩn đoán của bác sỹ"
-                  name="doctorComment"
-                  placeholder="Nhập chẩn đoán của bác sỹ"
-                />
-                {/* <Editor
-                  placeholder="Nhập chẩn đoán của bác sỹ"
-                  style={{
-                    border: '1px solid #d9d9d9',
-                  }}
-                  name="doctorComment"
-                  editorState={editorState}
-                  toolbarClassName="toolbarClassName"
-                  wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
-                  onEditorStateChange={setEditorState}
-                  toolbar={{
-                    options: ['inline', 'list', 'link'],
-                    inline: {
-                      options: ['bold', 'italic', 'underline'],
-                    },
-                    list: {
-                      options: ['unordered', 'ordered'],
-                    },
-                  }}
-                /> */}
-                <Button type="primary" htmlType="submit">
-                  Lưu kết quả
-                </Button>
-              </ProForm>
-            </>
-          ),
-        },
-      },
-    });
-  };
+  //               <div style={{ marginBottom: 16 }}>
+  //                 <p>Kết luận của bác sĩ</p>
+  //                 <Form.Item
+  //                   name="diseases"
+  //                   rules={[
+  //                     {
+  //                       validator: (rule: any, value: any, callback: any) => {
+  //                         if (!value || value.length === 0) {
+  //                           callback('Vui lòng chọn ít nhất một lựa chọn!');
+  //                         } else {
+  //                           callback();
+  //                         }
+  //                       },
+  //                     },
+  //                   ]}
+  //                 >
+  //                   <Checkbox.Group style={{ width: '100%' }}>
+  //                     <Row>
+  //                       <Col span={8}>
+  //                         <Checkbox value="alpha" style={{ lineHeight: '32px' }}>
+  //                           Alpha
+  //                         </Checkbox>
+  //                       </Col>
+  //                       <Col span={8}>
+  //                         <Checkbox value="beta" style={{ lineHeight: '32px' }}>
+  //                           Beta
+  //                         </Checkbox>
+  //                       </Col>
+  //                       <Col span={8}>
+  //                         <Checkbox value="none" style={{ lineHeight: '32px' }}>
+  //                           Không mang bệnh
+  //                         </Checkbox>
+  //                       </Col>
+  //                     </Row>
+  //                   </Checkbox.Group>
+  //                 </Form.Item>
+  //               </div>
+  //               <ProFormTextArea
+  //                 label="Chẩn đoán của bác sỹ"
+  //                 name="doctorComment"
+  //                 placeholder="Nhập chẩn đoán của bác sỹ"
+  //               />
+  //               {/* <Editor
+  //                 placeholder="Nhập chẩn đoán của bác sỹ"
+  //                 style={{
+  //                   border: '1px solid #d9d9d9',
+  //                 }}
+  //                 name="doctorComment"
+  //                 editorState={editorState}
+  //                 toolbarClassName="toolbarClassName"
+  //                 wrapperClassName="wrapperClassName"
+  //                 editorClassName="editorClassName"
+  //                 onEditorStateChange={setEditorState}
+  //                 toolbar={{
+  //                   options: ['inline', 'list', 'link'],
+  //                   inline: {
+  //                     options: ['bold', 'italic', 'underline'],
+  //                   },
+  //                   list: {
+  //                     options: ['unordered', 'ordered'],
+  //                   },
+  //                 }}
+  //               /> */}
+  //               <Button type="primary" htmlType="submit">
+  //                 Lưu kết quả
+  //               </Button>
+  //             </ProForm>
+  //           </>
+  //         ),
+  //       },
+  //     },
+  //   });
+  // };
 
-  const handlePredictThalassemia = () => {
-    if (!shouldEnablePredictThalassemia) {
-      return alert('Not enough data');
-    }
-    const { tests } = patientDetail;
+  // const handlePredictThalassemia = () => {
+  //   if (!shouldEnablePredictThalassemia) {
+  //     return alert('Not enough data');
+  //   }
+  //   const { tests } = patientDetail;
 
-    const bloodTest = tests.find((test: any) => test.testName === TEST_NAME.BLOOD_TEST)?.action;
-    const serumIronTest = tests.find(
-      (test: any) => test.testName === TEST_NAME.SERUM_IRON_TEST,
-    )?.action;
-    const hemoglobinTest = tests.find(
-      (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
-    )?.action;
+  //   const bloodTest = tests.find((test: any) => test.testName === TEST_NAME.BLOOD_TEST)?.action;
+  //   const serumIronTest = tests.find(
+  //     (test: any) => test.testName === TEST_NAME.SERUM_IRON_TEST,
+  //   )?.action;
+  //   const hemoglobinTest = tests.find(
+  //     (test: any) => test.testName === TEST_NAME.HEMOGLOBIN_TEST,
+  //   )?.action;
 
-    let data2Send: any = {
-      ctm_rbc: bloodTest.ctmRbc,
-      ctm_hgb: bloodTest.ctmHgb,
-      ctm_hct: bloodTest.ctmHct,
-      ctm_mcv: bloodTest.ctmMcv,
-      ctm_mch: bloodTest.ctmMch,
-      ctm_mchc: bloodTest.ctmMchc,
-      ctm_rdw: bloodTest.ctmRdw,
-    };
-    if (serumIronTest) {
-      data2Send = {
-        ...data2Send,
-        ctm_sathuyetthanh: serumIronTest.ctmSathuyetthanh,
-        ctm_ferritinehuyetthanh: serumIronTest.ctmFerritinehuyetthanh,
-      };
-    }
-    if (hemoglobinTest) {
-      data2Send = {
-        ...data2Send,
-        dd_hba1: hemoglobinTest.ddHba1,
-        dd_hba2: hemoglobinTest.ddHba2,
-        dd_hbe: hemoglobinTest.ddHbe,
-        dd_hbh: hemoglobinTest.ddHbh,
-        dd_hbbar: hemoglobinTest.ddHbbar,
-        dd_hbkhac: hemoglobinTest.ddHbkhac,
-        dd_hbf: hemoglobinTest.ddHbf,
-      };
-    }
+  //   let data2Send: any = {
+  //     ctm_rbc: bloodTest.ctmRbc,
+  //     ctm_hgb: bloodTest.ctmHgb,
+  //     ctm_hct: bloodTest.ctmHct,
+  //     ctm_mcv: bloodTest.ctmMcv,
+  //     ctm_mch: bloodTest.ctmMch,
+  //     ctm_mchc: bloodTest.ctmMchc,
+  //     ctm_rdw: bloodTest.ctmRdw,
+  //   };
+  //   if (serumIronTest) {
+  //     data2Send = {
+  //       ...data2Send,
+  //       ctm_sathuyetthanh: serumIronTest.ctmSathuyetthanh,
+  //       ctm_ferritinehuyetthanh: serumIronTest.ctmFerritinehuyetthanh,
+  //     };
+  //   }
+  //   if (hemoglobinTest) {
+  //     data2Send = {
+  //       ...data2Send,
+  //       dd_hba1: hemoglobinTest.ddHba1,
+  //       dd_hba2: hemoglobinTest.ddHba2,
+  //       dd_hbe: hemoglobinTest.ddHbe,
+  //       dd_hbh: hemoglobinTest.ddHbh,
+  //       dd_hbbar: hemoglobinTest.ddHbbar,
+  //       dd_hbkhac: hemoglobinTest.ddHbkhac,
+  //       dd_hbf: hemoglobinTest.ddHbf,
+  //     };
+  //   }
 
-    runPredictThalassemia(
-      predictThalassemia(data2Send)
-        .then((response: any) => {
-          handleShowThalassemiaResult(response);
-        })
-        .catch((error) => console.log(error)),
-    );
-  };
+  //   runPredictThalassemia(
+  //     predictThalassemia(data2Send)
+  //       .then((response: any) => {
+  //         handleShowThalassemiaResult(response);
+  //       })
+  //       .catch((error) => console.log(error)),
+  //   );
+  // };
 
   const handleSaveTrisomyResult = (values: any) => {
     const { diseases, doctorComment } = values;
@@ -325,17 +322,17 @@ function TestDetailTab({
                   <p>Kết luận của bác sĩ</p>
                   <Form.Item
                     name="diseases"
-                    rules={[
-                      {
-                        validator: (rule: any, value: any, callback: any) => {
-                          if (!value || value.length === 0) {
-                            callback('Please select at least one option');
-                          } else {
-                            callback();
-                          }
-                        },
-                      },
-                    ]}
+                    // rules={[
+                    //   {
+                    //     validator: (rule: any, value: any, callback: any) => {
+                    //       if (!value || value.length === 0) {
+                    //         callback('Please select at least one option');
+                    //       } else {
+                    //         callback();
+                    //       }
+                    //     },
+                    //   },
+                    // ]}
                   >
                     <Checkbox.Group
                       options={[
@@ -452,7 +449,7 @@ function TestDetailTab({
           <PlusOutlined />
           Thêm xét nghiệm
         </Button>
-        <Button
+        {/* <Button
           loading={isLoadingPredictThalassemia}
           className="ai-diagnosis-button"
           type="primary"
@@ -462,7 +459,7 @@ function TestDetailTab({
         >
           <FundOutlined />
           AI sàng lọc Thalassemia
-        </Button>
+        </Button> */}
         <Button
           className="ai-diagnosis-button"
           type="primary"
@@ -486,7 +483,7 @@ function TestDetailTab({
       <div className={styles.desc}>
         <h3>Hướng dẫn</h3>
         <Row>
-          <Col xs={24} md={12}>
+          {/* <Col xs={24} md={12}>
             <h4>AI sàng lọc Thalassemia</h4>
             <div>
               Hỗ trợ sàng lọc khi nhập đủ một trong các trường hợp sau:
@@ -496,7 +493,7 @@ function TestDetailTab({
                 <li>Xét nghiệm máu, Xét nghiệm sắt, Xét nghiệm điện di</li>
               </ul>
             </div>
-          </Col>
+          </Col> */}
           <Col xs={24} md={12}>
             <h4>AI sàng lọc Trisomy</h4>
             <div>

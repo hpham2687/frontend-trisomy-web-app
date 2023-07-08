@@ -124,9 +124,9 @@ function ChildrenDetail({ thalassemiaData, trisomyData }: any) {
   return (
     <div>
       <StyledTabs>
-        <TabsTabPane tab="Kết quả thalassemia" key="item-1">
+        {/* <TabsTabPane tab="Kết quả thalassemia" key="item-1">
           {thalassemiaData ? renderThalassemiaResult() : 'Chưa có dữ liệu'}
-        </TabsTabPane>
+        </TabsTabPane> */}
         <Tabs.TabPane tab="Kết quả trisomy" key="item-2">
           {trisomyData ? renderTrisomyResult() : 'Chưa có dữ liệu'}
         </Tabs.TabPane>
