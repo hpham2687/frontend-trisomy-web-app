@@ -5,7 +5,8 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { connect, history, IndexModelState, Loading, useIntl, useModel } from 'umi';
+import type { IndexModelState, Loading } from 'umi';
+import { connect, history, useIntl, useModel } from 'umi';
 
 import UnauthenticatedHeader from '@/components/Unautenticated/Header';
 import token from '@/utils/token';
@@ -29,7 +30,6 @@ const Login: React.FC = ({ index }: any) => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<'doctor' | 'admin'>('doctor');
   const { setInitialState } = useModel('@@initialState');
-  const { name } = index;
 
   const intl = useIntl();
 
@@ -88,7 +88,7 @@ const Login: React.FC = ({ index }: any) => {
               }}
             >
               <Tabs.TabPane key="doctor" tab={'Bác sĩ'} />
-              <Tabs.TabPane key="admin" tab={'Quản trị viên'} />
+              {/* <Tabs.TabPane key="admin" tab={'Quản trị viên'} /> */}
             </Tabs>
 
             {status === 'error' && loginType === 'account' && (
@@ -173,13 +173,13 @@ const Login: React.FC = ({ index }: any) => {
               <ProFormCheckbox noStyle name="autoLogin">
                 Nhớ mật khẩu
               </ProFormCheckbox>
-              <a
+              {/* <a
                 style={{
                   float: 'right',
                 }}
               >
                 Quên mật khẩu
-              </a>
+              </a> */}
             </div>
           </LoginForm>
           {/* </Col> */}

@@ -50,31 +50,36 @@ export const ModalSelectTestType = ({ getPatientDetail, patientDetail, ...rest }
   return (
     <BaseModal footer={null} title="Chọn xét nghiệm" {...rest}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {testConfig.map((test: TestType) => (
-          <Button
-            key={test.id}
-            type="primary"
-            disabled={isTestExist(patientTests, test.id)}
-            onClick={() => {
-              dispatch({
-                type: 'modal/showModal',
-                payload: {
-                  modalKey: getModalKeyFromId(test.id),
-                  customProps: {
-                    testType: test.id,
-                    patientDetail,
-                    getPatientDetail: () => {
-                      // TODO: Fetch right page
-                      getPatientDetail();
+        {testConfig.map((test: TestType) => {
+          if ([5, 6, 7, 8].includes(test.id)) {
+            return (
+              <Button
+                key={test.id}
+                type="primary"
+                disabled={isTestExist(patientTests, test.id)}
+                onClick={() => {
+                  dispatch({
+                    type: 'modal/showModal',
+                    payload: {
+                      modalKey: getModalKeyFromId(test.id),
+                      customProps: {
+                        testType: test.id,
+                        patientDetail,
+                        getPatientDetail: () => {
+                          // TODO: Fetch right page
+                          getPatientDetail();
+                        },
+                      },
                     },
-                  },
-                },
-              });
-            }}
-          >
-            {test.testName}
-          </Button>
-        ))}
+                  });
+                }}
+              >
+                {test.testName}
+              </Button>
+            );
+          }
+          return null;
+        })}
       </div>
     </BaseModal>
   );
